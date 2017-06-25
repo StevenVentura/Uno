@@ -6,5 +6,4 @@
 
 Uno.xml
 Uno.lua
-UnoServer.lua
 UnoStates.lua
