@@ -67,7 +67,7 @@ UnoScrollFrameTitle:SetTextColor(1,1,0,1);
  UnoScrollFrameTitle:SetShadowColor(0,0,0,1);
  UnoScrollFrameTitle:SetShadowOffset(2,-1);
  UnoScrollFrameTitle:SetPoint("TOPLEFT",10,-10);
- UnoScrollFrameTitle:SetText("Friends to add");
+ UnoScrollFrameTitle:SetText("Friends to invite");
  UnoScrollFrameTitle:Show();
 local frame = CreateFrame("Frame", "UnoScrollFrameParent", UnoScreenLobby) 
 frame:SetSize(150, 200) 
@@ -121,8 +121,13 @@ wowcount = wowcount + 1;
 local button = CreateFrame("CheckButton","UnoFriendSelectButton" .. index,content,"OptionsCheckButtonTemplate");
 button:SetPoint("TOPLEFT",_G["UnoFriendSelectButton" .. index-1],"BOTTOMLEFT",0,0);
 button.name = bnetNameWithNumber;
+button.index = index;
+button.disabled = false;
 button.setFunc = function(value) 
 
+local temperino = _G["UnoFriendSelectButton" .. button.index];
+temperino.titleText:SetTextColor(1/2,0.643/2,0.169/2,1);
+temperino.disabled = true;
 end--end anonymous function
 --now make text labels
 local titleText = button:CreateFontString("titleText",button,"GameFontNormal");
@@ -132,8 +137,8 @@ local titleText = button:CreateFontString("titleText",button,"GameFontNormal");
  titleText:SetPoint("LEFT",button,"RIGHT",0,0);
  titleText:SetText(bnetNameWithNumber);
  titleText:Show();
-print(bnetNameWithNumber)
 
+button.titleText = titleText;
 button:SetScript("OnEnter", function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 	GameTooltip:SetText("click to invite " .. bnetNameWithNumber);
@@ -144,6 +149,52 @@ end--end if game==wow
 scrollbar:SetMinMaxValues(1, 19*wowcount) 
 
 end--end for
+
+-----------------
+--now making the middle box: processing users
+
+
+UnoProcessFrameTitle = UnoScreenLobby:CreateFontString("UnoProcessFrameTitle",UnoScreenLobby,"GameFontNormal");
+UnoProcessFrameTitle:SetTextColor(1,1,0,1);
+ UnoProcessFrameTitle:SetShadowColor(0,0,0,1);
+ UnoProcessFrameTitle:SetShadowOffset(2,-1);
+ UnoProcessFrameTitle:SetPoint("TOP",UnoScrollFrameTitle,"TOP");
+ UnoProcessFrameTitle:SetPoint("LEFT",UnoScrollFrame,"RIGHT",50,0);
+ UnoProcessFrameTitle:SetText("Invitation Status");
+ UnoProcessFrameTitle:Show();
+
+CreateFrame("Frame","UnoProcessFrame",UnoScreenLobby);
+UnoProcessFrame:SetPoint("TOP",UnoProcessFrameTitle,"BOTTOM");
+UnoProcessFrame:SetPoint("LEFT",UnoScrollFrame,"RIGHT",50,0);
+UnoProcessFrame:SetWidth(250);
+UnoProcessFrame:SetPoint("BOTTOM",UnoScreenLobby,"BOTTOM",0,20);
+UnoProcessFrame.t = UnoProcessFrame:CreateTexture();
+UnoProcessFrame.t:SetColorTexture(1,1,1,0.1);
+UnoProcessFrame.t:SetAllPoints();
+UnoProcessFrame:Show();
+
+---------------------
+--making the bottomleft box: guildies
+UnoGuildiesFrameTitle = UnoScreenLobby:CreateFontString("UnoGuildiesFrameTitle",UnoScreenLobby,"GameFontNormal");
+UnoGuildiesFrameTitle:SetTextColor(1,1,0,1);
+ UnoGuildiesFrameTitle:SetShadowColor(0,0,0,1);
+ UnoGuildiesFrameTitle:SetShadowOffset(2,-1);
+ UnoGuildiesFrameTitle:SetPoint("TOPLEFT",UnoScrollFrame,"BOTTOMLEFT",0,-25);
+ UnoGuildiesFrameTitle:SetText("Guildies to invite");
+ UnoGuildiesFrameTitle:Show();
+ 
+----------------------
+--making the right box: lobbyparty
+UnoAcceptedPlayersFrameTitle = UnoScreenLobby:CreateFontString("UnoAcceptedPlayersFrameTitle",UnoScreenLobby,"GameFontNormal");
+UnoAcceptedPlayersFrameTitle:SetTextColor(1,1,0,1);
+ UnoAcceptedPlayersFrameTitle:SetShadowColor(0,0,0,1);
+ UnoAcceptedPlayersFrameTitle:SetShadowOffset(2,-1);
+ UnoAcceptedPlayersFrameTitle:SetPoint("TOP",UnoScrollFrameTitle,"TOP");
+ UnoAcceptedPlayersFrameTitle:SetPoint("LEFT",UnoProcessFrame,"RIGHT",25,0);
+ UnoAcceptedPlayersFrameTitle:SetText("Players in lobby");
+ UnoAcceptedPlayersFrameTitle:Show();
+
+
 
 
 end--end function UnoMakeLobbyFrames
