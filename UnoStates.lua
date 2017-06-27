@@ -158,7 +158,11 @@ end);
 
 end--end if game==wow
 
-scrollbar:SetMinMaxValues(1, 19*wowcount) 
+if (wowcount == 0)
+then scrollbar:SetMinMaxValues(1, 1);
+else
+scrollbar:SetMinMaxValues(1, 19*wowcount)  end
+
 
 end--end for
 for i, butt in ipairs(scrollbar.buttons) do
@@ -186,7 +190,7 @@ CreateFrame("Frame","UnoProcessFrame",UnoScreenLobby);
 UnoProcessFrame:SetPoint("TOP",UnoProcessFrameTitle,"BOTTOM");
 UnoProcessFrame:SetPoint("LEFT",UnoScrollFrame,"RIGHT",50,0);
 UnoProcessFrame:SetWidth(250);
-UnoProcessFrame:SetPoint("BOTTOM",UnoScreenLobby,"BOTTOM",0,20);
+UnoProcessFrame:SetPoint("BOTTOM",UnoScreenLobby,"BOTTOM",0,150);
 UnoProcessFrame.t = UnoProcessFrame:CreateTexture();
 UnoProcessFrame.t:SetColorTexture(1,1,1,0.1);
 UnoProcessFrame.t:SetAllPoints();
@@ -310,6 +314,58 @@ UnoAcceptedPlayersFrameTitle:SetTextColor(1,1,0,1);
  UnoAcceptedPlayersFrameTitle:SetText("Players in lobby");
  UnoAcceptedPlayersFrameTitle:Show();
 
+CreateFrame("FRAME","UnoAcceptedPlayersFrame",UnoScreenLobby);
+UnoAcceptedPlayersFrame:SetSize(UnoScrollFrame:GetWidth(),UnoScrollFrame:GetHeight());
+UnoAcceptedPlayersFrame:SetPoint("TOP",UnoAcceptedPlayersFrameTitle,"BOTTOM",0,0);
+UnoAcceptedPlayersFrame:SetPoint("LEFT",UnoAcceptedPlayersFrameTitle,"LEFT",0,0);
+UnoAcceptedPlayersFrame.t = UnoAcceptedPlayersFrame:CreateTexture();
+UnoAcceptedPlayersFrame.t:SetColorTexture(1,1,1,0.1);
+UnoAcceptedPlayersFrame.t:SetAllPoints();
+UnoAcceptedPlayersFrame:Show();
+--------------------------
+--make the editbox for manual invite
+UnoManualInviteEditBoxTitle = UnoScreenLobby:CreateFontString("UnoManualInviteEditBoxTitle",UnoScreenLobby,"GameFontNormal");
+UnoManualInviteEditBoxTitle:SetTextColor(1,1,0,1);
+UnoManualInviteEditBoxTitle:SetShadowColor(0,0,0,1);
+UnoManualInviteEditBoxTitle:SetShadowOffset(2,-1);
+UnoManualInviteEditBoxTitle:SetText("Manual (type name-realm and press enter)");
+UnoManualInviteEditBoxTitle:SetPoint("TOP",UnoProcessFrame,"BOTTOM",0,0);
+UnoManualInviteEditBoxTitle:SetPoint("LEFT",UnoProcessFrame);
+UnoManualInviteEditBoxTitle:Show();
+
+CreateFrame("EditBox","UnoManualInviteEditBox",UnoScreenLobby,"InputBoxTemplate");
+UnoManualInviteEditBox:SetSize(UnoProcessFrame:GetWidth(),50);
+UnoManualInviteEditBox:SetPoint("TOP",UnoManualInviteEditBoxTitle,"BOTTOM",0,10);
+UnoManualInviteEditBox:SetPoint("LEFT",UnoManualInviteEditBoxTitle)
+UnoManualInviteEditBox:SetAutoFocus(false);
+UnoManualInviteEditBox:SetScript("OnEnterPressed",function() 
+UnoManualInviteEditBox:SetText("");
+
+end);
+UnoManualInviteEditBox:Show();
+
+-----------------------
+--now make the ready and start buttons
+CreateFrame("Button","UnoReadyUpButton",UnoScreenLobby,"UIPanelButtonTemplate");
+UnoReadyUpButton:SetSize(150,50);
+UnoReadyUpButton:SetPoint("TOP",UnoAcceptedPlayersFrame,"BOTTOM");
+UnoReadyUpButton:SetPoint("LEFT",UnoAcceptedPlayersFrame);
+UnoReadyUpButton:SetText("Ready?");
+UnoReadyUpButton:SetScript("OnClick",function()
+print("clicked da ready button");
+end);
+UnoReadyUpButton:Show();
+
+CreateFrame("Button","UnoStartGameButton",UnoScreenLobby,"UIPanelButtonTemplate");
+UnoStartGameButton:SetSize(150,50);
+UnoStartGameButton:SetPoint("TOP",UnoReadyUpButton,"BOTTOM");
+UnoStartGameButton:SetPoint("LEFT",UnoAcceptedPlayersFrame);
+UnoStartGameButton:SetText("Start Game");
+UnoStartGameButton:SetScript("OnClick",function()
+print("clicked da start button")
+
+end);
+UnoStartGameButton:Show();
 
 
 
