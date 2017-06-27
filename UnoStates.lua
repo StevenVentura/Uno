@@ -89,9 +89,20 @@ scrollbar:SetValueStep(1)
 scrollbar.scrollStep = 1
 scrollbar:SetValue(0) 
 scrollbar:SetWidth(16) 
+scrollbar.buttons = {};
 scrollbar:SetScript("OnValueChanged", 
 function (self, value) 
 self:GetParent():SetVerticalScroll(value) 
+
+for i, butt in ipairs(scrollbar.buttons) do
+  if (butt:GetBottom() < UnoScrollFrame:GetBottom() or butt:GetTop() > UnoScrollFrame:GetTop()) then
+  butt:Hide();
+  else
+  butt:Show();
+  end
+end
+
+
 end) 
 local scrollbg = scrollbar:CreateTexture(nil, "BACKGROUND") 
 scrollbg:SetAllPoints(scrollbar) 
@@ -119,6 +130,7 @@ local presenceID,glitchyAccountName,bnetNameWithNumber,isJustBNetFriend,characte
 if (game == "WoW") then
 wowcount = wowcount + 1;
 local button = CreateFrame("CheckButton","UnoFriendSelectButton" .. index,content,"OptionsCheckButtonTemplate");
+scrollbar.buttons[index] = button;
 button:SetPoint("TOPLEFT",_G["UnoFriendSelectButton" .. index-1],"BOTTOMLEFT",0,0);
 button.name = bnetNameWithNumber;
 button.index = index;
@@ -149,6 +161,13 @@ end--end if game==wow
 scrollbar:SetMinMaxValues(1, 19*wowcount) 
 
 end--end for
+for i, butt in ipairs(scrollbar.buttons) do
+  if (butt:GetBottom() < UnoScrollFrame:GetBottom() or butt:GetTop() > UnoScrollFrame:GetTop()) then
+  butt:Hide();
+  else
+  butt:Show();
+  end
+end
 
 -----------------
 --now making the middle box: processing users
@@ -183,6 +202,103 @@ UnoGuildiesFrameTitle:SetTextColor(1,1,0,1);
  UnoGuildiesFrameTitle:SetText("Guildies to invite");
  UnoGuildiesFrameTitle:Show();
  
+ local frame2 = CreateFrame("Frame", nil, UnoScreenLobby) 
+frame2:SetSize(150, 200) 
+frame2:SetPoint("TOPLEFT",UnoGuildiesFrameTitle,"BOTTOMLEFT",0,0);
+local texture2 = frame2:CreateTexture() 
+texture2:SetAllPoints() 
+texture2:SetColorTexture(1,1,1,0.1) 
+frame2.background = texture2;
+local scrollframe2 = CreateFrame("ScrollFrame",nil,frame2);
+scrollframe2:SetPoint("CENTER",0,0);
+scrollframe2:SetSize(150,200);
+scrollframe2:Show();
+
+scrollbar2 = CreateFrame("Slider", nil, scrollframe2, "UIPanelScrollBarTemplate") 
+scrollbar2:SetPoint("TOPLEFT", frame2, "TOPRIGHT", 4, -16) 
+scrollbar2:SetPoint("BOTTOMLEFT", frame2, "BOTTOMRIGHT", 4, 16) 
+local numGuildMembers, numOnline, numOnlineAndMobile = GetNumGuildMembers()
+scrollbar2:SetMinMaxValues(1, 19*numOnline) 
+scrollbar2:SetValueStep(1) 
+scrollbar2.scrollStep = 1
+scrollbar2:SetValue(0) 
+scrollbar2:SetWidth(16) 
+scrollbar2.buttons = {};
+scrollbar2:SetScript("OnValueChanged", 
+function (self, value) 
+self:GetParent():SetVerticalScroll(value) 
+for i, butt in ipairs(scrollbar2.buttons) do
+  if (butt:GetBottom() < scrollframe2:GetBottom() or butt:GetTop() > scrollframe2:GetTop()) then
+  butt:Hide();
+  else
+  butt:Show();
+  end
+end
+end) 
+local scrollbg2 = scrollbar:CreateTexture(nil, "BACKGROUND") 
+scrollbg2:SetAllPoints(scrollbar2) 
+scrollbg2:SetColorTexture(0, 0, 0, 0.4) 
+
+local content2 = CreateFrame("Frame", nil, scrollframe2) 
+content2:SetSize(128, 128) 
+local texture2 = content2:CreateTexture() 
+texture2:SetAllPoints() 
+
+texture2:SetColorTexture(0,0,0,0);
+content2.texture = texture2 
+
+scrollframe2:SetScrollChild(content2)
+ 
+--forloopstuffbelow,scrollframestuffabove
+ local dummy = CreateFrame("CheckButton","UnoGuildySelectButton0",content2,"OptionsCheckButtonTemplate");
+dummy:SetPoint("TOPLEFT",0,16);
+dummy:Hide();
+ 
+GuildRoster();--updates the info in the UI
+
+for index=1,numOnline do 
+
+local fullName, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile, canSoR, reputation = GetGuildRosterInfo(index) 
+
+local button2 = CreateFrame("CheckButton","UnoGuildySelectButton" .. index,content2,"OptionsCheckButtonTemplate");
+button2:SetPoint("TOPLEFT",_G["UnoGuildySelectButton" .. index-1],"BOTTOMLEFT",0,0);
+button2.name = fullName;
+button2.index = index;
+button2.disabled = false;
+scrollbar2.buttons[index] = button2;
+button2.setFunc = function(value) 
+
+local temperino2 = _G["UnoGuildySelectButton" .. button2.index];
+temperino2.titleText2:SetTextColor(1/2,0.643/2,0.169/2,1);
+temperino2.disabled = true;
+end--end anonymous function
+--now make text labels
+local titleText2 = button2:CreateFontString("titleText2",button2,"GameFontNormal");
+ titleText2:SetTextColor(1,0.643,0.169,1);
+ titleText2:SetShadowColor(0,0,0,1);
+ titleText2:SetShadowOffset(2,-1);
+ titleText2:SetPoint("LEFT",button2,"RIGHT",0,0);
+ titleText2:SetText(fullName);
+ titleText2:Show();
+
+button2.titleText2 = titleText2;
+button2:SetScript("OnEnter", function(self)
+	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+	GameTooltip:SetText("click to invite " .. fullName);
+end);
+
+
+
+end--end for
+
+for i, butt in ipairs(scrollbar2.buttons) do
+  if (butt:GetBottom() < scrollframe2:GetBottom() or butt:GetTop() > scrollframe2:GetTop()) then
+  butt:Hide();
+  else
+  butt:Show();
+  end
+end
+
 ----------------------
 --making the right box: lobbyparty
 UnoAcceptedPlayersFrameTitle = UnoScreenLobby:CreateFontString("UnoAcceptedPlayersFrameTitle",UnoScreenLobby,"GameFontNormal");
