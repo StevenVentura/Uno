@@ -202,7 +202,7 @@ UnoGuildiesFrameTitle = UnoScreenLobby:CreateFontString("UnoGuildiesFrameTitle",
 UnoGuildiesFrameTitle:SetTextColor(1,1,0,1);
  UnoGuildiesFrameTitle:SetShadowColor(0,0,0,1);
  UnoGuildiesFrameTitle:SetShadowOffset(2,-1);
- UnoGuildiesFrameTitle:SetPoint("TOPLEFT",UnoScrollFrame,"BOTTOMLEFT",0,-25);
+ UnoGuildiesFrameTitle:SetPoint("TOPLEFT",UnoScrollFrame,"BOTTOMLEFT",0,-25*2);
  UnoGuildiesFrameTitle:SetText("Guildies to invite");
  UnoGuildiesFrameTitle:Show();
  
@@ -222,6 +222,7 @@ scrollbar2 = CreateFrame("Slider", nil, scrollframe2, "UIPanelScrollBarTemplate"
 scrollbar2:SetPoint("TOPLEFT", frame2, "TOPRIGHT", 4, -16) 
 scrollbar2:SetPoint("BOTTOMLEFT", frame2, "BOTTOMRIGHT", 4, 16) 
 local numGuildMembers, numOnline, numOnlineAndMobile = GetNumGuildMembers()
+if (numOnline == 0) then numOnline = 1 end
 scrollbar2:SetMinMaxValues(1, 19*numOnline) 
 scrollbar2:SetValueStep(1) 
 scrollbar2.scrollStep = 1
@@ -344,6 +345,27 @@ UnoManualInviteEditBox:SetText("");
 end);
 UnoManualInviteEditBox:Show();
 
+-----------------------
+--make da invite and refresh buttons
+CreateFrame("Button","UnoRefreshListButton",UnoScreenLobby,"UIPanelButtonTemplate");
+UnoRefreshListButton:SetSize(150,25);
+UnoRefreshListButton:SetPoint("TOP",UnoScrollFrame,"BOTTOM");
+UnoRefreshListButton:SetPoint("LEFT",UnoScrollFrame);
+UnoRefreshListButton:SetText("Refresh");
+UnoRefreshListButton:SetScript("OnClick",function()
+print("clicked refresh");
+end);
+UnoRefreshListButton:Show();
+
+CreateFrame("Button","UnoInviteListButton",UnoScreenLobby,"UIPanelButtonTemplate");
+UnoInviteListButton:SetSize(150,25);
+UnoInviteListButton:SetPoint("TOP",UnoRefreshListButton,"BOTTOM");
+UnoInviteListButton:SetPoint("LEFT",UnoScrollFrame);
+UnoInviteListButton:SetText("Invite");
+UnoInviteListButton:SetScript("OnClick",function()
+print("clicked invite");
+end);
+UnoInviteListButton:Show();
 -----------------------
 --now make the ready and start buttons
 CreateFrame("Button","UnoReadyUpButton",UnoScreenLobby,"UIPanelButtonTemplate");
