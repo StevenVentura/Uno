@@ -1,12 +1,16 @@
 UNO_SCREEN_BLANK = 0;
 UNO_SCREEN_SLASHUNO = 1;
 UNO_SCREEN_LOBBY = 2;
+UNO_SCREEN_INVITATION = 3;
+UNO_SCREEN_LOBBYGUEST = 4;
 
 UnoCurrentScreen = UNO_SCREEN_BLANK;
 
 UNO_IDENTIFIER = "<Uno>";
 UNO_MESSAGE_SEND_INVITATION = "The user is trying to invite you to join his Uno group, but it appears you do not have the Uno addon (or you disabled it). pls download from curse.com/addons/wow/uno"
-
+UNO_MESSAGE_HAS_ADDON = "I have the uno addon";
+UNO_MESSAGE_DECLINE = "decline";
+UNO_MESSAGE_ACCEPT = "accept";
 
 --
 UnoScreenSlashUno = CreateFrame("Frame","UnoScreenSlashUno",UIParent);
