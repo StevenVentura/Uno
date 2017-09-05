@@ -6,4 +6,5 @@
 
 Uno.xml
 Uno.lua
+UnoPlayers.lua
 UnoStates.lua

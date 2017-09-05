@@ -49,11 +49,16 @@ end--end function UnoOnUpdate
 
 
 
+function UnoIncoming(ChatFrameSelf, event, message, author, ...)
 
 
+
+
+
+end--end function UnoIncoming
 
 --this is called after the variables are loaded
 function UnoInit()
-
+ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER",UnoIncoming);
 
 end--end function UnoInit

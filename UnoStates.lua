@@ -4,6 +4,9 @@ UNO_SCREEN_LOBBY = 2;
 
 UnoCurrentScreen = UNO_SCREEN_BLANK;
 
+UNO_IDENTIFIER = "<Uno>";
+UNO_MESSAGE_SEND_INVITATION = "The user is trying to invite you to join his Uno group, but it appears you do not have the Uno addon (or you disabled it). pls download from curse.com/addons/wow/uno"
+
 
 --
 UnoScreenSlashUno = CreateFrame("Frame","UnoScreenSlashUno",UIParent);
@@ -81,7 +84,7 @@ scrollframe:SetPoint("CENTER",0,0);
 scrollframe:SetSize(150,200);
 scrollframe:Show();
 
-scrollbar = CreateFrame("Slider", UnoScrollBar, UnoScrollFrame, "UIPanelScrollBarTemplate") 
+scrollbar = CreateFrame("Slider", "UnoScrollBar", UnoScrollFrame, "UIPanelScrollBarTemplate") 
 scrollbar:SetPoint("TOPLEFT", frame, "TOPRIGHT", 4, -16) 
 scrollbar:SetPoint("BOTTOMLEFT", frame, "BOTTOMRIGHT", 4, 16) 
 scrollbar:SetMinMaxValues(1, 16*BNGetNumFriends()) 
@@ -218,7 +221,7 @@ scrollframe2:SetPoint("CENTER",0,0);
 scrollframe2:SetSize(150,200);
 scrollframe2:Show();
 
-scrollbar2 = CreateFrame("Slider", nil, scrollframe2, "UIPanelScrollBarTemplate") 
+scrollbar2 = CreateFrame("Slider", "UnoGuildiesScrollBar", scrollframe2, "UIPanelScrollBarTemplate") 
 scrollbar2:SetPoint("TOPLEFT", frame2, "TOPRIGHT", 4, -16) 
 scrollbar2:SetPoint("BOTTOMLEFT", frame2, "BOTTOMRIGHT", 4, 16) 
 local numGuildMembers, numOnline, numOnlineAndMobile = GetNumGuildMembers()
@@ -364,6 +367,23 @@ UnoInviteListButton:SetPoint("LEFT",UnoScrollFrame);
 UnoInviteListButton:SetText("Invite");
 UnoInviteListButton:SetScript("OnClick",function()
 print("clicked invite");
+
+for i, butt in ipairs(UnoScrollBar.buttons) do
+  if (butt:GetChecked()) then
+  AddUnoPlayer("bnethashtag",butt.name);
+  print("inviting this guy: " .. butt.name);
+  end
+end
+
+for i, butt in ipairs(UnoGuildiesScrollBar.buttons) do
+  if (butt:GetChecked()) then
+  AddUnoPlayer("nameserver",butt.name);
+  print("inviting this guy: " .. butt.name);
+  end
+end
+
+
+
 end);
 UnoInviteListButton:Show();
 -----------------------
