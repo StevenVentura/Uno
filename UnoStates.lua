@@ -37,7 +37,34 @@ UnoScreenLobby.t:SetAllPoints();
 UnoScreenLobby.t:SetColorTexture(43/255,15/255,1/255,0.80);
 UnoScreenLobby:Hide();
 
+UnoInvitationStatusList = {};
 
+function updateUnoInvitationStatusList()
+yOffset = 0;
+index = 0;
+--parallel array
+for name,player in pairs(UnoPlayers) do
+index = index + 1;
+if (not(UnoInvitationStatusList[index])
+	or
+	UnoInvitationStatusList[index].name ~= name) then
+	if (UnoInvitationStatusList[index]) then UnoInvitationStatusList[index]:Hide() end
+
+text = UnoProcessFrame:CreateFontString(nil,UnoProcessFrame,"GameFontNormal");
+text:SetTextColor(1,1,0,1);
+ text:SetShadowColor(0,0,0,1);
+ text:SetShadowOffset(2,-1);
+ text:SetPoint("TOPLEFT",10,-16*index);
+ text:SetText(name);
+ text:Show();
+ text.name = name;
+UnoInvitationStatusList[index] = text;
+end--end if not added yet or there was a change
+
+
+end--end for
+
+end--end function updateUnoInvitationStatusList
 
 CreateFrame("Button", "UnoMakeLobbyButton", UnoScreenSlashUno, "UIPanelButtonTemplate");
 UnoMakeLobbyButton:SetSize(150,50);
@@ -348,7 +375,7 @@ UnoManualInviteEditBox:SetPoint("LEFT",UnoManualInviteEditBoxTitle)
 UnoManualInviteEditBox:SetAutoFocus(false);
 UnoManualInviteEditBox:SetScript("OnEnterPressed",function() 
 UnoManualInviteEditBox:SetText("");
-
+updateUnoInvitationStatusList();
 end);
 UnoManualInviteEditBox:Show();
 
@@ -371,23 +398,22 @@ UnoInviteListButton:SetPoint("LEFT",UnoScrollFrame);
 UnoInviteListButton:SetText("Invite");
 UnoInviteListButton:SetScript("OnClick",function()
 print("clicked invite");
-
 for i, butt in ipairs(UnoScrollBar.buttons) do
   if (butt:GetChecked()) then
   AddUnoPlayer("bnethashtag",butt.name);
   print("inviting this guy: " .. butt.name);
-  end
-end
+  end--end if
+end--end for
 
 for i, butt in ipairs(UnoGuildiesScrollBar.buttons) do
   if (butt:GetChecked()) then
   AddUnoPlayer("nameserver",butt.name);
   print("inviting this guy: " .. butt.name);
-  end
-end
+  end--end if
+end--end for
 
 
-
+updateUnoInvitationStatusList();
 end);
 UnoInviteListButton:Show();
 -----------------------

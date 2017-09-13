@@ -1,6 +1,12 @@
 --Author: Soccerbilly aka Gangsthurh (Steven Ventura)
 --Date Created: 6/13/17
 --purpose: uno game xd
+--[[
+9/6/17 2:04PM
+current state:
+it runs the invite button which opens the accept/decline window on the other screen. goal for today is to get the status icons working, also for bnet.
+
+]]
 Uno = CreateFrame("Frame");
 
 --Uno:SetScript("OnEvent",function(self,event,...) self[event](self,event,...);end)
