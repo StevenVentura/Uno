@@ -11,6 +11,8 @@ UNO_MESSAGE_SEND_INVITATION = "The user is trying to invite you to join his Uno 
 UNO_MESSAGE_HAS_ADDON = "I have the uno addon";
 UNO_MESSAGE_DECLINE = "decline";
 UNO_MESSAGE_ACCEPT = "accept";
+--partial thngs
+UNO_STARTING = "starting";
 
 --
 UnoScreenSlashUno = CreateFrame("Frame","UnoScreenSlashUno",UIParent);
@@ -44,6 +46,7 @@ yOffset = 0;
 index = 0;
 for name,player in pairs(UnoPlayers) do
 index = index + 1;
+if (player.userJoinedTheLobby == true) then
 if (not(UnoPlayersInLobbyList[index])
 	or
 	UnoPlayersInLobbyList[index].name ~= name) then
@@ -61,7 +64,7 @@ text:SetTextColor(1,1,0,1);
 
 UnoPlayersInLobbyList[index] = text;
 end--end if not added yet or there was a change
-
+end--end if he is in da lobby
 end
 
 
@@ -477,7 +480,10 @@ UnoStartGameButton:SetPoint("LEFT",UnoAcceptedPlayersFrame);
 UnoStartGameButton:SetText("Start Game");
 UnoStartGameButton:SetScript("OnClick",function()
 print("clicked da start button")
-
+for name, player in pairs(UnoPlayers) do
+SendChatMessage(UNO_IDENTIFIER .. " " .. UNO_STARTING,"WHISPER",nil,name);
+end
+startTheUnoGame();
 end);
 UnoStartGameButton:Show();
 

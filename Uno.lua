@@ -53,6 +53,11 @@ updateLobbyPlayers(elapsed);
 
 
 end--end function UnoOnUpdate
+function startTheUnoGame()
+UnoScreenLobby:Hide();
+
+
+end--end function startTheUnoGame()
 
 --whispers
 function unoMessageReceived(ChatFrameSelf, event, message, author, ...)
@@ -60,6 +65,11 @@ local sarray = UnoSplitString(message);
 local remainder = string.sub(message,strlen(UNO_IDENTIFIER)+2);
 print("remainder is " .. remainder)
 if (sarray[1] ~= UNO_IDENTIFIER) then return end;
+
+if (sarray[2] == UNO_STARTING) then
+
+startTheUnoGame();
+end
 
 if (remainder == UNO_MESSAGE_HAS_ADDON) then
 --TODO da name match the table?
@@ -96,6 +106,7 @@ acceptFrame:SetWidth(108);
 acceptFrame:SetHeight(22);
 acceptFrame:SetScript("OnClick", function() 
 SendChatMessage(UNO_IDENTIFIER .. " " .. UNO_MESSAGE_ACCEPT,"WHISPER",nil,author);
+UnoInvitedToTheGame:Hide();
 end);
 acceptFrame:SetBackdropBorderColor(0,0,1);--include alpha?
 acceptFrame:SetBackdropColor(0,0,1);
