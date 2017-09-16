@@ -67,8 +67,8 @@ UnoPlayers[author].userHasUnoOrNot = true;
 
 end--end if UNO_MESSAGE_HAS_ADDON
 if (remainder == UNO_MESSAGE_ACCEPT) then
-
-
+UnoPlayers[author].userJoinedTheLobby = true;
+updateUnoPlayersInLobbyList();
 end--end if UNO_MESSAGE_ACCEPT
 if (remainder == UNO_MESSAGE_SEND_INVITATION) then
 print("ayy tho")

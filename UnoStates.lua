@@ -37,6 +37,36 @@ UnoScreenLobby.t:SetAllPoints();
 UnoScreenLobby.t:SetColorTexture(43/255,15/255,1/255,0.80);
 UnoScreenLobby:Hide();
 
+UnoPlayersInLobbyList = {};
+
+function updateUnoPlayersInLobbyList()
+yOffset = 0;
+index = 0;
+for name,player in pairs(UnoPlayers) do
+index = index + 1;
+if (not(UnoPlayersInLobbyList[index])
+	or
+	UnoPlayersInLobbyList[index].name ~= name) then
+	if (UnoPlayersInLobbyList[index]) then UnoPlayersInLobbyList[index]:Hide() end
+
+text = UnoAcceptedPlayersFrame:CreateFontString(nil,iconFrame,"GameFontNormal");
+text:SetTextColor(1,1,0,1);
+ text:SetShadowColor(0,0,0,1);
+ text:SetShadowOffset(2,-1);
+ text:SetPoint("TOPLEFT",10,-16*index);
+ text:SetText(name);
+ text:Show();
+ text.name = name;
+
+
+UnoPlayersInLobbyList[index] = text;
+end--end if not added yet or there was a change
+
+end
+
+
+end--end function updateUnoPlayersInLobbyList
+
 UnoInvitationStatusList = {};
 
 function updateUnoInvitationStatusList()
@@ -50,14 +80,26 @@ if (not(UnoInvitationStatusList[index])
 	UnoInvitationStatusList[index].name ~= name) then
 	if (UnoInvitationStatusList[index]) then UnoInvitationStatusList[index]:Hide() end
 
-text = UnoProcessFrame:CreateFontString(nil,UnoProcessFrame,"GameFontNormal");
+
+iconFrame = CreateFrame("Frame","iconFrame",UnoScreenSlashUno);
+iconFrame:SetSize(16,16);
+iconFrame:SetPoint("TOPLEFT",10,-16*index);
+icon = iconFrame:CreateTexture();
+
+icon:SetTexture("Interface/AddOns/Uno/images/redx.tga");
+icon:SetAllPoints();
+iconFrame:Show();
+	
+text = UnoProcessFrame:CreateFontString(nil,iconFrame,"GameFontNormal");
 text:SetTextColor(1,1,0,1);
  text:SetShadowColor(0,0,0,1);
  text:SetShadowOffset(2,-1);
- text:SetPoint("TOPLEFT",10,-16*index);
+ text:SetPoint("LEFT",iconFrame,"RIGHT",10,0);
  text:SetText(name);
  text:Show();
  text.name = name;
+
+text.iconFrame = iconFrame;
 UnoInvitationStatusList[index] = text;
 end--end if not added yet or there was a change
 
