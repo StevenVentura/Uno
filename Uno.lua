@@ -56,6 +56,7 @@ end--end function UnoOnUpdate
 function startTheUnoGame()
 UnoScreenLobby:Hide();
 
+UnoDrawClient();
 
 end--end function startTheUnoGame()
 

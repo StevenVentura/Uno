@@ -1,6 +1,6 @@
 ## Interface: 70100
 
-## Title: |cff88ff88Multiplayer Uno card game
+## Title: Uno |cff88ff88Multiplayer  card game
 
 ## Notes: |cff22ffffPlay Uno with your friends!
 
@@ -8,3 +8,6 @@ Uno.xml
 Uno.lua
 UnoPlayers.lua
 UnoStates.lua
+UnoClient.lua
+UnoServer.lua
+UnoCard.lua

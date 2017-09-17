@@ -480,13 +480,8 @@ UnoStartGameButton:SetPoint("LEFT",UnoAcceptedPlayersFrame);
 UnoStartGameButton:SetText("Start Game");
 UnoStartGameButton:SetScript("OnClick",function()
 print("clicked da start button")
-for name, player in pairs(UnoPlayers) do
-SendChatMessage(UNO_IDENTIFIER .. " " .. UNO_STARTING,"WHISPER",nil,name);
-end
-startTheUnoGame();
+StartTheUnoGameWithThesePlayers();--server command
 end);
 UnoStartGameButton:Show();
-
-
 
 end--end function UnoMakeLobbyFrames
