@@ -10,6 +10,7 @@ UnoLooseData = {
 
 };
 
+UnoUpdeckCard = {};
 
 function UnoDrawClient() 
 

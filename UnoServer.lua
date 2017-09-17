@@ -65,18 +65,50 @@ There are four suits, Red, Green, Yellow
 
  --amount = UnoServerCards["green"]."0"
 --create cards
+cardindex = 0;
 for colorIndex = 1, tableLength(UNO_COLORS) do
 for cardname,amount in pairs(UNO_DEFAULT_DECK_AMOUNTS_PER_COLOR) do
-UnoServerCards[UNO_COLORS[colorIndex]][cardname] = amount;
+for i=1,amount do
+cardIndex = cardIndex + 1;--should go up to 108
+UnoServerCards[cardIndex] = {
+color=UNO_COLORS[colorIndex],
+label=cardname,
+owner="maindeck"
+}
+end--end for
 end--end for
 end--end for
 
 --deal cards
 for name, player in pairs(UnoServerPlayers) do
 for i = 1, 5 do
-card = TakeRandomUnoCardFromDeck(UnoServerCards);
-card.owner = name;
+--give random cards to each player
+ServerDealUnoCardToPlayer(name);
 end--end for
 end--end for
 
+--put random card face up
+ServerDealUnoCardToPlayer("updeck");
+
 end--end function UnoCreateAndDealCards
+
+function ServerDealUnoCardToPlayer(dealToMe)
+
+
+index = random(1,128);
+outOfCards = false;atLeastOne = false;
+while(UnoServerCards[index].owner ~= "maindeck" and atLeastOne == false) do
+index = random(1,128);
+atLeastOne = false;
+for i=1,128 do 
+if (UnoServerCards[i].owner == "maindeck") then
+atLeastOne = true;
+print("RAN OUT OF CARDS");
+end--end if
+end--end for
+end--end while
+
+UnoServerCards[index].owner = dealToMe;
+
+
+end--end function GetIndexUnoCardFromDeck
