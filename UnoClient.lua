@@ -8,6 +8,9 @@ CreateFrame("Frame","UnoClientFrame",UIParent);
 UnoLooseData = {
 ["numberOfPlayersInMatch"] = 2};
 
+UnoClientCards = {};
+UnoClientPlayers = {};
+
 UnoUpdeckCard = {};
 
 function UnoDrawClient() 

@@ -176,6 +176,7 @@ frame.background = texture
 local scrollframe = CreateFrame("ScrollFrame","UnoScrollFrame",UnoScrollFrameParent);
 scrollframe:SetPoint("CENTER",0,0);
 scrollframe:SetSize(150,200);
+
 scrollframe:Show();
 
 scrollbar = CreateFrame("Slider", "UnoScrollBar", UnoScrollFrame, "UIPanelScrollBarTemplate") 
@@ -201,6 +202,12 @@ end
 
 
 end) 
+
+scrollframe:EnableMouseWheel(true);
+scrollframe:SetScript("OnMouseWheel", function(self, delta)
+      scrollbar:SetValue(scrollbar:GetValue()-delta*8);
+end)
+
 local scrollbg = scrollbar:CreateTexture(nil, "BACKGROUND") 
 scrollbg:SetAllPoints(scrollbar) 
 scrollbg:SetColorTexture(0, 0, 0, 0.4) 
@@ -337,6 +344,10 @@ for i, butt in ipairs(scrollbar2.buttons) do
   end
 end
 end) 
+scrollframe2:EnableMouseWheel(true);
+scrollframe2:SetScript("OnMouseWheel", function(self, delta)
+      scrollbar2:SetValue(scrollbar2:GetValue()-delta*8);
+end)
 local scrollbg2 = scrollbar:CreateTexture(nil, "BACKGROUND") 
 scrollbg2:SetAllPoints(scrollbar2) 
 scrollbg2:SetColorTexture(0, 0, 0, 0.4) 

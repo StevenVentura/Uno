@@ -14,7 +14,7 @@ UnoServerCards = {
 
 
 
-function StartUnoGameWithThesePlayers() 
+function StartTheUnoGameWithThesePlayers() 
 
 UnoServerPlayers = {
 
@@ -65,8 +65,8 @@ There are four suits, Red, Green, Yellow
 
  --amount = UnoServerCards["green"]."0"
 --create cards
-cardindex = 0;
-for colorIndex = 1, tableLength(UNO_COLORS) do
+cardIndex = 0;
+for colorIndex = 1, tablelength(UNO_COLORS) do
 for cardname,amount in pairs(UNO_DEFAULT_DECK_AMOUNTS_PER_COLOR) do
 for i=1,amount do
 cardIndex = cardIndex + 1;--should go up to 108
