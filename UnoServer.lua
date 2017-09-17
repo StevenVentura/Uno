@@ -49,8 +49,8 @@ UNO_VALUES = {"0","1","2","3","4","5","6","7","8","9",
 			"drawTwo","skip","reverse",
 			"wild","wildDraw4"};
 UNO_DEFAULT_DECK_AMOUNTS_PER_COLOR = {
-			   "0"=1,"1"=2,"2"=2,"3"=2,"4"=2,"5"=2,"6"=2,"7"=2,"8"=2,"9"=2,
-			   "drawTwo"=2,"skip"=2,"reverse"=2,"wild"=4,"wildDraw4"=4
+			   ["0"]=1,["1"]=2,["2"]=2,["3"]=2,["4"]=2,["5"]=2,["6"]=2,["7"]=2,["8"]=2,["9"]=2,
+			   ["drawTwo"]=2,["skip"]=2,["reverse"]=2,["wild"]=4,["wildDraw4"]=4
 						};
 function UnoCreateAndDealCards()
 

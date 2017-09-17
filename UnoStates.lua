@@ -52,7 +52,7 @@ if (not(UnoPlayersInLobbyList[index])
 	UnoPlayersInLobbyList[index].name ~= name) then
 	if (UnoPlayersInLobbyList[index]) then UnoPlayersInLobbyList[index]:Hide() end
 
-text = UnoAcceptedPlayersFrame:CreateFontString(nil,iconFrame,"GameFontNormal");
+text = UnoAcceptedPlayersFrame:CreateFontString(nil,nil,"GameFontNormal");
 text:SetTextColor(1,1,0,1);
  text:SetShadowColor(0,0,0,1);
  text:SetShadowOffset(2,-1);
@@ -84,12 +84,15 @@ if (not(UnoInvitationStatusList[index])
 	if (UnoInvitationStatusList[index]) then UnoInvitationStatusList[index]:Hide() end
 
 
-iconFrame = CreateFrame("Frame","iconFrame",UnoScreenSlashUno);
+
+iconFrame = CreateFrame("Frame",nil,UnoProcessFrame);
 iconFrame:SetSize(16,16);
 iconFrame:SetPoint("TOPLEFT",10,-16*index);
 icon = iconFrame:CreateTexture();
 
-icon:SetTexture("Interface/AddOns/Uno/images/redx.tga");
+print("heyo guys");
+
+
 icon:SetAllPoints();
 iconFrame:Show();
 	
@@ -102,10 +105,25 @@ text:SetTextColor(1,1,0,1);
  text:Show();
  text.name = name;
 
-text.iconFrame = iconFrame;
+text.icon = icon;
 UnoInvitationStatusList[index] = text;
 end--end if not added yet or there was a change
 
+if (player.userHasUnoOrNot == false and player.userHasUnoOrNotTimer < 5.0) then
+UnoInvitationStatusList[index].icon:SetTexture("Interface/AddOns/Uno/images/questionmark.tga");
+end
+if (player.userHasUnoOrNot == false and player.userHasUnoOrNotTimer > 5.0) then
+UnoInvitationStatusList[index].icon:SetTexture("Interface/AddOns/Uno/images/redx.tga");
+end
+if (player.userJoinedTheLobby == false and player.userHasUnoOrNot == true) then
+UnoInvitationStatusList[index].icon:SetTexture("Interface/AddOns/Uno/images/ellipsis.tga");
+end
+if (player.userJoinedTheLobby == true) then
+UnoInvitationStatusList[index].icon:SetTexture("Interface/AddOns/Uno/images/greencheck.tga");
+end
+if (player.userDeclinedTheInvite == true) then
+UnoInvitationStatusList[index].icon:SetTexture("Interface/AddOns/Uno/images/redx.tga");
+end
 
 end--end for
 

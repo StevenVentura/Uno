@@ -43,13 +43,9 @@ end
 
 
 lagLess = 0;
-UnoTimeDelayThing = 0.50;
 function UnoOnUpdate(self, elapsed)
-lagLess = lagLess + elapsed;
-if (lagLess < UnoTimeDelayThing) then  return end
-lagLess = 0;
---do stuff here
 updateLobbyPlayers(elapsed);
+
 
 
 end--end function UnoOnUpdate
@@ -75,12 +71,17 @@ end
 if (remainder == UNO_MESSAGE_HAS_ADDON) then
 --TODO da name match the table?
 UnoPlayers[author].userHasUnoOrNot = true;
-
+updateUnoInvitationStatusList();
 end--end if UNO_MESSAGE_HAS_ADDON
 if (remainder == UNO_MESSAGE_ACCEPT) then
 UnoPlayers[author].userJoinedTheLobby = true;
+updateUnoInvitationStatusList();
 updateUnoPlayersInLobbyList();
 end--end if UNO_MESSAGE_ACCEPT
+if (remainder == UNO_MESSAGE_DECLINE) then
+UnoPlayers[author].userDeclinedTheInvite = true;
+updateUnoInvitationStatusList();
+end
 if (remainder == UNO_MESSAGE_SEND_INVITATION) then
 print("ayy tho")
 --u just got invited! send recognition , also begin da process
@@ -142,20 +143,14 @@ end--end function unoMessageReceived
 
 
 function updateLobbyPlayers(elapsed)
-for _,boy in ipairs(UnoPlayers) do
---TODO how do i do dat
-print(boy.userHasUnoOrNotTimer);
+for name,boy in pairs(UnoPlayers) do
+if (boy.userHasUnoOrNotTimer < 5.0) then
 boy.userHasUnoOrNotTimer = boy.userHasUnoOrNotTimer + elapsed;
-if (boy.userHasUnoOrNotTimer < 4.5 ) then
-boy.statusIcon="unknown";
-end--end if
-if (boy.userHasUnoOrNotTimer > 4.5 and boy.userHasUnoOrNot == false) then
-boy.statusIcon="download";
-print("<Uno>: " .. boy .. " doesn't have the addon.");
-end--end if
-if (boy.userHasUnoOrNot == true) then
-boy.statusIcon="question";
-end--end if
+if (boy.userHasUnoOrNotTimer > 5.0) then
+updateUnoInvitationStatusList()
+end--end > 5
+
+end--end < 5
 
 end--end for
 

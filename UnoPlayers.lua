@@ -32,7 +32,8 @@ statusIcon="none",
 whisperCategory=boolree,
 userHasUnoOrNot=false,
 userHasUnoOrNotTimer=0,
-userJoinedTheLobby=false
+userJoinedTheLobby=false,
+userDeclinedTheInvite=false
 
 };
 
