@@ -77,10 +77,10 @@ end
 
 --client code
 if (sarray[2] == UNO_MESSAGE_CARDUPDATE) then
-local numCardUpdates = tablelength(sarray) - 2;
+local numCardUpdates = (tablelength(sarray) - 2)/2;
 for i=1,numCardUpdates,1 do
-local cardIndex = tonumber(sarray[(i+2)]); 
-local newOwner = sarray[(i+3)];
+local cardIndex = tonumber(sarray[((i-1)*2+3)]); 
+local newOwner = sarray[((i-1)*2+3)];
 UnoClientCards[cardIndex].owner = newOwner;
 end--end for
 end--end if UNO_MESSAGE_CARDUPDATE
