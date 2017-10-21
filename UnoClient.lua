@@ -17,7 +17,7 @@ UnoUpdeckCard = {};
 
 function UnoDrawClient() 
 ----copied from UnoServer.lua (UnoCreateAndDealCards) changed UnoServerCards to UnoClientCards
---create cards : Give them a default value
+--create cards : Give them a default value, instantiate them in our array so they can be updated by index.
 cardIndex = 0;
 for colorIndex = 1, tablelength(UNO_COLORS) do
 for cardname,amount in pairs(UNO_DEFAULT_DECK_AMOUNTS_PER_COLOR) do

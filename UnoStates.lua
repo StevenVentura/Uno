@@ -12,7 +12,8 @@ UNO_MESSAGE_HAS_ADDON = "I have the uno addon";
 UNO_MESSAGE_DECLINE = "decline";
 UNO_MESSAGE_ACCEPT = "accept";
 --partial thngs
-UNO_STARTING = "starting";
+UNO_STARTING = "starting";--TODO: give the name of all players appended to this string?
+UNO_MESSAGE_CARDUPDATE = "CARDUPDATE";--TODO: broadcast deck data appended to this string
 
 --
 UnoScreenSlashUno = CreateFrame("Frame","UnoScreenSlashUno",UIParent);
