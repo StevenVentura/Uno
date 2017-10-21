@@ -13,7 +13,7 @@ UnoServerCards = {
 
 
 
-
+--when the host presses the "Start game" button, StartTheUnoGameWithThesePlayers()  is called
 function StartTheUnoGameWithThesePlayers() 
 
 UnoServerPlayers = {
@@ -22,18 +22,21 @@ UnoServerPlayers = {
 
 for name, player in pairs(UnoPlayers) do
 if (player.userJoinedTheLobby == true) then
-UnoServerPlayers[name] = name;
+UnoServerPlayers[name] = player;--this is a deep copy (there are no references back)
 end--end if
 end--end for
---add self to it
-UnoServerPlayers["serverPlayer"] = "serverPlayer";
 
+--add self to it
+--UnoServerPlayers["serverPlayer"] = "serverPlayer";
 
 
 --let them know we are starting
+--TODO: send the game information here? like, all the other player's names.
 for name, player in pairs(UnoServerPlayers) do
 SendChatMessage(UNO_IDENTIFIER .. " " .. UNO_STARTING,"WHISPER",nil,name);
 end
+--send it to myself
+SendChatMessage(UNO_IDENTIFIER .. " " .. UNO_STARTING,"WHISPER",nil,UnitName("player"));
 UnoCreateAndDealCards();
 
 startTheUnoGame();--for my client
@@ -90,7 +93,14 @@ end--end for
 --put random card face up
 ServerDealUnoCardToPlayer("updeck");
 
+UnoBroadcastUpdateDeck();
+
 end--end function UnoCreateAndDealCards
+
+function UnoBroadcastUpdateDeck()
+
+
+end--end function UnoBroadcastUpdateDeck
 
 function ServerDealUnoCardToPlayer(dealToMe)
 

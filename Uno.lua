@@ -57,16 +57,24 @@ UnoDrawClient();
 end--end function startTheUnoGame()
 
 --whispers
-function unoMessageReceived(ChatFrameSelf, event, message, author, ...)
+function UNO_WHISPER_RECEIVED(ChatFrameSelf, event, message, author, ...)
+
+UnoAbstractMessageReceived(message,author);
+
+end--end function UNO_WHISPER_RECEIVED
+
+function UnoAbstractMessageReceived(message, author, pid)
 local sarray = UnoSplitString(message);
 local remainder = string.sub(message,strlen(UNO_IDENTIFIER)+2);
 print("remainder is " .. remainder)
+print("author is " .. author);
 if (sarray[1] ~= UNO_IDENTIFIER) then return end;
 
 if (sarray[2] == UNO_STARTING) then
 
 startTheUnoGame();
 end
+
 
 if (remainder == UNO_MESSAGE_HAS_ADDON) then
 --TODO da name match the table?
@@ -81,11 +89,22 @@ end--end if UNO_MESSAGE_ACCEPT
 if (remainder == UNO_MESSAGE_DECLINE) then
 UnoPlayers[author].userDeclinedTheInvite = true;
 updateUnoInvitationStatusList();
+
 end
+
+
+
 if (remainder == UNO_MESSAGE_SEND_INVITATION) then
-print("ayy tho")
+
+
+if (pid) then
+AddUnoPlayerClientLobby("bnethashtag",author,pid);
+else
+AddUnoPlayerClientLobby("nameserver",author);
+end
+
 --u just got invited! send recognition , also begin da process
-SendChatMessage(UNO_IDENTIFIER .. " " .. UNO_MESSAGE_HAS_ADDON,"WHISPER",nil,author);
+UnoMessage(UnoPlayersClientLobby[author],UNO_IDENTIFIER .. " " .. UNO_MESSAGE_HAS_ADDON);
 UnoCurrentScreen = UNO_SCREEN_INVITATION;
 --pop up da window
 UnoInvitedToTheGame = CreateFrame("FRAME","UnoInvitedToTheGame",UIParent);
@@ -134,12 +153,7 @@ UnoInvitedToTheGame:Show();
 
 
 end--end UNO_MESSAGE_SEND_INVITATION
-
-
-
-
-end--end function unoMessageReceived
-
+end--end UnoAbstractMessageReceived
 
 
 function updateLobbyPlayers(elapsed)
@@ -157,17 +171,13 @@ end--end for
 
 end--end function updateLobbyPlayers
 
-
-function UnoIncoming(ChatFrameSelf, event, message, author, ...)
-
-
-
-
-
-end--end function UnoIncoming
+function UNO_CHAT_MSG_BN_WHISPER(tableThing,uselessCHAT_MSG_BN_WHISPER
+						,message,sender,u3,u4,u5,u6,u7,u8,u9,u10,presenceLie,u11,presenceID,u13)
+UnoAbstractMessageReceived(message,sender,presenceID);
+end --end function unochatbnet
 
 --this is called after the variables are loaded
 function UnoInit()
-ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER",unoMessageReceived);
-
+ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER",UNO_WHISPER_RECEIVED);
+ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER",UNO_CHAT_MSG_BN_WHISPER);
 end--end function UnoInit

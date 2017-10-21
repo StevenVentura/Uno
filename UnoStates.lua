@@ -237,6 +237,8 @@ local button = CreateFrame("CheckButton","UnoFriendSelectButton" .. index,conten
 scrollbar.buttons[index] = button;
 button:SetPoint("TOPLEFT",_G["UnoFriendSelectButton" .. index-1],"BOTTOMLEFT",0,0);
 button.name = bnetNameWithNumber;
+button.glitchyAccountName = glitchyAccountName;
+button.presenceID = presenceID;
 button.index = index;
 button.disabled = false;
 button.setFunc = function(value) 
@@ -474,15 +476,17 @@ UnoInviteListButton:SetScript("OnClick",function()
 print("clicked invite");
 for i, butt in ipairs(UnoScrollBar.buttons) do
   if (butt:GetChecked()) then
-  AddUnoPlayer("bnethashtag",butt.name);
-  print("inviting this guy: " .. butt.name);
+  AddUnoPlayer("bnethashtag",butt.name,butt.presenceID,butt.glitchyAccountName);
+  UnoMessage(UnoPlayers[butt.name],UNO_IDENTIFIER .. " " .. UNO_MESSAGE_SEND_INVITATION);
   end--end if
 end--end for
 
 for i, butt in ipairs(UnoGuildiesScrollBar.buttons) do
   if (butt:GetChecked()) then
   AddUnoPlayer("nameserver",butt.name);
-  print("inviting this guy: " .. butt.name);
+  print("type is ...")
+  print(UnoPlayers[butt.name].contactType)
+  UnoMessage(UnoPlayers[butt.name],UNO_IDENTIFIER .. " " .. UNO_MESSAGE_SEND_INVITATION);
   end--end if
 end--end for
 
