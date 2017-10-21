@@ -97,14 +97,18 @@ UnoBroadcastUpdateDeck();
 
 end--end function UnoCreateAndDealCards
 
+
+UnoServerCardsChanged = {};
+
+
 --[[
 documentation for UnoBroadcastUpdateDeck is in UnoCard.lua
 ]]
 function UnoBroadcastUpdateDeck()
 --using the UnoServerCardsChanged event stack, create cardsMessage
 local cardsMessage = UNO_IDENTIFIER .. " " .. UNO_MESSAGE_CARDUPDATE;
-
 for masterIndex, newOwner in pairs(UnoServerCardsChanged) do
+
 cardsMessage = cardsMessage .. " " .. masterIndex .. " " .. newOwner;
 end--end for
 
@@ -121,7 +125,7 @@ end--end for
 
 end--end function UnoBroadcastUpdateDeck
 
-UnoServerCardsChanged = {};
+
 
 function ServerDealUnoCardToPlayer(dealToMe)
 
@@ -142,6 +146,9 @@ end--end while
 UnoServerCards[index].owner = dealToMe;
 
 --populate the event stack
-UnoServerCardsChanged[index] = owner;
+
+UnoServerCardsChanged[index] = dealToMe;
+
+
 
 end--end function GetIndexUnoCardFromDeck
