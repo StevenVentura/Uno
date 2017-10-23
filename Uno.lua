@@ -59,6 +59,8 @@ end--end function startTheUnoGame()
 --whispers
 function UNO_WHISPER_RECEIVED(ChatFrameSelf, event, message, author, ...)
 
+
+
 UnoAbstractMessageReceived(message,author);
 
 end--end function UNO_WHISPER_RECEIVED
@@ -72,6 +74,16 @@ print("author is " .. author);
 if (sarray[1] ~= UNO_IDENTIFIER) then return end;
 
 if (sarray[2] == UNO_STARTING) then
+
+--populate the client players array
+local numOtherPlayers = tablelength(sarray) - 2;
+for i=1,numOtherPlayers do
+local playerName = sarray[i+2];
+UnoClientPlayers[playerName] = playerName;
+print("welcome " .. playerName .. " to your game xd")
+end--end for
+
+
 startTheUnoGame();
 end
 
@@ -184,6 +196,24 @@ end--end function updateLobbyPlayers
 
 function UNO_CHAT_MSG_BN_WHISPER(tableThing,uselessCHAT_MSG_BN_WHISPER
 						,message,sender,u3,u4,u5,u6,u7,u8,u9,u10,presenceLie,u11,presenceID,u13)
+
+--[[if the sender is a full name like "Jennifer Clarke" instead of "Jenn#1884" then do a reverse
+		lookup to be consistently only using Btag names via the "name" attribute. 
+		This is to protect the identity of my customers to ensure that nobody sees
+		their full name except for people who already had access to this information;
+		instead of seeing the full name of the player, they will just see the battletag nickname "Jenn#1884".
+		
+		Let's keep things legal here - already nervous enough about the game being called Uno.]]
+if (UnoPlayers[sender] == nil) then
+for name,playerObject in pairs(UnoPlayers) do
+if (playerObject.isRealIDNotJustBNet and playerObject.realName == sender) then
+print("tf = ")
+print(isRealIDNotJustBNet)
+sender = playerObject.name;
+end--end if
+end--end for
+
+end--end if
 UnoAbstractMessageReceived(message,sender,presenceID);
 end --end function unochatbnet
 

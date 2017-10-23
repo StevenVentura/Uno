@@ -12,6 +12,25 @@ userJoinedTheLobby=false
 }
 
 ]]
+--[[
+
+10/23/17
+players are seen as Soccerbilly-Gorefiend
+and
+-=-=
+AddUnoPlayer("bnethashtag",butt.name,butt.presenceID,butt.glitchyAccountName);
+
+if (remainder == UNO_MESSAGE_HAS_ADDON) then
+--TODO da name match the table?
+print("|cffffff00author is " .. author);
+for i, ii in pairs(UnoPlayers) do
+print("i=" .. i)
+print("ii=" .. i
+-=-=
+all players will be identified by their Btag. i will never use their real name.
+
+
+]]
 
 UNO_CONTACT_WHISPER = 1;
 UNO_CONTACT_BTAG = 2;
@@ -57,6 +76,7 @@ end--end function AddUnoPlayerClientLobby
 
 --used by the server in the invitation phase
 function AddUnoPlayer(boolree, nameX,pid,glitchyAccountName) 
+
 
 if (boolree == "bnethashtag") then
 taipu = UNO_CONTACT_BTAG;

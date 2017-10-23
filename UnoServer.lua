@@ -32,11 +32,20 @@ end--end for
 
 --let them know we are starting
 --TODO: send the game information here? like, all the other player's names.
+
+--make players aware of each other
+local unoPlayerNameList = "";
+unoPlayerNameList = unoPlayerNameList .. " " .. UnitName("player") .. "-" .. GetRealmName("player");
 for name, player in pairs(UnoServerPlayers) do
-SendChatMessage(UNO_IDENTIFIER .. " " .. UNO_STARTING,"WHISPER",nil,name);
-end
+unoPlayerNameList = unoPlayerNameList .. " " .. name;
+end--end for
+
+--broadcast message to all players
+for name, player in pairs(UnoServerPlayers) do
+SendChatMessage(UNO_IDENTIFIER .. " " .. UNO_STARTING .. unoPlayerNameList,"WHISPER",nil,name);
+end--end for
 --send it to myself
-SendChatMessage(UNO_IDENTIFIER .. " " .. UNO_STARTING,"WHISPER",nil,UnitName("player"));
+SendChatMessage(UNO_IDENTIFIER .. " " .. UNO_STARTING .. unoPlayerNameList,"WHISPER",nil,UnitName("player"));
 UnoCreateAndDealCards();
 
 startTheUnoGame();--for my client

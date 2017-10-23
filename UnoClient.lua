@@ -5,8 +5,6 @@ started writing this file on 9/16/17
 
 CreateFrame("Frame","UnoClientFrame",UIParent);
 
-UnoLooseData = {
-["numberOfPlayersInMatch"] = 2};
 
 UnoClientCards = {};
 UnoClientPlayers = {};
@@ -27,7 +25,7 @@ UnoClientCards[cardIndex] = {
 color=UNO_COLORS[colorIndex],
 label=cardname,
 owner="maindeck"
-}
+};
 end--end for
 end--end for
 end--end for
