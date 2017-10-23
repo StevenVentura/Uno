@@ -119,7 +119,7 @@ end
 
 if (remainder == UNO_MESSAGE_SEND_INVITATION) then
 
-
+print("|cff0088ffauthor is " .. author);
 if (pid) then
 AddUnoPlayerClientLobby("bnethashtag",author,pid);
 else
@@ -149,7 +149,7 @@ acceptFrame:SetPoint("CENTER",-108-22,-22);
 acceptFrame:SetWidth(108);
 acceptFrame:SetHeight(22);
 acceptFrame:SetScript("OnClick", function() 
-SendChatMessage(UNO_IDENTIFIER .. " " .. UNO_MESSAGE_ACCEPT,"WHISPER",nil,author);
+UnoMessage(UnoPlayersClientLobby[author], UNO_IDENTIFIER .. " " .. UNO_MESSAGE_ACCEPT);
 UnoInvitedToTheGame:Hide();
 end);
 acceptFrame:SetBackdropBorderColor(0,0,1);--include alpha?
@@ -163,7 +163,7 @@ declineFrame:SetPoint("CENTER",108+22,-22);
 declineFrame:SetWidth(108);
 declineFrame:SetHeight(22);
 declineFrame:SetScript("OnClick", function() 
-SendChatMessage(UNO_IDENTIFIER .. " " .. UNO_MESSAGE_DECLINE,"WHISPER",nil,author);
+UnoMessage(UnoPlayersClientLobby[author],UNO_IDENTIFIER .. " " .. UNO_MESSAGE_DECLINE);
 UnoCurrentScreen = UNO_SCREEN_BLANK;
 UnoInvitedToTheGame:Hide();
 end);
@@ -194,25 +194,31 @@ end--end for
 
 end--end function updateLobbyPlayers
 
+function UnoFindBtagFromRealID(realID)
+for index = 1, BNGetNumFriends() do
+local presenceID,glitchyAccountName,bnetNameWithNumber,isJustBNetFriend,characterName,uselessnumber,game = BNGetFriendInfo( index );
+if (realID == glitchyAccountName) then return bnetNameWithNumber end--end if
+end--end for
+end--end function UnoFindBtagFromRealID
+
 function UNO_CHAT_MSG_BN_WHISPER(tableThing,uselessCHAT_MSG_BN_WHISPER
 						,message,sender,u3,u4,u5,u6,u7,u8,u9,u10,presenceLie,u11,presenceID,u13)
 
---[[if the sender is a full name like "Jennifer Clarke" instead of "Jenn#1884" then do a reverse
-		lookup to be consistently only using Btag names via the "name" attribute. 
-		This is to protect the identity of my customers to ensure that nobody sees
-		their full name except for people who already had access to this information;
-		instead of seeing the full name of the player, they will just see the battletag nickname "Jenn#1884".
-		
-		Let's keep things legal here - already nervous enough about the game being called Uno.]]
+
+--use nickname lookup instead of full RealID for privacy reasons
 if (UnoPlayers[sender] == nil) then
 for name,playerObject in pairs(UnoPlayers) do
 if (playerObject.isRealIDNotJustBNet and playerObject.realName == sender) then
-print("tf = ")
-print(isRealIDNotJustBNet)
 sender = playerObject.name;
+end--end if
 end--end if
 end--end for
 
+--[[check if it hasnt been added to players yet -- should only happen 1 time per person.
+in order to correspond with <<if (remainder == UNO_MESSAGE_SEND_INVITATION) then>>
+]]
+if (UnoPlayers[sender] == nil) then
+sender = UnoFindBtagFromRealID(sender);
 end--end if
 UnoAbstractMessageReceived(message,sender,presenceID);
 end --end function unochatbnet

@@ -105,6 +105,7 @@ name = nameX
 end--end function AddUnoPlayer
 
 function UnoMessage(playerdata,message)
+print("contacttype is next...")
 print(playerdata.contactType)
 if (playerdata.contactType == UNO_CONTACT_WHISPER) then
 
