@@ -49,12 +49,7 @@ updateLobbyPlayers(elapsed);
 
 
 end--end function UnoOnUpdate
-function startTheUnoGame()
-UnoScreenLobby:Hide();
 
-UnoDrawClient();
-
-end--end function startTheUnoGame()
 
 --whispers
 function UNO_WHISPER_RECEIVED(ChatFrameSelf, event, message, author, ...)

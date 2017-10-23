@@ -43,5 +43,12 @@ in UnoStates.lua i defined UNO_MESSAGE_CARDUPDATE.
 
 that should be good for now.
 
+10/23/17
+UnoClientCards[cardIndex] = {
+color=UNO_COLORS[colorIndex],
+label=cardname,
+owner="maindeck"
+};
+
 
 ]]

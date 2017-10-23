@@ -31,7 +31,7 @@ end--end for
 
 
 --let them know we are starting
---TODO: send the game information here? like, all the other player's names.
+--DONETODO: send the game information here? like, all the other player's names.
 
 --make players aware of each other
 local unoPlayerNameList = "";
@@ -48,7 +48,6 @@ end--end for
 SendChatMessage(UNO_IDENTIFIER .. " " .. UNO_STARTING .. unoPlayerNameList,"WHISPER",nil,UnitName("player"));
 UnoCreateAndDealCards();
 
-startTheUnoGame();--for my client
 end--end function
 
 function TakeRandomUnoCardFromDeck(deck)
