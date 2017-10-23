@@ -55,6 +55,42 @@ UnoDrawClient();
 
 end--end function startTheUnoGame()
 
+
+UnoMaindeckOffsetX = 
+
+function UnoPositionCard(cardToPosition)
+local width,height = UnoClientFrame:GetSize();
+
+
+if (cardToPosition.owner == "maindeck") then
+cardToPosition:SetPoint("CENTER",nil,"CENTER",width/8,0);
+end--end maindeck
+
+if (cardToPosition.owner == "updeck") then
+cardToPosition:SetPoint("CENTER",nil,"CENTER",-width/8,0)
+end --end updeck
+
+local ownerCount = 0;
+local playerOwned = cardToPosition ~= "updeck" and cardToPosition.owner ~= "maindeck";
+for index,card in pairs(UnoClientCards) do
+if (card.owner == cardToPosition.owner) then ownerCount = ownerCount + 1 end
+end
+
+if (playerOwned == true) then
+local count = 0;
+local px = UnoClientPlayers[card.owner].centerX;
+local py = UnoClientPlayers[card.owner].centerY;
+local theta = UnoClientPlayers[card.owner].theta;
+for index,card in pairs(UnoClientCards) do
+if (card.owner == cardToPosition.owner) then
+cardToPosition:SetPoint()
+count = count + 1;
+end--end if his
+end--end for
+end--end if playerOwned
+
+end--end function UnoPositionCard
+
 function UnoDrawClient() 
 print("|cffff0000calleing drawcleint")
 UnoClientFrame:SetPoint("CENTER");
@@ -69,24 +105,26 @@ for name,player in pairs(UnoClientPlayers) do
 player.theta = theta;
 
 
-player.frame = CreateFrame("FRAME",nil,UnoClientFrame);
 local width,height = UnoClientFrame:GetSize();
-player.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",
-						width/2/2 * math.cos(theta),
-						height/2/2 * math.sin(theta));	
---for the next player
+player.centerX = width/2 + width/2 * math.cos(player.theta);
+player.centerY = height/2 + height/2 * math.sin(player.theta);
+
+--increment for the next player
 theta = theta + 360/numPlayers;
 end--end for
 
 for index,card in pairs(UnoClientCards) do
 card.frame = CreateFrame("FRAME",nil,UnoClientFrame);
-card.frame:SetSize(40*0.7142857142857143,40);
-card.frame:SetPoint("CENTER")
+card.frame:SetSize(width/8*0.7142857142857143,width/8);
+UnoPositionCard(card);
 card.frame.texture = card.frame:CreateTexture();
 card.frame.texture:SetAllPoints();
 card.frame.texture:SetTexture("Interface/AddOns/Uno/images/red8.tga");
 card.frame:Show();
 end
+
+
+
 
 
 UnoClientFrame:Show();
