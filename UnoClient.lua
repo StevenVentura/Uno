@@ -11,7 +11,26 @@ UnoClientPlayers = {};
 
 UnoUpdeckCard = {};
 
+function UnoClientDisplayLobbyGuestScreen()
+CreateFrame("FRAME","UnoClientLobbyScreen",UIParent);
+UnoClientLobbyScreen:SetSize(150,40);
+UnoClientLobbyScreen:SetPoint("CENTER");
+UnoClientLobbyScreen.t = UnoClientLobbyScreen:CreateTexture();
+UnoClientLobbyScreen.t:SetAllPoints();
+UnoClientLobbyScreen.t:SetColorTexture(43/255,15/255,1/255,0.80);
+UnoClientLobbyScreen.title = UnoClientLobbyScreen:CreateFontString(nil,UnoClientLobbyScreen,"GameFontNormal");
+UnoClientLobbyScreen.title:SetTextColor(1,1,0,1);
+ UnoClientLobbyScreen.title:SetShadowColor(0,0,0,1);
+ UnoClientLobbyScreen.title:SetShadowOffset(2,-1);
+ UnoClientLobbyScreen.title:SetPoint("TOPLEFT",10,-10);
+ UnoClientLobbyScreen.title:SetText("UNO: Waiting for host...");
+ UnoClientLobbyScreen.title:Show();
 
+
+
+
+
+end--end functin UnoClientDisplayLobbyGuestScreen
 
 function UnoDrawClient() 
 ----copied from UnoServer.lua (UnoCreateAndDealCards) changed UnoServerCards to UnoClientCards

@@ -74,7 +74,7 @@ print("author is " .. author);
 if (sarray[1] ~= UNO_IDENTIFIER) then return end;
 
 if (sarray[2] == UNO_STARTING) then
-
+if (UnoClientLobbyScreen) then UnoClientLobbyScreen:Hide() end;
 --populate the client players array
 local numOtherPlayers = tablelength(sarray) - 2;
 for i=1,numOtherPlayers do
@@ -149,13 +149,15 @@ acceptFrame:SetPoint("CENTER",-108-22,-22);
 acceptFrame:SetWidth(108);
 acceptFrame:SetHeight(22);
 acceptFrame:SetScript("OnClick", function() 
+--now we are in the lobby waiting
+UnoCurrentScreen = UNO_SCREEN_LOBBYGUEST;
+UnoClientDisplayLobbyGuestScreen();
 UnoMessage(UnoPlayersClientLobby[author], UNO_IDENTIFIER .. " " .. UNO_MESSAGE_ACCEPT);
 UnoInvitedToTheGame:Hide();
 end);
 acceptFrame:SetBackdropBorderColor(0,0,1);--include alpha?
 acceptFrame:SetBackdropColor(0,0,1);
-UnoCurrentScreen = UNO_SCREEN_LOBBYGUEST;
---now we are in the lobby waiting
+
 acceptFrame:Show();
 local declineFrame = CreateFrame("Button", "UnoInvitedToTheGameDecline", UnoInvitedToTheGame, "UIPanelButtonTemplate");
 declineFrame:SetText("Decline Invite");

@@ -42,7 +42,7 @@ end--end for
 
 --broadcast message to all players
 for name, player in pairs(UnoServerPlayers) do
-SendChatMessage(UNO_IDENTIFIER .. " " .. UNO_STARTING .. unoPlayerNameList,"WHISPER",nil,name);
+UnoMessage(UnoPlayers[name],UNO_IDENTIFIER .. " " .. UNO_STARTING .. unoPlayerNameList);
 end--end for
 --send it to myself
 SendChatMessage(UNO_IDENTIFIER .. " " .. UNO_STARTING .. unoPlayerNameList,"WHISPER",nil,UnitName("player"));
