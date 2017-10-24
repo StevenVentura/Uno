@@ -57,11 +57,11 @@ end--end function TakeRandomUnoCardFromDeck
 
 UNO_COLORS = {"red","green","yellow","blue"};
 UNO_VALUES = {"0","1","2","3","4","5","6","7","8","9",
-			"drawTwo","skip","reverse",
-			"wild","wildDraw4"};
+			"plus2","skip","reverse",
+			"wild","wildplus4"};
 UNO_DEFAULT_DECK_AMOUNTS_PER_COLOR = {
 			   ["0"]=1,["1"]=2,["2"]=2,["3"]=2,["4"]=2,["5"]=2,["6"]=2,["7"]=2,["8"]=2,["9"]=2,
-			   ["drawTwo"]=2,["skip"]=2,["reverse"]=2,["wild"]=4,["wildDraw4"]=4
+			   ["plus2"]=2,["skip"]=2,["reverse"]=2,["wild"]=4,["wildplus4"]=4
 						};
 function UnoCreateAndDealCards()
 
@@ -140,14 +140,13 @@ function ServerDealUnoCardToPlayer(dealToMe)
 
 
 index = random(1,128);
-outOfCards = false;atLeastOne = false;
-while(UnoServerCards[index].owner ~= "maindeck" and atLeastOne == false) do
+outOfCards = false;atLeastOne = true;
+while(UnoServerCards[index].owner ~= "maindeck" and atLeastOne == true) do
 index = random(1,128);
 atLeastOne = false;
 for i=1,128 do 
 if (UnoServerCards[i].owner == "maindeck") then
 atLeastOne = true;
-print("RAN OUT OF CARDS");
 end--end if
 end--end for
 end--end while

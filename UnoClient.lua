@@ -42,9 +42,13 @@ for colorIndex = 1, tablelength(UNO_COLORS) do
 for cardname,amount in pairs(UNO_DEFAULT_DECK_AMOUNTS_PER_COLOR) do
 for i=1,amount do
 cardIndex = cardIndex + 1;--should go up to 108
+local tempName = cardname;
+if (cardname ~= "wild" and cardname ~= "wildplus4") then
+tempName = UNO_COLORS[colorIndex] .. cardname;
+end--end if
 UnoClientCards[cardIndex] = {
 color=UNO_COLORS[colorIndex],
-label=cardname,
+label=tempName,
 owner="maindeck"
 };
 end--end for
@@ -63,7 +67,7 @@ function GetUnoCardHeight()
 return 50;
 end--end
 function GetUnoCardGap()
-return 10;
+return 100;
 end--end
 
 function UnoGetMaindeckOffset()
@@ -104,9 +108,8 @@ if (playerOwned == true) then
 local playerHand = UnoGetHandClient(cardToPosition.owner);
 local player = UnoClientPlayers[cardToPosition.owner];
 local handCount = tablelength(playerHand);
+print("handcount is " .. handCount)
 local currentCount = 0;--lay the hand out across the table
-print("second")
-print("owner is " .. cardToPosition.owner);
 
 local px = UnoClientPlayers[cardToPosition.owner].centerX;
 
@@ -141,6 +144,11 @@ end--end if playerOwned
 
 end--end function UnoPositionCard
 
+function UnoUpdatePositions()
+for name,card in pairs(UnoClientCards) do 
+UnoPositionCard(card)
+end--end for
+end--end function UnoUpdatePositions
 function UnoDrawClient() 
 print("|cffff0000calleing drawcleint")
 UnoClientFrame:SetPoint("CENTER");
@@ -154,7 +162,7 @@ local theta = 0;
 local width,height = UnoClientFrame:GetSize();
 for name,player in pairs(UnoClientPlayers) do
 player.theta = theta;
-print("first");
+
 
 
 --relative to the middle of the board
@@ -163,20 +171,21 @@ player.centerX = width/4 * math.cos(player.theta);
 player.centerY = height/4 * math.sin(player.theta);
 
 --increment for the next player
-theta = theta + 360/numPlayers;
+theta = theta + 360*math.pi/180/numPlayers;
 end--end for
 
---print("testval is " .. UnoClientPlayers["Bubblebuddey-Gorefiend"].centerX);
+
 
 
 
 for index,card in pairs(UnoClientCards) do
 card.frame = CreateFrame("FRAME",nil,UnoClientFrame);
 card.frame:SetSize(width/8*0.7142857142857143,width/8);
-UnoPositionCard(card);
+--UnoPositionCard(card);
 card.frame.texture = card.frame:CreateTexture();
 card.frame.texture:SetAllPoints();
-card.frame.texture:SetTexture("Interface/AddOns/Uno/images/red8.tga");
+card.frame.texture:SetTexture("Interface/AddOns/Uno/images/" .. card.label .. ".tga");
+
 card.frame:Show();
 end
 

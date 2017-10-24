@@ -89,7 +89,8 @@ for i=1,numCardUpdates,1 do
 local cardIndex = tonumber(sarray[((i-1)*2+3)]); 
 local newOwner = sarray[((i-1)*2+4)];
 UnoClientCards[cardIndex].owner = newOwner;
-UnoPositionCard(UnoClientCards[cardIndex]);
+UnoUpdatePositions();
+--UnoPositionCard(UnoClientCards[cardIndex]);
 end--end for
 end--end if UNO_MESSAGE_CARDUPDATE
 
