@@ -88,7 +88,6 @@ end--end function
 function UnoPositionCard(cardToPosition)
 local width,height = UnoClientFrame:GetSize();
 
-
 if (cardToPosition.owner == "maindeck") then
 cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",width/8,0);
 end--end maindeck
@@ -99,16 +98,20 @@ end --end updeck
 
 --get the count of how many cards he owns
 
-local playerOwned = cardToPosition ~= "updeck" and cardToPosition.owner ~= "maindeck";
+local playerOwned = cardToPosition.owner ~= "updeck" and cardToPosition.owner ~= "maindeck";
 
 if (playerOwned == true) then
 local playerHand = UnoGetHandClient(cardToPosition.owner);
-local player = UnoClientPlayers[card.owner];
+local player = UnoClientPlayers[cardToPosition.owner];
 local handCount = tablelength(playerHand);
 local currentCount = 0;--lay the hand out across the table
-local px = UnoClientPlayers[card.owner].centerX;
-local py = UnoClientPlayers[card.owner].centerY;
-local theta = UnoClientPlayers[card.owner].theta;
+print("second")
+print("owner is " .. cardToPosition.owner);
+
+local px = UnoClientPlayers[cardToPosition.owner].centerX;
+
+local py = UnoClientPlayers[cardToPosition.owner].centerY;
+local theta = UnoClientPlayers[cardToPosition.owner].theta;
 local firstXOffset,firstYOffset;
 for index,card in pairs(UnoClientCards) do
 if (card.owner == cardToPosition.owner) then
@@ -128,10 +131,10 @@ end--end if his
 end--end for
 --calculated firstX and firstY , now need to rotate and give parent and stuff
 cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",
-		UnoGetCardRadius() * math.sin(cardToPosition.theta) 
-			+ firstXOffset*math.cos(cardToPosition.theta),
-		UnoGetCardRadius() * math.cos(cardToPosition.theta)
-			+ firstXOffset*math.sin(cardToPosition.theta) );
+		UnoGetCardRadius() * math.sin(theta) 
+			+ firstXOffset*math.cos(theta),
+		UnoGetCardRadius() * math.cos(theta)
+			+ firstXOffset*math.sin(theta) );
 --TODO actually rotate the card i forgot how
 
 end--end if playerOwned
@@ -151,16 +154,21 @@ local theta = 0;
 local width,height = UnoClientFrame:GetSize();
 for name,player in pairs(UnoClientPlayers) do
 player.theta = theta;
+print("first");
 
 
 --relative to the middle of the board
-
+------local px = UnoClientPlayers[cardToPosition.owner].centerX;
 player.centerX = width/4 * math.cos(player.theta);
 player.centerY = height/4 * math.sin(player.theta);
 
 --increment for the next player
 theta = theta + 360/numPlayers;
 end--end for
+
+--print("testval is " .. UnoClientPlayers["Bubblebuddey-Gorefiend"].centerX);
+
+
 
 for index,card in pairs(UnoClientCards) do
 card.frame = CreateFrame("FRAME",nil,UnoClientFrame);

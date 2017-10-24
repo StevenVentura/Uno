@@ -116,7 +116,6 @@ function UnoBroadcastUpdateDeck()
 --using the UnoServerCardsChanged event stack, create cardsMessage
 local cardsMessage = UNO_IDENTIFIER .. " " .. UNO_MESSAGE_CARDUPDATE;
 for masterIndex, newOwner in pairs(UnoServerCardsChanged) do
-
 cardsMessage = cardsMessage .. " " .. masterIndex .. " " .. newOwner;
 end--end for
 
@@ -124,6 +123,8 @@ end--end for
 for name, player in pairs(UnoServerPlayers) do
 UnoMessage(player, cardsMessage);
 end
+--and to myself too
+SendChatMessage(cardsMessage, "WHISPER",nil,UnitName("player"));
 
 
 --now clear the event stack
