@@ -55,8 +55,35 @@ UnoDrawClient();
 
 end--end function startTheUnoGame()
 
+--placeholder variables. TODO: absolute , relative, and scaled values: which domain am i in?
+function GetUnoCardWidth()
+return 50;
+end--end
+function GetUnoCardHeight()
+return 50;
+end--end
+function GetUnoCardGap()
+return 10;
+end--end
 
-UnoMaindeckOffsetX = 
+function UnoGetMaindeckOffset()
+return -GetUnoCardWidth, 0;
+end
+function UnoGetUpdeckOffset()
+return GetUnoCardWidth, 0;
+end
+
+function UnoGetHandClient(name)
+local out = {};
+for index,card in pairs(UnoClientCards)
+if (card.owner == name) then out[index] = card end
+end--end for
+return out;
+end--end function UnoGetHand
+
+function UnoGetCardRadius()
+return 100;
+end--end function
 
 function UnoPositionCard(cardToPosition)
 local width,height = UnoClientFrame:GetSize();
@@ -70,23 +97,43 @@ if (cardToPosition.owner == "updeck") then
 cardToPosition:SetPoint("CENTER",nil,"CENTER",-width/8,0)
 end --end updeck
 
-local ownerCount = 0;
+--get the count of how many cards he owns
+
 local playerOwned = cardToPosition ~= "updeck" and cardToPosition.owner ~= "maindeck";
-for index,card in pairs(UnoClientCards) do
-if (card.owner == cardToPosition.owner) then ownerCount = ownerCount + 1 end
-end
 
 if (playerOwned == true) then
-local count = 0;
+local playerHand = UnoGetHandClient(cardToPosition.owner);
+local player = UnoClientPlayers[card.owner];
+local handCount = tablelength(playerHand);
+local currentCount = 0;--lay the hand out across the table
 local px = UnoClientPlayers[card.owner].centerX;
 local py = UnoClientPlayers[card.owner].centerY;
 local theta = UnoClientPlayers[card.owner].theta;
+local firstXOffset,firstYOffset;
 for index,card in pairs(UnoClientCards) do
 if (card.owner == cardToPosition.owner) then
-cardToPosition:SetPoint()
-count = count + 1;
+currentCount = currentCount + 1;
+if (handCount%2 == 0) then
+local distFromMiddle = currentCount - handCount/2;
+firstXOffset = -(GetUnoCardWidth()/2+GetUnoCardGap()) 
+			+ (GetUnoCardWidth()+GetUnoCardGap())*distFromMiddle;
+firstYOffset = 0;
+else--end even, else odd
+--distance from the middle value
+local distFromMiddle = currentCount - ceil(handCount/2);
+firstXOffset = distFromMiddle * (GetUnoCardWidth() + GetUnoCardGap());
+firstYOffset = 0;
+end--end odd
 end--end if his
 end--end for
+--calculated firstX and firstY , now need to rotate and give parent and stuff
+cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",
+		UnoGetCardRadius() * math.sin(cardToPosition.theta) 
+			+ firstXOffset*math.cos(cardToPosition.theta),
+		UnoGetCardRadius() * math.cos(cardToPosition.theta)
+			+ firstXOffset*math.sin(cardToPosition.theta) );
+--TODO actually rotate the card i forgot how
+
 end--end if playerOwned
 
 end--end function UnoPositionCard
@@ -105,9 +152,10 @@ for name,player in pairs(UnoClientPlayers) do
 player.theta = theta;
 
 
+--relative to the middle of the board
 local width,height = UnoClientFrame:GetSize();
-player.centerX = width/2 + width/2 * math.cos(player.theta);
-player.centerY = height/2 + height/2 * math.sin(player.theta);
+player.centerX = width/4 * math.cos(player.theta);
+player.centerY = height/4 * math.sin(player.theta);
 
 --increment for the next player
 theta = theta + 360/numPlayers;
