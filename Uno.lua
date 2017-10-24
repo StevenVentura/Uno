@@ -74,7 +74,7 @@ if (UnoClientLobbyScreen) then UnoClientLobbyScreen:Hide() end;
 local numOtherPlayers = tablelength(sarray) - 2;
 for i=1,numOtherPlayers do
 local playerName = sarray[i+2];
-UnoClientPlayers[playerName] = playerName;
+UnoClientPlayers[playerName] = {name=playerName};
 print("welcome " .. playerName .. " to your game xd")
 end--end for
 

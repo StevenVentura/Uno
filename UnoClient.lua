@@ -75,7 +75,7 @@ end
 
 function UnoGetHandClient(name)
 local out = {};
-for index,card in pairs(UnoClientCards)
+for index,card in pairs(UnoClientCards) do
 if (card.owner == name) then out[index] = card end
 end--end for
 return out;
@@ -90,11 +90,11 @@ local width,height = UnoClientFrame:GetSize();
 
 
 if (cardToPosition.owner == "maindeck") then
-cardToPosition:SetPoint("CENTER",nil,"CENTER",width/8,0);
+cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",width/8,0);
 end--end maindeck
 
 if (cardToPosition.owner == "updeck") then
-cardToPosition:SetPoint("CENTER",nil,"CENTER",-width/8,0)
+cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",-width/8,0)
 end --end updeck
 
 --get the count of how many cards he owns
@@ -148,12 +148,13 @@ UnoClientFrame.texture:SetColorTexture(43/255,15/255,1/255,0.80);
 
 local numPlayers = tablelength(UnoClientPlayers);
 local theta = 0;
+local width,height = UnoClientFrame:GetSize();
 for name,player in pairs(UnoClientPlayers) do
 player.theta = theta;
 
 
 --relative to the middle of the board
-local width,height = UnoClientFrame:GetSize();
+
 player.centerX = width/4 * math.cos(player.theta);
 player.centerY = height/4 * math.sin(player.theta);
 

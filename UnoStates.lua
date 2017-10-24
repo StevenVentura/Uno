@@ -107,42 +107,44 @@ text:SetTextColor(1,1,0,1);
  text.name = name;
 
 text.icon = icon;
+text.iconFrame = iconFrame;
 UnoInvitationStatusList[index] = text;
 end--end if not added yet or there was a change
 
 if (player.userHasUnoOrNot == false and player.userHasUnoOrNotTimer < 5.0) then
 UnoInvitationStatusList[index].icon:SetTexture("Interface/AddOns/Uno/images/questionmark.tga");
-UnoInvitationStatusList[index].icon:SetScript("OnEnter", function(self)
+
+UnoInvitationStatusList[index].iconFrame:SetScript("OnEnter", function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-	GameTooltip:SetText("checking if he has uno");
+	GameTooltip:SetText("checking if " .. player.name .. " has uno");
 end);
 end
 if (player.userHasUnoOrNot == false and player.userHasUnoOrNotTimer > 5.0) then
 UnoInvitationStatusList[index].icon:SetTexture("Interface/AddOns/Uno/images/redx.tga");
-UnoInvitationStatusList[index].icon:SetScript("OnEnter", function(self)
+UnoInvitationStatusList[index].iconFrame:SetScript("OnEnter", function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-	GameTooltip:SetText("he does not have the addon");
+	GameTooltip:SetText(player.name .. " does not have the addon");
 end);
 end
 if (player.userJoinedTheLobby == false and player.userHasUnoOrNot == true) then
 UnoInvitationStatusList[index].icon:SetTexture("Interface/AddOns/Uno/images/ellipsis.tga");
-UnoInvitationStatusList[index].icon:SetScript("OnEnter", function(self)
+UnoInvitationStatusList[index].iconFrame:SetScript("OnEnter", function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-	GameTooltip:SetText("waiting for his choice...");
+	GameTooltip:SetText("waiting for " .. player.name .. "'s choice...");
 end);
 end
 if (player.userJoinedTheLobby == true) then
 UnoInvitationStatusList[index].icon:SetTexture("Interface/AddOns/Uno/images/greencheck.tga");
-UnoInvitationStatusList[index].icon:SetScript("OnEnter", function(self)
+UnoInvitationStatusList[index].iconFrame:SetScript("OnEnter", function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-	GameTooltip:SetText("user has joined the lobby");
+	GameTooltip:SetText(player.name .. " has joined the lobby");
 end);
 end
 if (player.userDeclinedTheInvite == true) then
 UnoInvitationStatusList[index].icon:SetTexture("Interface/AddOns/Uno/images/redx.tga");
-UnoInvitationStatusList[index].icon:SetScript("OnEnter", function(self)
+UnoInvitationStatusList[index].iconFrame:SetScript("OnEnter", function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-	GameTooltip:SetText("he declined your invite");
+	GameTooltip:SetText(player.name .. " declined your invite");
 end);
 end
 
