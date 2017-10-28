@@ -106,7 +106,7 @@ UnoPlayers[author].userJoinedTheLobby = true;
 updateUnoInvitationStatusList();
 updateUnoPlayersInLobbyList();
 end--end if UNO_MESSAGE_ACCEPT
-if (remainder == UNO_MESSAGE_DECLINE) then
+if (remainder == UNO_MESSAGE_DECLINE--[[ and UnoCurrentScreen == UNO_SCREEN_LOBBY]]) then
 UnoPlayers[author].userDeclinedTheInvite = true;
 updateUnoInvitationStatusList();
 

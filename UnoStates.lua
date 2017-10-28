@@ -342,7 +342,7 @@ local texture2 = frame2:CreateTexture()
 texture2:SetAllPoints() 
 texture2:SetColorTexture(1,1,1,0.1) 
 frame2.background = texture2;
-local scrollframe2 = CreateFrame("ScrollFrame",nil,frame2);
+local scrollframe2 = CreateFrame("ScrollFrame","UnoScrollFrameGuildies",frame2);
 scrollframe2:SetPoint("CENTER",0,0);
 scrollframe2:SetSize(150,200);
 scrollframe2:Show();
@@ -350,6 +350,7 @@ scrollframe2:Show();
 scrollbar2 = CreateFrame("Slider", "UnoGuildiesScrollBar", scrollframe2, "UIPanelScrollBarTemplate") 
 scrollbar2:SetPoint("TOPLEFT", frame2, "TOPRIGHT", 4, -16) 
 scrollbar2:SetPoint("BOTTOMLEFT", frame2, "BOTTOMRIGHT", 4, 16) 
+GuildRoster();--updates the info in the UI
 local numGuildMembers, numOnline, numOnlineAndMobile = GetNumGuildMembers()
 if (numOnline == 0) then numOnline = 1 end
 scrollbar2:SetMinMaxValues(1, 19*numOnline) 
@@ -377,7 +378,7 @@ local scrollbg2 = scrollbar:CreateTexture(nil, "BACKGROUND")
 scrollbg2:SetAllPoints(scrollbar2) 
 scrollbg2:SetColorTexture(0, 0, 0, 0.4) 
 
-local content2 = CreateFrame("Frame", nil, scrollframe2) 
+local content2 = CreateFrame("Frame", "UnoContentFrameGuildies", scrollframe2) 
 content2:SetSize(128, 128) 
 local texture2 = content2:CreateTexture() 
 texture2:SetAllPoints() 
@@ -486,8 +487,172 @@ UnoRefreshListButton:SetPoint("TOP",UnoScrollFrame,"BOTTOM");
 UnoRefreshListButton:SetPoint("LEFT",UnoScrollFrame);
 UnoRefreshListButton:SetText("Refresh");
 UnoRefreshListButton:SetScript("OnClick",function()
-print("clicked refresh");
+--refresh the bnet list. you have to reuse the old frames.
+---=-==-=begin copy paste with some changes here
+
+dummy = UnoFriendSelectButton0;
+--check boxes are 26 by 26 pixels. the gap between them is ...
+--make them all invisible now 10/27/17
+for i=1,100 do
+if (_G["UnoFriendSelectButton" .. i]) then
+_G["UnoFriendSelectButton" .. i]:Hide();
+_G["UnoFriendSelectButton" .. i]:SetChecked(false);
+_G["UnoFriendSelectButton" .. i].stevenDisable = true;
+end
+end
+
+local wowcount = 0;
+
+for index = 1, BNGetNumFriends() do
+--http://wowprogramming.com/docs/api/BNGetFriendInfo
+local presenceID,glitchyAccountName,bnetNameWithNumber,isJustBNetFriend,characterName,uselessnumber,game = BNGetFriendInfo( index );
+if (game == "WoW") then
+wowcount = wowcount + 1;
+local button = "";
+local content = UnoScrollFrameContent;
+local scrollbar = UnoScrollBar;
+local scrollframe = UnoScrollFrame;
+--reuse the old buttons on refresh
+local already = false;
+if (_G["UnoFriendSelectButton" .. index]) then
+already = true;
+button = _G["UnoFriendSelectButton" .. index];
+else
+button = CreateFrame("CheckButton","UnoFriendSelectButton" .. index,content,"OptionsCheckButtonTemplate");
+end
+button.stevenDisable = false;
+
+scrollbar.buttons[index] = button;
+button:SetPoint("TOPLEFT",_G["UnoFriendSelectButton" .. index-1],"BOTTOMLEFT",0,0);
+--write the new data
+button.name = bnetNameWithNumber;
+button.glitchyAccountName = glitchyAccountName;
+button.presenceID = presenceID;
+button.index = index;
+button.disabled = false;
+button.setFunc = function(value) 
+
+local temperino = _G["UnoFriendSelectButton" .. button.index];
+temperino.titleText:SetTextColor(1/2,0.643/2,0.169/2,1);
+temperino.disabled = true;
+end--end anonymous function
+--now make text labels
+if (already == false) then
+local titleText = button:CreateFontString("titleText",button,"GameFontNormal");
+ titleText:SetTextColor(1,0.643,0.169,1);
+ titleText:SetShadowColor(0,0,0,1);
+ titleText:SetShadowOffset(2,-1);
+ titleText:SetPoint("LEFT",button,"RIGHT",0,0);
+ titleText:SetText(bnetNameWithNumber);
+ titleText:Show();
+
+button.titleText = titleText;
+
+else--else if already
+button.titleText:SetText(bnetNameWithNumber);
+end--end if already-block
+--either way
+button:SetScript("OnEnter", function(self)
+	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+	GameTooltip:SetText("click to invite " .. bnetNameWithNumber);
 end);
+end--end if game==wow
+
+if (wowcount == 0)
+then scrollbar:SetMinMaxValues(1, 1);
+else
+scrollbar:SetMinMaxValues(1, 19*wowcount)  end
+end--end for
+for i, butt in ipairs(scrollbar.buttons) do
+if (butt.stevenDisable == false) then
+  if (butt:GetBottom() < UnoScrollFrame:GetBottom() or butt:GetTop() > UnoScrollFrame:GetTop()) then
+  butt:Hide();
+  else
+  butt:Show();
+  end
+end
+end
+--=-=-=-=-end copy paste
+---=-=-=begin copy paste other thing and some other copy pastes too
+--make them all invisible now 10/27/17
+for i=1,100 do
+if (_G["UnoGuildySelectButton" .. i]) then
+_G["UnoGuildySelectButton" .. i]:Hide();
+_G["UnoGuildySelectButton" .. i]:SetChecked(false);
+_G["UnoGuildySelectButton" .. i].stevenDisable = true;
+print("hiding " .. i)
+end
+end
+
+local dummy = UnoGuildySelectButton0;
+GuildRoster();--updates the info in the UI
+local numGuildMembers, numOnline, numOnlineAndMobile = GetNumGuildMembers()
+if (numOnline == 0) then numOnline = 1 end 
+GuildRoster();--updates the info in the UI
+
+for index=1,numOnline do 
+
+local fullName, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile, canSoR, reputation = GetGuildRosterInfo(index) 
+local already = false;
+local button2 = "";
+local content2 = UnoContentFrameGuildies;
+local scrollbar2 = UnoGuildiesScrollBar;
+local scrollframe2 = UnoScrollFrameGuildies;
+if (_G["UnoGuildySelectButton" .. index]) then
+already = true;
+button2 = _G["UnoGuildySelectButton" .. index];
+else
+button2 = CreateFrame("CheckButton","UnoGuildySelectButton" .. index,content2,"OptionsCheckButtonTemplate");
+end--end if button
+button2.stevenDisable = false;
+
+button2:SetPoint("TOPLEFT",_G["UnoGuildySelectButton" .. index-1],"BOTTOMLEFT",0,0);
+button2.name = fullName;
+button2.index = index;
+button2.disabled = false;
+scrollbar2.buttons[index] = button2;
+button2.setFunc = function(value) 
+
+local temperino2 = _G["UnoGuildySelectButton" .. button2.index];
+temperino2.titleText2:SetTextColor(1/2,0.643/2,0.169/2,1);
+temperino2.disabled = true;
+end--end anonymous function
+--now make text labels
+if (already == false) then
+local titleText2 = button2:CreateFontString("titleText2",button2,"GameFontNormal");
+ titleText2:SetTextColor(1,0.643,0.169,1);
+ titleText2:SetShadowColor(0,0,0,1);
+ titleText2:SetShadowOffset(2,-1);
+ titleText2:SetPoint("LEFT",button2,"RIGHT",0,0);
+ titleText2:SetText(fullName);
+ titleText2:Show();
+
+button2.titleText2 = titleText2;
+
+else--else if already
+button2.titleText2:SetText(fullName);
+end
+--either way
+button2:SetScript("OnEnter", function(self)
+	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+	GameTooltip:SetText("click to invite " .. fullName);
+end);
+
+end--end for
+
+for i, butt in ipairs(scrollbar2.buttons) do
+if (butt.stevenDisable == false) then
+  if (butt:GetBottom() < scrollframe2:GetBottom() or butt:GetTop() > scrollframe2:GetTop()) then
+  butt:Hide();
+  else
+  butt:Show();
+  end
+end
+end
+---=-=-=end copy paste other thing
+
+
+end);--end function OnClick for refresh button
 UnoRefreshListButton:Show();
 
 CreateFrame("Button","UnoInviteListButton",UnoScreenLobby,"UIPanelButtonTemplate");
