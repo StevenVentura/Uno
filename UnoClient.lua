@@ -34,6 +34,7 @@ end--end functin UnoClientDisplayLobbyGuestScreen
 
 --startTheUnoGame is a client-side function
 function startTheUnoGame()
+UnoCurrentScreen = UNO_SCREEN_PLAYINGGAME
 UnoScreenLobby:Hide();
 ----copied from UnoServer.lua (UnoCreateAndDealCards) changed UnoServerCards to UnoClientCards
 --create cards : Give them a default value, instantiate them in our array so they can be updated by index.

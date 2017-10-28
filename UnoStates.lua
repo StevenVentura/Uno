@@ -3,6 +3,7 @@ UNO_SCREEN_SLASHUNO = 1;
 UNO_SCREEN_LOBBY = 2;
 UNO_SCREEN_INVITATION = 3;
 UNO_SCREEN_LOBBYGUEST = 4;
+UNO_SCREEN_PLAYINGGAME = 5;
 
 UnoCurrentScreen = UNO_SCREEN_BLANK;
 
@@ -260,6 +261,7 @@ local button = CreateFrame("CheckButton","UnoFriendSelectButton" .. index,conten
 scrollbar.buttons[index] = button;
 button:SetPoint("TOPLEFT",_G["UnoFriendSelectButton" .. index-1],"BOTTOMLEFT",0,0);
 button.name = bnetNameWithNumber;
+button.toonName = characterName;
 button.glitchyAccountName = glitchyAccountName;
 button.presenceID = presenceID;
 button.index = index;
@@ -402,6 +404,7 @@ local fullName, rank, rankIndex, level, class, zone, note, officernote, online, 
 local button2 = CreateFrame("CheckButton","UnoGuildySelectButton" .. index,content2,"OptionsCheckButtonTemplate");
 button2:SetPoint("TOPLEFT",_G["UnoGuildySelectButton" .. index-1],"BOTTOMLEFT",0,0);
 button2.name = fullName;
+button2.toonName = fullName;
 button2.index = index;
 button2.disabled = false;
 scrollbar2.buttons[index] = button2;
@@ -526,6 +529,7 @@ scrollbar.buttons[index] = button;
 button:SetPoint("TOPLEFT",_G["UnoFriendSelectButton" .. index-1],"BOTTOMLEFT",0,0);
 --write the new data
 button.name = bnetNameWithNumber;
+button.toonName = characterName;
 button.glitchyAccountName = glitchyAccountName;
 button.presenceID = presenceID;
 button.index = index;
@@ -580,7 +584,6 @@ if (_G["UnoGuildySelectButton" .. i]) then
 _G["UnoGuildySelectButton" .. i]:Hide();
 _G["UnoGuildySelectButton" .. i]:SetChecked(false);
 _G["UnoGuildySelectButton" .. i].stevenDisable = true;
-print("hiding " .. i)
 end
 end
 
@@ -608,6 +611,7 @@ button2.stevenDisable = false;
 
 button2:SetPoint("TOPLEFT",_G["UnoGuildySelectButton" .. index-1],"BOTTOMLEFT",0,0);
 button2.name = fullName;
+button2.toonName = fullName;
 button2.index = index;
 button2.disabled = false;
 scrollbar2.buttons[index] = button2;
@@ -661,23 +665,24 @@ UnoInviteListButton:SetPoint("TOP",UnoRefreshListButton,"BOTTOM");
 UnoInviteListButton:SetPoint("LEFT",UnoScrollFrame);
 UnoInviteListButton:SetText("Invite");
 UnoInviteListButton:SetScript("OnClick",function()
-print("clicked invite");
+
 for i, butt in ipairs(UnoScrollBar.buttons) do
   if (butt:GetChecked()) then
-  AddUnoPlayer("bnethashtag",butt.name,butt.presenceID,butt.glitchyAccountName);
+  --AddUnoPlayer("bnethashtag",butt.name,butt.presenceID,butt.glitchyAccountName);
+  AddUnoPlayer("bnethashtag",butt);
+  print("toonName is " .. butt.toonName);
   UnoMessage(UnoPlayers[butt.name],UNO_IDENTIFIER .. " " .. UNO_MESSAGE_SEND_INVITATION);
   end--end if
 end--end for
 
 for i, butt in ipairs(UnoGuildiesScrollBar.buttons) do
   if (butt:GetChecked()) then
-  AddUnoPlayer("nameserver",butt.name);
-  print("type is ...")
-  print(UnoPlayers[butt.name].contactType)
+  --AddUnoPlayer("nameserver",butt.name);
+  AddUnoPlayer("nameserver",butt);
+  print("toonName is " .. butt.toonName);
   UnoMessage(UnoPlayers[butt.name],UNO_IDENTIFIER .. " " .. UNO_MESSAGE_SEND_INVITATION);
   end--end if
 end--end for
-
 
 updateUnoInvitationStatusList();
 end);

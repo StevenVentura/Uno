@@ -1,6 +1,13 @@
 --[[
 
 started writing this file on 9/16/17
+
+10/27/17
+what is the name of the server to the other players?
+if they added him through battletag, do they see his battletag, or do they see his char name?
+how about i just make every single player known by their char name??
+and then i give them a contact method?
+
 ]]
 UnoServerObject = {
 
@@ -19,6 +26,7 @@ function StartTheUnoGameWithThesePlayers()
 UnoServerPlayers = {
 
 };
+
 
 for name, player in pairs(UnoPlayers) do
 if (player.userJoinedTheLobby == true) then

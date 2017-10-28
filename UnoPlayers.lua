@@ -75,17 +75,25 @@ end--end function AddUnoPlayerClientLobby
 
 
 --used by the server in the invitation phase
-function AddUnoPlayer(boolree, nameX,pid,glitchyAccountName) 
+function AddUnoPlayer(boolree, button)--nameX,pid,glitchyAccountName) 
 
-
+local taipu = "";
 if (boolree == "bnethashtag") then
 taipu = UNO_CONTACT_BTAG;
 end
 if (boolree == "nameserver") then
 taipu = UNO_CONTACT_WHISPER;
 end
+local justFirstName = "";
+if (string.find(button.toonName,"-") ~= nil) then
+justFirstName = string.sub(button.toonName,
+				1,
+				string.find(button.toonName,"-")-1);
+else
+justFirstName = button.toonName;
+end
 
-UnoPlayers[nameX] = {
+UnoPlayers[button.name] = {
 statusIcon="none",
 whisperCategory=boolree,
 userHasUnoOrNot=false,
@@ -93,10 +101,11 @@ userHasUnoOrNotTimer=0,
 userJoinedTheLobby=false,
 userDeclinedTheInvite=false,
 contactType = taipu,
-presenceID = pid,
-isRealIDNotJustBNet = (glitchyAccountName ~= name),
-realName = glitchyAccountName,
-name = nameX
+presenceID = button.presenceID,
+isRealIDNotJustBNet = (button.glitchyAccountName ~= button.name),
+realName = button.glitchyAccountName,
+toonName = justFirstName,
+name = button.name
 };
 
 

@@ -68,7 +68,7 @@ print("author is " .. author);
 --return and do nothing if its not an addon message.
 if (sarray[1] ~= UNO_IDENTIFIER) then return end;
 
-if (sarray[2] == UNO_STARTING) then
+if (sarray[2] == UNO_STARTING and UnoCurrentScreen ~= UNO_SCREEN_BLANK) then
 if (UnoClientLobbyScreen) then UnoClientLobbyScreen:Hide() end;
 --populate the client players array
 local numOtherPlayers = tablelength(sarray) - 2;
@@ -83,7 +83,7 @@ startTheUnoGame();
 end--end UNO_STARTING
 
 --client code
-if (sarray[2] == UNO_MESSAGE_CARDUPDATE) then
+if (sarray[2] == UNO_MESSAGE_CARDUPDATE and UnoCurrentScreen == UNO_SCREEN_PLAYINGGAME) then
 local numCardUpdates = (tablelength(sarray) - 2)/2;
 for i=1,numCardUpdates,1 do
 local cardIndex = tonumber(sarray[((i-1)*2+3)]); 
@@ -96,17 +96,17 @@ end--end if UNO_MESSAGE_CARDUPDATE
 
 
 
-if (remainder == UNO_MESSAGE_HAS_ADDON) then
+if (remainder == UNO_MESSAGE_HAS_ADDON and UnoCurrentScreen == UNO_SCREEN_LOBBY) then
 --TODO da name match the table?
 UnoPlayers[author].userHasUnoOrNot = true;
 updateUnoInvitationStatusList();
 end--end if UNO_MESSAGE_HAS_ADDON
-if (remainder == UNO_MESSAGE_ACCEPT) then
+if (remainder == UNO_MESSAGE_ACCEPT and UnoCurrentScreen == UNO_SCREEN_LOBBY) then
 UnoPlayers[author].userJoinedTheLobby = true;
 updateUnoInvitationStatusList();
 updateUnoPlayersInLobbyList();
 end--end if UNO_MESSAGE_ACCEPT
-if (remainder == UNO_MESSAGE_DECLINE--[[ and UnoCurrentScreen == UNO_SCREEN_LOBBY]]) then
+if (remainder == UNO_MESSAGE_DECLINE and UnoCurrentScreen == UNO_SCREEN_LOBBY) then
 UnoPlayers[author].userDeclinedTheInvite = true;
 updateUnoInvitationStatusList();
 
@@ -114,7 +114,8 @@ end
 
 
 
-if (remainder == UNO_MESSAGE_SEND_INVITATION) then
+if (remainder == UNO_MESSAGE_SEND_INVITATION and (UnoCurrentScreen == UNO_SCREEN_BLANK or 
+												  UnoCurrentScreen == UNO_SCREEN_SLASHUNO )) then
 
 print("|cff0088ffauthor is " .. author);
 if (pid) then
