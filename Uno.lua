@@ -78,7 +78,8 @@ UnoClientPlayers[playerName] = {name=playerName,centerX=0,centerY=0};
 print("welcome " .. playerName .. " to your game xd")
 end--end for
 
-
+UnoClientTheHostsIdentification = author;
+print("the hosts id is " .. UnoClientTheHostsIdentification)
 startTheUnoGame();
 end--end UNO_STARTING
 
@@ -118,11 +119,20 @@ if (remainder == UNO_MESSAGE_SEND_INVITATION and (UnoCurrentScreen == UNO_SCREEN
 												  UnoCurrentScreen == UNO_SCREEN_SLASHUNO )) then
 
 print("|cff0088ffauthor is " .. author);
+UnoHostContact = { };
 if (pid) then
+UnoHostContact.contactType = UNO_CONTACT_BTAG;
+UnoHostContact.pid = pid;
 AddUnoPlayerClientLobby("bnethashtag",author,pid);
 else
+UnoHostContact.contactType = UNO_CONTACT_WHISPER;
+UnoHostContact.whisperName = author;
 AddUnoPlayerClientLobby("nameserver",author);
 end
+
+
+
+
 
 --u just got invited! send recognition , also begin da process
 UnoMessage(UnoPlayersClientLobby[author],UNO_IDENTIFIER .. " " .. UNO_MESSAGE_HAS_ADDON);

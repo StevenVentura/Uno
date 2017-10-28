@@ -32,6 +32,22 @@ all players will be identified by their Btag. i will never use their real name.
 
 ]]
 
+--[[
+10/28/17
+the "name" attribute of player is his index in the array.
+the server host is handled weird though.
+
+On the server host's side, 
+in his array, 
+UnoHostContact.contactType = UNO_CONTACT_BTAG;
+UnoHostContact.pid = pid;
+AddUnoPlayerClientLobby("bnethashtag",author,pid);
+else
+UnoHostContact.contactType = UNO_CONTACT_WHISPER;
+UnoHostContact.whisperName = author;
+
+]]
+
 UNO_CONTACT_WHISPER = 1;
 UNO_CONTACT_BTAG = 2;
 
@@ -93,6 +109,7 @@ else
 justFirstName = button.toonName;
 end
 
+--used on the server during lobby time and transferred partially to game time
 UnoPlayers[button.name] = {
 statusIcon="none",
 whisperCategory=boolree,
@@ -113,9 +130,8 @@ name = button.name
 
 end--end function AddUnoPlayer
 
+--used during lobby somewhere
 function UnoMessage(playerdata,message)
-print("contacttype is next...")
-print(playerdata.contactType)
 if (playerdata.contactType == UNO_CONTACT_WHISPER) then
 
 SendChatMessage(message,"WHISPER",nil,playerdata.name);

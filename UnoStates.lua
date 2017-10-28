@@ -670,7 +670,6 @@ for i, butt in ipairs(UnoScrollBar.buttons) do
   if (butt:GetChecked()) then
   --AddUnoPlayer("bnethashtag",butt.name,butt.presenceID,butt.glitchyAccountName);
   AddUnoPlayer("bnethashtag",butt);
-  print("toonName is " .. butt.toonName);
   UnoMessage(UnoPlayers[butt.name],UNO_IDENTIFIER .. " " .. UNO_MESSAGE_SEND_INVITATION);
   end--end if
 end--end for
@@ -679,7 +678,6 @@ for i, butt in ipairs(UnoGuildiesScrollBar.buttons) do
   if (butt:GetChecked()) then
   --AddUnoPlayer("nameserver",butt.name);
   AddUnoPlayer("nameserver",butt);
-  print("toonName is " .. butt.toonName);
   UnoMessage(UnoPlayers[butt.name],UNO_IDENTIFIER .. " " .. UNO_MESSAGE_SEND_INVITATION);
   end--end if
 end--end for

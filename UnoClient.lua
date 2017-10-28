@@ -3,6 +3,18 @@
 started writing this file on 9/16/17
 ]]
 
+--[[
+the client is only aware of the name of all of the other players.
+just their name.
+
+but he has full contact to the host so he can send messages to the host.
+these messages can either happen in battle.net or they can happen in whisper.
+
+
+
+
+]]
+
 CreateFrame("Frame","UnoClientFrame",UIParent);
 
 
@@ -10,6 +22,21 @@ UnoClientCards = {};
 UnoClientPlayers = {};
 
 UnoUpdeckCard = {};
+
+function UnoMessageTheHost(message)
+if (UnoHostContact == nil) then --then this means i am the host
+UnoHostContact = {
+contactType = UNO_CONTACT_WHISPER,
+whisperName = UnitName("player")
+};
+end
+if (UnoHostContact.contactType == UNO_CONTACT_BTAG) then
+BNSendWhisper(UnoHostContact.pid,message);
+else
+SendChatMessage(message,"WHISPER",nil,UnoHostContact.whisperName);
+end
+
+end--end function UnoMessageTheHost
 
 function UnoClientDisplayLobbyGuestScreen()
 CreateFrame("FRAME","UnoClientLobbyScreen",UIParent);
@@ -31,7 +58,7 @@ UnoClientLobbyScreen.title:SetTextColor(1,1,0,1);
 
 
 end--end functin UnoClientDisplayLobbyGuestScreen
-
+UnoClientTheHostsIdentification = "nobodyyet"
 --startTheUnoGame is a client-side function
 function startTheUnoGame()
 UnoCurrentScreen = UNO_SCREEN_PLAYINGGAME
@@ -146,6 +173,7 @@ end--end if playerOwned
 end--end function UnoPositionCard
 
 function UnoUpdatePositions()
+UnoMessageTheHost("test");
 for name,card in pairs(UnoClientCards) do 
 UnoPositionCard(card)
 end--end for

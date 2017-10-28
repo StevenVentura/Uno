@@ -43,7 +43,7 @@ end--end for
 
 --make players aware of each other
 local unoPlayerNameList = "";
-unoPlayerNameList = unoPlayerNameList .. " " .. UnitName("player") .. "-" .. GetRealmName("player");
+unoPlayerNameList = unoPlayerNameList .. " " .. UnitName("player");-- .. "-" .. GetRealmName("player");
 for name, player in pairs(UnoServerPlayers) do
 unoPlayerNameList = unoPlayerNameList .. " " .. name;
 end--end for
