@@ -46,7 +46,7 @@ local unoPlayerNameList = "";
 UnoServerPlayers["HOST"] = {name=UnitName("player"),officialIndex=1,contactType=UNO_CONTACT_WHISPER};
 local officialIndex = 2;
 --note that the first name broadcasted is the host. the client is aware of this.
-unoPlayerNameList = unoPlayerNameList .. " " .. UnitName("player");-- .. "-" .. GetRealmName("player");
+--unoPlayerNameList = unoPlayerNameList .. " " .. UnitName("player");-- .. "-" .. GetRealmName("player");
 for name, player in pairs(UnoServerPlayers) do
 unoPlayerNameList = unoPlayerNameList .. " " .. name;
 UnoServerPlayers[name].officialIndex = officialIndex;

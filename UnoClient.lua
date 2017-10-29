@@ -77,7 +77,8 @@ end--end if
 UnoClientCards[cardIndex] = {
 color=UNO_COLORS[colorIndex],
 label=tempName,
-owner="maindeck"
+owner="maindeck",
+index=cardIndex
 };
 end--end for
 end--end for
@@ -89,20 +90,23 @@ end--end function startTheUnoGame()
 
 --placeholder variables. TODO: absolute , relative, and scaled values: which domain am i in?
 function GetUnoCardWidth()
-return 50;
+local width,height = UnoClientFrame:GetSize();
+return width/8*0.7142857142857143;
 end--end
 function GetUnoCardHeight()
-return 50;
+local width,height = UnoClientFrame:GetSize();
+return width/8;
 end--end
 function GetUnoCardGap()
-return 100;
+local width,height = UnoClientFrame:GetSize();
+return GetUnoCardHeight()/3;
 end--end
 
 function UnoGetMaindeckOffset()
-return -GetUnoCardWidth, 0;
+return -GetUnoCardWidth(), 0;
 end
 function UnoGetUpdeckOffset()
-return GetUnoCardWidth, 0;
+return GetUnoCardWidth(), 0;
 end
 
 function UnoGetHandClient(name)
@@ -114,18 +118,24 @@ return out;
 end--end function UnoGetHand
 
 function UnoGetCardRadius()
-return 100;
+local width,height = UnoClientFrame:GetSize();
+return GetUnoCardHeight()*2;
 end--end function
 
 function UnoPositionCard(cardToPosition)
 local width,height = UnoClientFrame:GetSize();
 
+cardToPosition.frame.texture:SetTexture("Interface/AddOns/Uno/images/" .. cardToPosition.label .. ".tga");
+cardToPosition.frame:Show();
+
 if (cardToPosition.owner == "maindeck") then
-cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",width/8,0);
+cardToPosition.frame.texture:SetTexture("Interface/AddOns/Uno/images/uno_cardback.tga");
+cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",UnoGetMaindeckOffset());
 end--end maindeck
 
 if (cardToPosition.owner == "updeck") then
-cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",-width/8,0)
+--TODO: only show the topmost card on updeck., or at least show it on the highest so they can peak what was under it.
+cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",UnoGetUpdeckOffset())
 end --end updeck
 
 --get the count of how many cards he owns
@@ -137,6 +147,7 @@ local playerHand = UnoGetHandClient(cardToPosition.owner);
 local player = UnoClientPlayers[cardToPosition.owner];
 local handCount = tablelength(playerHand);
 local currentCount = 0;--lay the hand out across the table
+local thisCardsCount = 0;
 
 local px = UnoClientPlayers[cardToPosition.owner].centerX;
 
@@ -146,19 +157,21 @@ local firstXOffset,firstYOffset;
 for index,card in pairs(UnoClientCards) do
 if (card.owner == cardToPosition.owner) then
 currentCount = currentCount + 1;
+if (index == cardToPosition.index) then thisCardsCount = currentCount; end
+end--end if his hand
+end--end for
+print("thisCardsCount is " .. thisCardsCount);
 if (handCount%2 == 0) then
-local distFromMiddle = currentCount - handCount/2;
+local distFromMiddle = thisCardsCount - handCount/2;
 firstXOffset = -(GetUnoCardWidth()/2+GetUnoCardGap()) 
 			+ (GetUnoCardWidth()+GetUnoCardGap())*distFromMiddle;
 firstYOffset = 0;
 else--end even, else odd
 --distance from the middle value
-local distFromMiddle = currentCount - ceil(handCount/2);
+local distFromMiddle = thisCardsCount - ceil(handCount/2);
 firstXOffset = distFromMiddle * (GetUnoCardWidth() + GetUnoCardGap());
 firstYOffset = 0;
 end--end odd
-end--end if his
-end--end for
 --calculated firstX and firstY , now need to rotate and give parent and stuff
 cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",
 		UnoGetCardRadius() * math.sin(theta) 
@@ -211,9 +224,7 @@ card.frame:SetSize(width/8*0.7142857142857143,width/8);
 --UnoPositionCard(card);
 card.frame.texture = card.frame:CreateTexture();
 card.frame.texture:SetAllPoints();
-card.frame.texture:SetTexture("Interface/AddOns/Uno/images/" .. card.label .. ".tga");
-
-card.frame:Show();
+card.frame:Hide();
 end
 
 
@@ -222,3 +233,12 @@ end
 
 UnoClientFrame:Show();
 end--end function UnoDrawClient
+
+function DrawUnoCard(card)
+if (card.owner == "maindeck") then 
+
+else
+card.frame.texture:SetTexture("Interface/AddOns/Uno/images/" .. card.label .. ".tga");
+end
+card.frame:Show();
+end--end function DrawUnoCard
