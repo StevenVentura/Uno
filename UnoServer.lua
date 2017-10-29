@@ -22,7 +22,7 @@ UnoServerCards = {
 
 --when the host presses the "Start game" button, StartTheUnoGameWithThesePlayers()  is called
 function StartTheUnoGameWithThesePlayers() 
-
+UnoServerPlayers = { };
 UnoServerPlayers = {
 
 };
@@ -43,17 +43,22 @@ end--end for
 
 --make players aware of each other
 local unoPlayerNameList = "";
+UnoServerPlayers["HOST"] = {name=UnitName("player"),officialIndex=1,contactType=UNO_CONTACT_WHISPER};
+local officialIndex = 2;
+--note that the first name broadcasted is the host. the client is aware of this.
 unoPlayerNameList = unoPlayerNameList .. " " .. UnitName("player");-- .. "-" .. GetRealmName("player");
 for name, player in pairs(UnoServerPlayers) do
 unoPlayerNameList = unoPlayerNameList .. " " .. name;
+UnoServerPlayers[name].officialIndex = officialIndex;
+officialIndex = officialIndex + 1;
 end--end for
 
 --broadcast message to all players
 for name, player in pairs(UnoServerPlayers) do
-UnoMessage(UnoPlayers[name],UNO_IDENTIFIER .. " " .. UNO_STARTING .. unoPlayerNameList);
+UnoMessage(UnoServerPlayers[name],UNO_IDENTIFIER .. " " .. UNO_STARTING .. unoPlayerNameList);
 end--end for
---send it to myself
-SendChatMessage(UNO_IDENTIFIER .. " " .. UNO_STARTING .. unoPlayerNameList,"WHISPER",nil,UnitName("player"));
+--send it to myself; 10/28/17 actually sending to myself is done via the HOST keyword index, inside UnoMessage
+--SendChatMessage(UNO_IDENTIFIER .. " " .. UNO_STARTING .. unoPlayerNameList,"WHISPER",nil,UnitName("player"));
 UnoCreateAndDealCards();
 
 end--end function

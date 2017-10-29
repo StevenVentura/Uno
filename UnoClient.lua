@@ -136,7 +136,6 @@ if (playerOwned == true) then
 local playerHand = UnoGetHandClient(cardToPosition.owner);
 local player = UnoClientPlayers[cardToPosition.owner];
 local handCount = tablelength(playerHand);
-print("handcount is " .. handCount)
 local currentCount = 0;--lay the hand out across the table
 
 local px = UnoClientPlayers[cardToPosition.owner].centerX;
@@ -173,7 +172,6 @@ end--end if playerOwned
 end--end function UnoPositionCard
 
 function UnoUpdatePositions()
-UnoMessageTheHost("test");
 for name,card in pairs(UnoClientCards) do 
 UnoPositionCard(card)
 end--end for

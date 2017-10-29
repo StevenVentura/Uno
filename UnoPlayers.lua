@@ -45,7 +45,11 @@ AddUnoPlayerClientLobby("bnethashtag",author,pid);
 else
 UnoHostContact.contactType = UNO_CONTACT_WHISPER;
 UnoHostContact.whisperName = author;
+---------
 
+UnoServerPlayers DOCUMENTATION:
+[name] = {name , officialIndex};
+used for mapping player indexes to their contact informtation and other data
 ]]
 
 UNO_CONTACT_WHISPER = 1;
@@ -89,6 +93,10 @@ name = nameX
 
 end--end function AddUnoPlayerClientLobby
 
+--used during playing the game.
+function AddUnoPlayerClientPlaying(playerName, index)
+UnoClientPlayers[playerName] = {officialIndex = index, name=playerName,centerX=0,centerY=0};
+end--end function AddUnoPlayerClientPlaying
 
 --used by the server in the invitation phase
 function AddUnoPlayer(boolree, button)--nameX,pid,glitchyAccountName) 
@@ -130,7 +138,7 @@ name = button.name
 
 end--end function AddUnoPlayer
 
---used during lobby somewhere
+--used during lobby somewhere, and used by the server to broadcast messages during the game
 function UnoMessage(playerdata,message)
 if (playerdata.contactType == UNO_CONTACT_WHISPER) then
 
