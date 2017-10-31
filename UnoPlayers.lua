@@ -95,7 +95,19 @@ end--end function AddUnoPlayerClientLobby
 
 --used during playing the game.
 function AddUnoPlayerClientPlaying(playerName, index)
-UnoClientPlayers[playerName] = {officialIndex = index, name=playerName,centerX=0,centerY=0};
+UnoClientPlayers[playerName] = {
+		frame = CreateFrame("FRAME",nil,UIParent),
+		officialIndex = index, name=playerName,centerX=0,centerY=0};
+UnoClientPlayers[playerName].frame:SetSize(100,100);
+UnoClientPlayers[playerName].title = 
+	UnoClientPlayers[playerName].frame:CreateFontString(nil,nil,"GameFontNormal");
+UnoClientPlayers[playerName].title:SetTextColor(1,0.643,0.169,1);
+ UnoClientPlayers[playerName].title:SetShadowColor(0,0,0,1);
+ UnoClientPlayers[playerName].title:SetShadowOffset(2,-1);
+ UnoClientPlayers[playerName].title:SetPoint("CENTER",
+	UnoClientPlayers[playerName].frame,"CENTER",0,0);
+UnoClientPlayers[playerName].title:SetText(playerName);
+UnoClientPlayers[playerName].title:Show(); 
 end--end function AddUnoPlayerClientPlaying
 
 --used by the server in the invitation phase

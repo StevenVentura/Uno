@@ -175,10 +175,11 @@ firstYOffset = 0;
 end--end odd
 --calculated firstX and firstY , now need to rotate and give parent and stuff
 cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",
-		UnoGetCardRadius() * math.sin(theta) 
-			+ firstXOffset*math.cos(theta),
-		UnoGetCardRadius() * math.cos(theta)
-			+ firstXOffset*math.sin(theta) );
+		UnoGetCardRadius() * math.sin(theta-math.pi/2) 
+			+ firstXOffset*math.cos(theta-math.pi/2),
+		UnoGetCardRadius() * math.cos(theta-math.pi/2)
+			+ firstXOffset*math.sin(theta-math.pi/2) );
+cardToPosition.frame.texture:SetRotation(theta-math.pi/2+math.pi);
 --TODO actually rotate the card i forgot how
 
 end--end if playerOwned
@@ -188,16 +189,30 @@ end--end function UnoPositionCard
 function UnoUpdatePositions()
 for name,card in pairs(UnoClientCards) do 
 UnoPositionCard(card)
-
+card.frame:SetFrameStrata("MEDIUM");
 if (IsMyUnoCard(card)) then
 card.frame:SetMovable(true);
 card.frame:EnableMouse(true);
 card.frame:RegisterForDrag("LeftButton");
-card.frame:SetScript("OnDragStart",card.frame.StartMoving);
+card.frame:SetScript("OnDragStart",function(self)
+self:StartMoving();
+self:SetFrameStrata("HIGH");
+end);
 card.frame:SetScript("OnDragStop", function(self)
+self:SetFrameStrata("MEDIUM");
 self:StopMovingOrSizing();
 local x, y = self:GetLeft(), self:GetBottom();
-print("dropped card at x=" .. x .. ", y=" .. y);
+--make x and y relative to the game board rather than absolute.
+x = x - UnoClientFrame:GetLeft();
+y = y - UnoClientFrame:GetBottom();
+--make x and y be the middle of the drag card.
+local width,height=self:GetSize();
+x = x + width / 2;
+y = y + height / 2;
+
+self.draggedX = x;
+self.draggedY = y;
+
 
 end);--end anonymous function
 end--end IsMyUnoCard
@@ -213,14 +228,18 @@ UnoClientFrame.texture:SetAllPoints();
 UnoClientFrame.texture:SetColorTexture(43/255,15/255,1/255,0.80);
 
 local numPlayers = tablelength(UnoClientPlayers);
-local theta = 0;
+local theta = math.pi/2;
 local width,height = UnoClientFrame:GetSize();
 for name,player in pairs(UnoClientPlayers) do
 player.theta = theta;
 --relative to the middle of the board
 ------local px = UnoClientPlayers[cardToPosition.owner].centerX;
-player.centerX = width/4 * math.cos(player.theta);
-player.centerY = height/4 * math.sin(player.theta);
+player.centerX = width/5 * math.cos(player.theta);
+player.centerY = height/5 * math.sin(player.theta);
+--position the text label for the player
+player.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",player.centerX,player.centerY);
+
+
 --increment for the next player
 theta = theta + 360*math.pi/180/numPlayers;
 end--end for
@@ -267,5 +286,5 @@ return card.owner == UnoGetMe().name;
 end--end function IsMyUnoCard
 
 function IsUnoCardFaceDown(card)
-return card.owner == "maindeck" or not(IsMyUnoCard(card));
+return card.owner == "maindeck" or (not(card.owner == "updeck") and not(IsMyUnoCard(card)));
 end--end function
