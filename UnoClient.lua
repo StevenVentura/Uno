@@ -160,7 +160,6 @@ currentCount = currentCount + 1;
 if (index == cardToPosition.index) then thisCardsCount = currentCount; end
 end--end if his hand
 end--end for
-print("thisCardsCount is " .. thisCardsCount);
 if (handCount%2 == 0) then
 local distFromMiddle = thisCardsCount - handCount/2;
 firstXOffset = -(GetUnoCardWidth()/2+GetUnoCardGap()) 
@@ -202,14 +201,10 @@ local theta = 0;
 local width,height = UnoClientFrame:GetSize();
 for name,player in pairs(UnoClientPlayers) do
 player.theta = theta;
-
-
-
 --relative to the middle of the board
 ------local px = UnoClientPlayers[cardToPosition.owner].centerX;
 player.centerX = width/4 * math.cos(player.theta);
 player.centerY = height/4 * math.sin(player.theta);
-
 --increment for the next player
 theta = theta + 360*math.pi/180/numPlayers;
 end--end for
@@ -234,9 +229,20 @@ end
 UnoClientFrame:Show();
 end--end function UnoDrawClient
 
-function DrawUnoCard(card)
-if (card.owner == "maindeck") then 
+function UnoGetMe()
+if (UnoHostContact.whisperName and UnoHostContact.whisperName == UnitName("player")) then
+return UnoClientPlayers["HOST"];
+else
 
+end
+end--end function UnoGetMe
+
+function IsEnemyUnoCard(card)
+local me = UnoGetMePlaying();
+end--end function
+function DrawUnoCard(card)
+if (card.owner == "maindeck" or IsEnemyUnoCard(card) ) then 
+card.frame.texture:SetTexture("Interface/AddOns/Uno/images/card_back.tga");
 else
 card.frame.texture:SetTexture("Interface/AddOns/Uno/images/" .. card.label .. ".tga");
 end

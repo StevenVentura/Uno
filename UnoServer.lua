@@ -43,18 +43,17 @@ end--end for
 
 --make players aware of each other
 local unoPlayerNameList = "";
-UnoServerPlayers["HOST"] = {name=UnitName("player"),officialIndex=1,contactType=UNO_CONTACT_WHISPER};
-local officialIndex = 2;
---note that the first name broadcasted is the host. the client is aware of this.
+UnoServerPlayers["HOST"] = {name=UnitName("player"),officialIndex=nil,contactType=UNO_CONTACT_WHISPER};
+local officialIndex = 1;--start the counting at 1.
 --unoPlayerNameList = unoPlayerNameList .. " " .. UnitName("player");-- .. "-" .. GetRealmName("player");
 for name, player in pairs(UnoServerPlayers) do
-unoPlayerNameList = unoPlayerNameList .. " " .. name;
+unoPlayerNameList = unoPlayerNameList .. " " .. name .. "=" .. officialIndex;
 UnoServerPlayers[name].officialIndex = officialIndex;
 officialIndex = officialIndex + 1;
 end--end for
 
 --broadcast message to all players
-for name, player in pairs(UnoServerPlayers) do
+for name, player in pairs(UnoServerPlayers) do--                     vnote theres no space
 UnoMessage(UnoServerPlayers[name],UNO_IDENTIFIER .. " " .. UNO_STARTING .. unoPlayerNameList);
 end--end for
 --send it to myself; 10/28/17 actually sending to myself is done via the HOST keyword index, inside UnoMessage
