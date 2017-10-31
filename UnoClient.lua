@@ -188,7 +188,21 @@ end--end function UnoPositionCard
 function UnoUpdatePositions()
 for name,card in pairs(UnoClientCards) do 
 UnoPositionCard(card)
+
+if (IsMyUnoCard(card)) then
+card.frame:SetMovable(true);
+card.frame:EnableMouse(true);
+card.frame:RegisterForDrag("LeftButton");
+card.frame:SetScript("OnDragStart",card.frame.StartMoving);
+card.frame:SetScript("OnDragStop", function(self)
+self:StopMovingOrSizing();
+local x, y = self:GetLeft(), self:GetBottom();
+print("dropped card at x=" .. x .. ", y=" .. y);
+
+end);--end anonymous function
+end--end IsMyUnoCard
 end--end for
+
 end--end function UnoUpdatePositions
 function UnoDrawClient() 
 print("|cffff0000calleing drawcleint")
