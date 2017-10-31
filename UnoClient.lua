@@ -127,9 +127,11 @@ local width,height = UnoClientFrame:GetSize();
 
 cardToPosition.frame.texture:SetTexture("Interface/AddOns/Uno/images/" .. cardToPosition.label .. ".tga");
 cardToPosition.frame:Show();
+if (IsUnoCardFaceDown(cardToPosition)) then
+cardToPosition.frame.texture:SetTexture("Interface/AddOns/Uno/images/uno_cardback.tga");
+end
 
 if (cardToPosition.owner == "maindeck") then
-cardToPosition.frame.texture:SetTexture("Interface/AddOns/Uno/images/uno_cardback.tga");
 cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",UnoGetMaindeckOffset());
 end--end maindeck
 
@@ -228,23 +230,28 @@ end
 
 UnoClientFrame:Show();
 end--end function UnoDrawClient
+function UnoIAmTheHost()
+return UnoHostContact.whisperName and UnoHostContact.whisperName == UnitName("player");
+end--end function UnoIAmTheHost
 
 function UnoGetMe()
-if (UnoHostContact.whisperName and UnoHostContact.whisperName == UnitName("player")) then
+if (UnoIAmTheHost()) then
 return UnoClientPlayers["HOST"];
 else
-
+return UnoGetPlayerByIndexClient(UnoClientMyOfficialIndex);
 end
 end--end function UnoGetMe
 
-function IsEnemyUnoCard(card)
-local me = UnoGetMePlaying();
-end--end function
-function DrawUnoCard(card)
-if (card.owner == "maindeck" or IsEnemyUnoCard(card) ) then 
-card.frame.texture:SetTexture("Interface/AddOns/Uno/images/card_back.tga");
-else
-card.frame.texture:SetTexture("Interface/AddOns/Uno/images/" .. card.label .. ".tga");
+function UnoGetPlayerByIndexClient(index)
+for name,player in pairs(UnoClientPlayers) do
+if (player.officialIndex == index) then return player end
 end
-card.frame:Show();
-end--end function DrawUnoCard
+end--end function UnoGetPlayerByIndexClient
+
+function IsMyUnoCard(card)
+return card.owner == UnoGetMe().name;
+end--end function IsMyUnoCard
+
+function IsUnoCardFaceDown(card)
+return card.owner == "maindeck" or not(IsMyUnoCard(card));
+end--end function

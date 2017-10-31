@@ -71,11 +71,11 @@ if (sarray[1] ~= UNO_IDENTIFIER) then return end;
 if (sarray[2] == UNO_STARTING and UnoCurrentScreen ~= UNO_SCREEN_BLANK) then
 if (UnoClientLobbyScreen) then UnoClientLobbyScreen:Hide() end;
 --populate the client players array
-local numOtherPlayers = tablelength(sarray) - 2;
+local numOtherPlayers = tablelength(sarray) - 3;
+UnoClientMyOfficialIndex = tonumber(sarray[3]);
 for i=1,numOtherPlayers do
-
-local playerName = string.sub(sarray[i+2],1,string.find(sarray[i+2],"=")-1);
-AddUnoPlayerClientPlaying(playerName,tonumber(string.sub(sarray[i+2],-1,-1)));
+local playerName = string.sub(sarray[i+3],1,string.find(sarray[i+3],"=")-1);
+AddUnoPlayerClientPlaying(playerName,tonumber(string.sub(sarray[i+3],-1,-1)));
 print("welcome " .. playerName .. " to your game xd")
 end--end for
 

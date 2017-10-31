@@ -23,9 +23,11 @@ UnoServerCards = {
 --when the host presses the "Start game" button, StartTheUnoGameWithThesePlayers()  is called
 function StartTheUnoGameWithThesePlayers() 
 UnoServerPlayers = { };
-UnoServerPlayers = {
-
-};
+--i am the host
+UnoHostContact = {
+contactType = UNO_CONTACT_WHISPER,
+whisperName = UnitName("player")
+}
 
 
 for name, player in pairs(UnoPlayers) do
@@ -53,8 +55,9 @@ officialIndex = officialIndex + 1;
 end--end for
 
 --broadcast message to all players
-for name, player in pairs(UnoServerPlayers) do--                     vnote theres no space
-UnoMessage(UnoServerPlayers[name],UNO_IDENTIFIER .. " " .. UNO_STARTING .. unoPlayerNameList);
+for name, player in pairs(UnoServerPlayers) do--       vnote theres no space
+UnoMessage(UnoServerPlayers[name],UNO_IDENTIFIER .. " " .. UNO_STARTING 
+			.. " " .. UnoServerPlayers[name].officialIndex .. unoPlayerNameList);
 end--end for
 --send it to myself; 10/28/17 actually sending to myself is done via the HOST keyword index, inside UnoMessage
 --SendChatMessage(UNO_IDENTIFIER .. " " .. UNO_STARTING .. unoPlayerNameList,"WHISPER",nil,UnitName("player"));
