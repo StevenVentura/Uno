@@ -16,12 +16,15 @@ these messages can either happen in battle.net or they can happen in whisper.
 ]]
 
 CreateFrame("Frame","UnoClientFrame",UIParent);
+<<<<<<< HEAD
 CreateFrame("Button","UnoClientFrameCloseButton",UnoClientFrame,"UIPanelButtonTemplate");
 UnoClientFrameCloseButton:SetSize(24,24);
 UnoClientFrameCloseButton:SetPoint("TOPRIGHT");
 UnoClientFrameCloseButton:SetScript("OnClick",CloseOutOfUnoGame);
 UnoClientFrameCloseButton:SetText("x");
 UnoClientFrameCloseButton:Show();
+=======
+>>>>>>> origin/master
 
 
 UnoClientCards = {};
@@ -59,12 +62,16 @@ UnoClientLobbyScreen.title:SetTextColor(1,1,0,1);
  UnoClientLobbyScreen.title:SetText("UNO: Waiting for host...");
  UnoClientLobbyScreen.title:Show();
 
+<<<<<<< HEAD
 CreateFrame("Button","UnoClientLobbyScreenCloseButton",UnoClientLobbyScreen,"UIPanelButtonTemplate"); 
 UnoClientLobbyScreenCloseButton:SetSize(24,24);
 UnoClientLobbyScreenCloseButton:SetPoint("TOPRIGHT");
 UnoClientLobbyScreenCloseButton:SetScript("OnClick",CloseOutOfUnoGame);
 UnoClientLobbyScreenCloseButton:SetText("x");
 UnoClientLobbyScreenCloseButton:Show();
+=======
+
+>>>>>>> origin/master
 
 
 
@@ -286,8 +293,11 @@ return UnoGetPlayerByIndexClient(UnoClientMyOfficialIndex);
 end
 end--end function UnoGetMe
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> origin/master
 function UnoGetPlayerByIndexClient(index)
 for name,player in pairs(UnoClientPlayers) do
 if (player.officialIndex == index) then return player end

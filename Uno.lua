@@ -53,7 +53,86 @@ end--end function UnoOnUpdate
 
 --whispers
 function UNO_WHISPER_RECEIVED(ChatFrameSelf, event, message, author, ...)
+<<<<<<< HEAD
+=======
 
+
+
+UnoAbstractMessageReceived(message,author);
+
+end--end function UNO_WHISPER_RECEIVED
+
+function UnoAbstractMessageReceived(message, author, pid)
+local sarray = UnoSplitString(message);
+local remainder = string.sub(message,strlen(UNO_IDENTIFIER)+2);
+print("remainder is " .. remainder)
+print("author is " .. author);
+--return and do nothing if its not an addon message.
+if (sarray[1] ~= UNO_IDENTIFIER) then return end;
+
+if (sarray[2] == UNO_STARTING and UnoCurrentScreen ~= UNO_SCREEN_BLANK) then
+if (UnoClientLobbyScreen) then UnoClientLobbyScreen:Hide() end;
+--populate the client players array
+local numOtherPlayers = tablelength(sarray) - 3;
+UnoClientMyOfficialIndex = tonumber(sarray[3]);
+for i=1,numOtherPlayers do
+local playerName = string.sub(sarray[i+3],1,string.find(sarray[i+3],"=")-1);
+AddUnoPlayerClientPlaying(playerName,tonumber(string.sub(sarray[i+3],-1,-1)));
+print("welcome " .. playerName .. " to your game xd")
+end--end for
+
+UnoClientTheHostsIdentification = author;
+print("the hosts id is " .. UnoClientTheHostsIdentification)
+startTheUnoGame();
+end--end UNO_STARTING
+
+--client code
+if (sarray[2] == UNO_MESSAGE_CARDUPDATE and UnoCurrentScreen == UNO_SCREEN_PLAYINGGAME) then
+local numCardUpdates = (tablelength(sarray) - 2)/2;
+for i=1,numCardUpdates,1 do
+local cardIndex = tonumber(sarray[((i-1)*2+3)]); 
+local newOwner = sarray[((i-1)*2+4)];
+UnoClientCards[cardIndex].owner = newOwner;
+UnoUpdatePositions();
+--UnoPositionCard(UnoClientCards[cardIndex]);
+end--end for
+end--end if UNO_MESSAGE_CARDUPDATE
+
+
+
+if (remainder == UNO_MESSAGE_HAS_ADDON and UnoCurrentScreen == UNO_SCREEN_LOBBY) then
+--TODO da name match the table?
+UnoPlayers[author].userHasUnoOrNot = true;
+updateUnoInvitationStatusList();
+end--end if UNO_MESSAGE_HAS_ADDON
+if (remainder == UNO_MESSAGE_ACCEPT and UnoCurrentScreen == UNO_SCREEN_LOBBY) then
+UnoPlayers[author].userJoinedTheLobby = true;
+updateUnoInvitationStatusList();
+updateUnoPlayersInLobbyList();
+end--end if UNO_MESSAGE_ACCEPT
+if (remainder == UNO_MESSAGE_DECLINE and UnoCurrentScreen == UNO_SCREEN_LOBBY) then
+UnoPlayers[author].userDeclinedTheInvite = true;
+updateUnoInvitationStatusList();
+>>>>>>> origin/master
+
+end
+
+
+
+if (remainder == UNO_MESSAGE_SEND_INVITATION and (UnoCurrentScreen == UNO_SCREEN_BLANK or 
+												  UnoCurrentScreen == UNO_SCREEN_SLASHUNO )) then
+
+print("|cff0088ffauthor is " .. author);
+UnoHostContact = { };
+if (pid) then
+UnoHostContact.contactType = UNO_CONTACT_BTAG;
+UnoHostContact.pid = pid;
+AddUnoPlayerClientLobby("bnethashtag",author,pid);
+else
+UnoHostContact.contactType = UNO_CONTACT_WHISPER;
+UnoHostContact.whisperName = author;
+AddUnoPlayerClientLobby("nameserver",author);
+end
 
 
 UnoAbstractMessageReceived(message,author);
@@ -189,6 +268,7 @@ UnoInvitedToTheGame:Show();
 end--end UNO_MESSAGE_SEND_INVITATION
 end--end UnoAbstractMessageReceived
 
+<<<<<<< HEAD
 function CloseOutOfUnoGame()
 if (UnoScreenLobby ~= nil and UnoScreenLobby:IsShown()) then
 	UnoScreenLobby:Hide(); end
@@ -205,6 +285,8 @@ UnoCurrentScreen = UNO_SCREEN_BLANK;
 --TODO: send "hey i left the lobby btw" message
 
 end--end function CloseOutOfUnoGame
+=======
+>>>>>>> origin/master
 
 function updateLobbyPlayers(elapsed)
 for name,boy in pairs(UnoPlayers) do
