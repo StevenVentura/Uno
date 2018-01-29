@@ -61,7 +61,10 @@ UnoMessage(UnoServerPlayers[name],UNO_IDENTIFIER .. " " .. UNO_STARTING
 end--end for
 --send it to myself; 10/28/17 actually sending to myself is done via the HOST keyword index, inside UnoMessage
 --SendChatMessage(UNO_IDENTIFIER .. " " .. UNO_STARTING .. unoPlayerNameList,"WHISPER",nil,UnitName("player"));
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/master
 UnoCreateAndDealCards();
 
 end--end function
@@ -79,6 +82,7 @@ UNO_DEFAULT_DECK_AMOUNTS_PER_COLOR = {
 			   ["0"]=1,["1"]=2,["2"]=2,["3"]=2,["4"]=2,["5"]=2,["6"]=2,["7"]=2,["8"]=2,["9"]=2,
 			   ["plus2"]=2,["skip"]=2,["reverse"]=2,["wild"]=4,["wildplus4"]=4
 						};
+<<<<<<< HEAD
 function getServerUnoPlayerByOfficialIndex(index) 
 
 for name,player in pairs(UnoServerPlayers) do
@@ -105,6 +109,9 @@ currentTurnNameServer = getServerUnoPlayerByOfficialIndex(1).name;
 
 UnoBroadcastTurnUpdate();
 
+=======
+function UnoCreateAndDealCards()
+>>>>>>> origin/master
 
 --[[
 There are 108 cards in a Uno deck. 

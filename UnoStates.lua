@@ -15,12 +15,15 @@ UNO_MESSAGE_ACCEPT = "accept";
 --partial thngs
 UNO_STARTING = "starting";--DONETODO: give the name of all players appended to this string?
 UNO_MESSAGE_CARDUPDATE = "CARDUPDATE";--DONETODO: broadcast deck data appended to this string
+<<<<<<< HEAD
 UNO_MESSAGE_TURNUPDATE = "TURNUPDATE";
 --[[
 UNO_TURN_UPDATE documentation:
 
 
 ]]
+=======
+>>>>>>> origin/master
 
 --
 UnoScreenSlashUno = CreateFrame("Frame","UnoScreenSlashUno",UIParent);
@@ -58,6 +61,10 @@ UnoScreenLobby.t:SetAllPoints();
 UnoScreenLobby.t:SetColorTexture(43/255,15/255,1/255,0.80);
 UnoScreenLobby:Hide();
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> origin/master
 CreateFrame("Button","UnoScreenLobbyCloseButton",UnoScreenLobby,"UIPanelButtonTemplate");
 UnoScreenLobbyCloseButton:SetSize(24,24);
 UnoScreenLobbyCloseButton:SetPoint("TOPRIGHT");
@@ -66,6 +73,11 @@ UnoScreenLobbyCloseButton:SetText("x");
 UnoScreenLobbyCloseButton:Show();
 
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> origin/master
+>>>>>>> origin/master
 UnoPlayersInLobbyList = {};
 
 function updateUnoPlayersInLobbyList()
@@ -98,6 +110,7 @@ end
 end--end function updateUnoPlayersInLobbyList
 
 UnoInvitationStatusList = {};
+<<<<<<< HEAD
 
 function updateUnoInvitationStatusList()
 yOffset = 0;
@@ -112,6 +125,22 @@ if (not(UnoInvitationStatusList[index])
 
 
 
+=======
+
+function updateUnoInvitationStatusList()
+yOffset = 0;
+index = 0;
+--parallel array
+for name,player in pairs(UnoPlayers) do
+index = index + 1;
+if (not(UnoInvitationStatusList[index])
+	or
+	UnoInvitationStatusList[index].name ~= name) then
+	if (UnoInvitationStatusList[index]) then UnoInvitationStatusList[index]:Hide() end
+
+
+
+>>>>>>> origin/master
 iconFrame = CreateFrame("Frame",nil,UnoProcessFrame);
 iconFrame:SetSize(16,16);
 iconFrame:SetPoint("TOPLEFT",10,-16*index);
@@ -119,6 +148,9 @@ icon = iconFrame:CreateTexture();
 
 print("heyo guys");
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
 
 icon:SetAllPoints();
 iconFrame:Show();
@@ -176,6 +208,69 @@ end
 
 end--end for
 
+=======
+>>>>>>> origin/master
+
+icon:SetAllPoints();
+iconFrame:Show();
+	
+text = UnoProcessFrame:CreateFontString(nil,iconFrame,"GameFontNormal");
+text:SetTextColor(1,1,0,1);
+ text:SetShadowColor(0,0,0,1);
+ text:SetShadowOffset(2,-1);
+ text:SetPoint("LEFT",iconFrame,"RIGHT",10,0);
+ text:SetText(name);
+ text:Show();
+ text.name = name;
+
+text.icon = icon;
+text.iconFrame = iconFrame;
+UnoInvitationStatusList[index] = text;
+end--end if not added yet or there was a change
+
+if (player.userHasUnoOrNot == false and player.userHasUnoOrNotTimer < 5.0) then
+UnoInvitationStatusList[index].icon:SetTexture("Interface/AddOns/Uno/images/questionmark.tga");
+
+UnoInvitationStatusList[index].iconFrame:SetScript("OnEnter", function(self)
+	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+	GameTooltip:SetText("checking if " .. player.name .. " has uno");
+end);
+end
+if (player.userHasUnoOrNot == false and player.userHasUnoOrNotTimer > 5.0) then
+UnoInvitationStatusList[index].icon:SetTexture("Interface/AddOns/Uno/images/redx.tga");
+UnoInvitationStatusList[index].iconFrame:SetScript("OnEnter", function(self)
+	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+	GameTooltip:SetText(player.name .. " does not have the addon");
+end);
+end
+if (player.userJoinedTheLobby == false and player.userHasUnoOrNot == true) then
+UnoInvitationStatusList[index].icon:SetTexture("Interface/AddOns/Uno/images/ellipsis.tga");
+UnoInvitationStatusList[index].iconFrame:SetScript("OnEnter", function(self)
+	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+	GameTooltip:SetText("waiting for " .. player.name .. "'s choice...");
+end);
+end
+if (player.userJoinedTheLobby == true) then
+UnoInvitationStatusList[index].icon:SetTexture("Interface/AddOns/Uno/images/greencheck.tga");
+UnoInvitationStatusList[index].iconFrame:SetScript("OnEnter", function(self)
+	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+	GameTooltip:SetText(player.name .. " has joined the lobby");
+end);
+end
+if (player.userDeclinedTheInvite == true) then
+UnoInvitationStatusList[index].icon:SetTexture("Interface/AddOns/Uno/images/redx.tga");
+UnoInvitationStatusList[index].iconFrame:SetScript("OnEnter", function(self)
+	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+	GameTooltip:SetText(player.name .. " declined your invite");
+end);
+end
+
+end--end for
+
+<<<<<<< HEAD
+=======
+>>>>>>> origin/master
+>>>>>>> origin/master
 end--end function updateUnoInvitationStatusList
 
 CreateFrame("Button", "UnoMakeLobbyButton", UnoScreenSlashUno, "UIPanelButtonTemplate");
