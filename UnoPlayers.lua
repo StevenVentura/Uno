@@ -52,8 +52,16 @@ UnoServerPlayers DOCUMENTATION:
 used for mapping player indexes to their contact informtation and other data
 ]]
 
+<<<<<<< HEAD
 
 
+=======
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> origin/master
+>>>>>>> origin/master
 UNO_CONTACT_WHISPER = 1;
 UNO_CONTACT_BTAG = 2;
 

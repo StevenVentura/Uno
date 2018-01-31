@@ -16,19 +16,40 @@ these messages can either happen in battle.net or they can happen in whisper.
 ]]
 
 CreateFrame("Frame","UnoClientFrame",UIParent);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> origin/master
+>>>>>>> origin/master
 CreateFrame("Button","UnoClientFrameCloseButton",UnoClientFrame,"UIPanelButtonTemplate");
 UnoClientFrameCloseButton:SetSize(24,24);
 UnoClientFrameCloseButton:SetPoint("TOPRIGHT");
 UnoClientFrameCloseButton:SetScript("OnClick",CloseOutOfUnoGame);
 UnoClientFrameCloseButton:SetText("x");
 UnoClientFrameCloseButton:Show();
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
 
 
 UnoClientCards = {};
 UnoClientPlayers = {};
 
+<<<<<<< HEAD
 UnoCurrentUpdeckCard = {};
 
+=======
+UnoUpdeckCard = {};
+
+<<<<<<< HEAD
+>>>>>>> origin/master
 function getClientUnoPlayerByOfficialIndex(index) 
 
 for name,player in pairs(UnoClientPlayers) do
@@ -45,6 +66,11 @@ print("|cff0000ffit's " .. currentTurnNameClient .. "'s turn.");
 --TODO: animation here and stuff
 end--end function SetUnoTurnClient
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> origin/master
+>>>>>>> origin/master
 function UnoMessageTheHost(message)
 if (UnoHostContact == nil) then --then this means i am the host
 UnoHostContact = {
@@ -75,12 +101,28 @@ UnoClientLobbyScreen.title:SetTextColor(1,1,0,1);
  UnoClientLobbyScreen.title:SetText("UNO: Waiting for host...");
  UnoClientLobbyScreen.title:Show();
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> origin/master
+>>>>>>> origin/master
 CreateFrame("Button","UnoClientLobbyScreenCloseButton",UnoClientLobbyScreen,"UIPanelButtonTemplate"); 
 UnoClientLobbyScreenCloseButton:SetSize(24,24);
 UnoClientLobbyScreenCloseButton:SetPoint("TOPRIGHT");
 UnoClientLobbyScreenCloseButton:SetScript("OnClick",CloseOutOfUnoGame);
 UnoClientLobbyScreenCloseButton:SetText("x");
 UnoClientLobbyScreenCloseButton:Show();
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
 
 
 
@@ -222,6 +264,7 @@ card.frame:SetMovable(true);
 card.frame:EnableMouse(true);
 card.frame:RegisterForDrag("LeftButton");
 card.frame:SetScript("OnDragStart",function(self)
+<<<<<<< HEAD
 local x, y = self:GetLeft(), self:GetBottom();
 x = x - UnoClientFrame:GetLeft();
 y = y - UnoClientFrame:GetBottom();
@@ -233,6 +276,8 @@ y = y + height / 2;
 self.beforeDragX = x;
 self.beforeDragY = y;
 
+=======
+>>>>>>> origin/master
 self:StartMoving();
 self:SetFrameStrata("HIGH");
 end);
@@ -251,13 +296,17 @@ y = y + height / 2;
 self.draggedX = x;
 self.draggedY = y;
 
+<<<<<<< HEAD
 UnoCheckIfValidCardPlacement(self);
+=======
+>>>>>>> origin/master
 
 end);--end anonymous function
 end--end IsMyUnoCard
 end--end for
 
 end--end function UnoUpdatePositions
+<<<<<<< HEAD
 
 function UnoCheckIfValidCardPlacement(draggingCard)
 
@@ -286,6 +335,10 @@ end--end function UnoCheckIfValidCardPlacement
 
 function UnoDrawClient() 
 
+=======
+function UnoDrawClient() 
+print("|cffff0000calleing drawcleint")
+>>>>>>> origin/master
 UnoClientFrame:SetPoint("CENTER");
 UnoClientFrame:SetSize(800*3/4,600*3/4);
 UnoClientFrame.texture = UnoClientFrame:CreateTexture();
@@ -340,8 +393,21 @@ return UnoGetPlayerByIndexClient(UnoClientMyOfficialIndex);
 end
 end--end function UnoGetMe
 
+<<<<<<< HEAD
 
 
+=======
+<<<<<<< HEAD
+
+
+=======
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
 function UnoGetPlayerByIndexClient(index)
 for name,player in pairs(UnoClientPlayers) do
 if (player.officialIndex == index) then return player end
