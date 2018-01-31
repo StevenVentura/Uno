@@ -16,40 +16,19 @@ these messages can either happen in battle.net or they can happen in whisper.
 ]]
 
 CreateFrame("Frame","UnoClientFrame",UIParent);
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> origin/master
->>>>>>> origin/master
 CreateFrame("Button","UnoClientFrameCloseButton",UnoClientFrame,"UIPanelButtonTemplate");
 UnoClientFrameCloseButton:SetSize(24,24);
 UnoClientFrameCloseButton:SetPoint("TOPRIGHT");
 UnoClientFrameCloseButton:SetScript("OnClick",CloseOutOfUnoGame);
 UnoClientFrameCloseButton:SetText("x");
 UnoClientFrameCloseButton:Show();
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-=======
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
 
 
 UnoClientCards = {};
 UnoClientPlayers = {};
 
-<<<<<<< HEAD
 UnoCurrentUpdeckCard = {};
 
-=======
-UnoUpdeckCard = {};
-
-<<<<<<< HEAD
->>>>>>> origin/master
 function getClientUnoPlayerByOfficialIndex(index) 
 
 for name,player in pairs(UnoClientPlayers) do
@@ -66,11 +45,6 @@ print("|cff0000ffit's " .. currentTurnNameClient .. "'s turn.");
 --TODO: animation here and stuff
 end--end function SetUnoTurnClient
 
-<<<<<<< HEAD
-=======
-=======
->>>>>>> origin/master
->>>>>>> origin/master
 function UnoMessageTheHost(message)
 if (UnoHostContact == nil) then --then this means i am the host
 UnoHostContact = {
@@ -101,28 +75,12 @@ UnoClientLobbyScreen.title:SetTextColor(1,1,0,1);
  UnoClientLobbyScreen.title:SetText("UNO: Waiting for host...");
  UnoClientLobbyScreen.title:Show();
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> origin/master
->>>>>>> origin/master
 CreateFrame("Button","UnoClientLobbyScreenCloseButton",UnoClientLobbyScreen,"UIPanelButtonTemplate"); 
 UnoClientLobbyScreenCloseButton:SetSize(24,24);
 UnoClientLobbyScreenCloseButton:SetPoint("TOPRIGHT");
 UnoClientLobbyScreenCloseButton:SetScript("OnClick",CloseOutOfUnoGame);
 UnoClientLobbyScreenCloseButton:SetText("x");
 UnoClientLobbyScreenCloseButton:Show();
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-=======
-
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
 
 
 
@@ -205,8 +163,14 @@ cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",UnoGetMaindeckOff
 end--end maindeck
 
 if (cardToPosition.owner == "updeck") then
---TODO: only show the topmost card on updeck., or at least show it on the highest so they can peak what was under it.
 cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",UnoGetUpdeckOffset())
+
+--throw the previous updeck card away.
+UnoCurrentUpdeckCard.owner = "trash";
+UnoCurrentUpdeckCard.frame:Hide();
+--set our handle to the new top value.
+UnoCurrentUpdeckCard = cardToPosition;
+
 end --end updeck
 
 --get the count of how many cards he owns
@@ -264,56 +228,52 @@ card.frame:SetMovable(true);
 card.frame:EnableMouse(true);
 card.frame:RegisterForDrag("LeftButton");
 card.frame:SetScript("OnDragStart",function(self)
-<<<<<<< HEAD
-local x, y = self:GetLeft(), self:GetBottom();
-x = x - UnoClientFrame:GetLeft();
-y = y - UnoClientFrame:GetBottom();
---make x and y be the middle of the drag card.
-local width,height=self:GetSize();
-x = x + width / 2;
-y = y + height / 2;
+local x, y = self:GetLeft(), self:GetTop();
+
 
 self.beforeDragX = x;
 self.beforeDragY = y;
 
-=======
->>>>>>> origin/master
 self:StartMoving();
 self:SetFrameStrata("HIGH");
 end);
 card.frame:SetScript("OnDragStop", function(self)
 self:SetFrameStrata("MEDIUM");
 self:StopMovingOrSizing();
-local x, y = self:GetLeft(), self:GetBottom();
---make x and y relative to the game board rather than absolute.
-x = x - UnoClientFrame:GetLeft();
-y = y - UnoClientFrame:GetBottom();
---make x and y be the middle of the drag card.
-local width,height=self:GetSize();
-x = x + width / 2;
-y = y + height / 2;
+local x, y = self:GetLeft(), self:GetTop();
 
 self.draggedX = x;
 self.draggedY = y;
 
-<<<<<<< HEAD
-UnoCheckIfValidCardPlacement(self);
-=======
->>>>>>> origin/master
+isValidPlacement = UnoCheckIfValidCardPlacement(self);
+if (isValidPlacement == false) then
+self:setPoint("LEFT",self.beforeDragX);
+self:setPoint("TOP",self.beforeDragY);
+end
 
 end);--end anonymous function
 end--end IsMyUnoCard
 end--end for
 
 end--end function UnoUpdatePositions
-<<<<<<< HEAD
 
 function UnoCheckIfValidCardPlacement(draggingCard)
 
---
-draggingCard.draggedX, draggingCard.draggedY
-if (UnoCurrentUpdeckCard.frame.intersects(draggingCard.frame)
+isOnTop = true;
+if (UnoCurrentUpdeckCard.getLeft() > draggingCard.getRight()
+	or
+	draggingCard.getLeft() > UnoCurrentUpdeckCard.getRight()
+	or
+	UnoCurrentUpdeckCard.getTop() < draggingCard.getBottom()
+	or
+	draggingCard.getTop() < UnoCurrentScreen.getBottom()
+	) then
+	isOnTop = false;
+	end
+--check for intersection with updeck card
+if (isOnTop == true)
 	then
+	print("ayyyyyy its on top");
 	if (draggingCard.label == "plus2"
 		or draggingCard.label == "skip"
 		or draggingCard.label == "reverse"
@@ -335,10 +295,6 @@ end--end function UnoCheckIfValidCardPlacement
 
 function UnoDrawClient() 
 
-=======
-function UnoDrawClient() 
-print("|cffff0000calleing drawcleint")
->>>>>>> origin/master
 UnoClientFrame:SetPoint("CENTER");
 UnoClientFrame:SetSize(800*3/4,600*3/4);
 UnoClientFrame.texture = UnoClientFrame:CreateTexture();
@@ -393,21 +349,8 @@ return UnoGetPlayerByIndexClient(UnoClientMyOfficialIndex);
 end
 end--end function UnoGetMe
 
-<<<<<<< HEAD
 
 
-=======
-<<<<<<< HEAD
-
-
-=======
-<<<<<<< HEAD
-
-
-=======
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
 function UnoGetPlayerByIndexClient(index)
 for name,player in pairs(UnoClientPlayers) do
 if (player.officialIndex == index) then return player end
