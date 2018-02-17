@@ -166,6 +166,7 @@ if (cardToPosition.owner == "updeck") then
 cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",UnoGetUpdeckOffset())
 
 --throw the previous updeck card away.
+<<<<<<< HEAD
 
 if (UnoCurrentUpdeckCard ~= cardToPosition) then
 UnoCurrentUpdeckCard.owner = "trash";
@@ -176,6 +177,12 @@ end
 --set our handle to the new top value.
 UnoCurrentUpdeckCard = cardToPosition;
 print("now owner is " .. UnoCurrentUpdeckCard.owner);
+=======
+UnoCurrentUpdeckCard.owner = "trash";
+UnoCurrentUpdeckCard.frame:Hide();
+--set our handle to the new top value.
+UnoCurrentUpdeckCard = cardToPosition;
+>>>>>>> origin/master
 
 end --end updeck
 
@@ -189,7 +196,11 @@ local player = UnoClientPlayers[cardToPosition.owner];
 local handCount = tablelength(playerHand);
 local currentCount = 0;--lay the hand out across the table
 local thisCardsCount = 0;
+<<<<<<< HEAD
 print("owner is " .. cardToPosition.owner);
+=======
+
+>>>>>>> origin/master
 local px = UnoClientPlayers[cardToPosition.owner].centerX;
 
 local py = UnoClientPlayers[cardToPosition.owner].centerY;
@@ -263,6 +274,7 @@ end--end for
 
 end--end function UnoUpdatePositions
 
+<<<<<<< HEAD
 --TODO: LEFT OFF HERE BTW
 function UnoCardIntersection(card1, card2) 
 
@@ -293,6 +305,18 @@ if (UnoCurrentUpdeckCard.frame.getLeft() > draggingCard.frame.getRight()
 	UnoCurrentUpdeckCard.frame.getTop() < draggingCard.frame.getBottom()
 	or
 	draggingCard.frame.getTop() < UnoCurrentScreen.frame.getBottom()
+=======
+function UnoCheckIfValidCardPlacement(draggingCard)
+
+isOnTop = true;
+if (UnoCurrentUpdeckCard.getLeft() > draggingCard.getRight()
+	or
+	draggingCard.getLeft() > UnoCurrentUpdeckCard.getRight()
+	or
+	UnoCurrentUpdeckCard.getTop() < draggingCard.getBottom()
+	or
+	draggingCard.getTop() < UnoCurrentScreen.getBottom()
+>>>>>>> origin/master
 	) then
 	isOnTop = false;
 	end
