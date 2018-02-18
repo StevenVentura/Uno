@@ -69,7 +69,19 @@ print("author is " .. author);
 if (sarray[1] ~= UNO_IDENTIFIER) then return end;
 
 if (sarray[2] == UNO_MESSAGE_TURNUPDATE and UnoCurrentScreen ~= UNO_SCREEN_BLANK) then
+<<<<<<< HEAD
 SetUnoTurnClient(tonumber(sarray[3]));
+=======
+<<<<<<< HEAD
+SetUnoTurnClient(tonumber(sarray[3]));
+=======
+<<<<<<< HEAD
+SetUnoTurnClient(tonumber(sarray[3]));
+=======
+SetUnoTurnClient(tonumber(string.sub(sarray[3])));
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
 end
 
 if (sarray[2] == UNO_STARTING and UnoCurrentScreen ~= UNO_SCREEN_BLANK) then
@@ -165,7 +177,18 @@ acceptFrame:SetScript("OnClick", function()
 --now we are in the lobby waiting
 UnoCurrentScreen = UNO_SCREEN_LOBBYGUEST;
 UnoClientDisplayLobbyGuestScreen();
+<<<<<<< HEAD
 print("why?")
+=======
+<<<<<<< HEAD
+print("why?")
+=======
+<<<<<<< HEAD
+print("why?")
+=======
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
 UnoMessage(UnoPlayersClientLobby[author], UNO_IDENTIFIER .. " " .. UNO_MESSAGE_ACCEPT);
 UnoInvitedToTheGame:Hide();
 end);
