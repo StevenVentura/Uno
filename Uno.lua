@@ -69,7 +69,23 @@ print("author is " .. author);
 if (sarray[1] ~= UNO_IDENTIFIER) then return end;
 
 if (sarray[2] == UNO_MESSAGE_TURNUPDATE and UnoCurrentScreen ~= UNO_SCREEN_BLANK) then
+<<<<<<< HEAD
 SetUnoTurnClient(tonumber(sarray[3]));
+=======
+<<<<<<< HEAD
+SetUnoTurnClient(tonumber(sarray[3]));
+=======
+<<<<<<< HEAD
+SetUnoTurnClient(tonumber(sarray[3]));
+=======
+<<<<<<< HEAD
+SetUnoTurnClient(tonumber(sarray[3]));
+=======
+SetUnoTurnClient(tonumber(string.sub(sarray[3])));
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
 end
 
 if (sarray[2] == UNO_STARTING and UnoCurrentScreen ~= UNO_SCREEN_BLANK) then
@@ -88,6 +104,7 @@ print("the hosts id is " .. UnoClientTheHostsIdentification)
 startTheUnoGame();
 end--end UNO_STARTING
 
+<<<<<<< HEAD
 --server code
 if (sarray[2] == UNO_CLIENT_CARDPLACED and UnoCurrentScreen == UNO_SCREEN_PLAYINGGAME) then
 --ping pong client cardupdate from client to server to broadcast
@@ -101,6 +118,8 @@ print("broadcast pls");
 UnoBroadcastTurnUpdate();
 end
 
+=======
+>>>>>>> origin/master
 --client code
 if (sarray[2] == UNO_MESSAGE_CARDUPDATE and UnoCurrentScreen == UNO_SCREEN_PLAYINGGAME) then
 local numCardUpdates = (tablelength(sarray) - 2)/2;
@@ -147,11 +166,18 @@ UnoHostContact.contactType = UNO_CONTACT_WHISPER;
 UnoHostContact.whisperName = author;
 AddUnoPlayerClientLobby("nameserver",author);
 end
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 
 
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/master
 --u just got invited! send recognition , also begin da process
 UnoMessage(UnoPlayersClientLobby[author],UNO_IDENTIFIER .. " " .. UNO_MESSAGE_HAS_ADDON);
 UnoCurrentScreen = UNO_SCREEN_INVITATION;
@@ -178,7 +204,22 @@ acceptFrame:SetScript("OnClick", function()
 --now we are in the lobby waiting
 UnoCurrentScreen = UNO_SCREEN_LOBBYGUEST;
 UnoClientDisplayLobbyGuestScreen();
+<<<<<<< HEAD
 print("why?")
+=======
+<<<<<<< HEAD
+print("why?")
+=======
+<<<<<<< HEAD
+print("why?")
+=======
+<<<<<<< HEAD
+print("why?")
+=======
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
+>>>>>>> origin/master
 UnoMessage(UnoPlayersClientLobby[author], UNO_IDENTIFIER .. " " .. UNO_MESSAGE_ACCEPT);
 UnoInvitedToTheGame:Hide();
 end);
