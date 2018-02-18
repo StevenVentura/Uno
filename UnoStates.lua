@@ -16,12 +16,9 @@ UNO_MESSAGE_ACCEPT = "accept";
 UNO_STARTING = "starting";--DONETODO: give the name of all players appended to this string?
 UNO_MESSAGE_CARDUPDATE = "CARDUPDATE";--DONETODO: broadcast deck data appended to this string
 UNO_MESSAGE_TURNUPDATE = "TURNUPDATE";
-<<<<<<< HEAD
 --messages sent from client to host
 --CARDPLACED also called CLIENT_TURNENDED
 UNO_CLIENT_CARDPLACED = "CARDPLACED";--TODO: ping message to server, distribute turnupdate and cardupdate
-=======
->>>>>>> origin/master
 --[[
 UNO_TURN_UPDATE documentation:
 
