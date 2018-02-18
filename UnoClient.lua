@@ -166,6 +166,10 @@ if (cardToPosition.owner == "updeck") then
 cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",UnoGetUpdeckOffset())
 
 --throw the previous updeck card away.
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> origin/master
 
 if (UnoCurrentUpdeckCard ~= cardToPosition) then
 UnoCurrentUpdeckCard.owner = "trash";
@@ -175,7 +179,17 @@ UnoCurrentUpdeckCard.frame:Hide();
 end
 --set our handle to the new top value.
 UnoCurrentUpdeckCard = cardToPosition;
+<<<<<<< HEAD
 
+=======
+print("now owner is " .. UnoCurrentUpdeckCard.owner);
+=======
+UnoCurrentUpdeckCard.owner = "trash";
+UnoCurrentUpdeckCard.frame:Hide();
+--set our handle to the new top value.
+UnoCurrentUpdeckCard = cardToPosition;
+>>>>>>> origin/master
+>>>>>>> origin/master
 
 end --end updeck
 
@@ -189,7 +203,15 @@ local player = UnoClientPlayers[cardToPosition.owner];
 local handCount = tablelength(playerHand);
 local currentCount = 0;--lay the hand out across the table
 local thisCardsCount = 0;
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+print("owner is " .. cardToPosition.owner);
+=======
+
+>>>>>>> origin/master
+>>>>>>> origin/master
 local px = UnoClientPlayers[cardToPosition.owner].centerX;
 
 local py = UnoClientPlayers[cardToPosition.owner].centerY;
@@ -234,13 +256,20 @@ card.frame:SetMovable(true);
 card.frame:EnableMouse(true);
 card.frame:RegisterForDrag("LeftButton");
 card.frame:SetScript("OnDragStart",function(self)
+<<<<<<< HEAD
 local x, y = (self:GetLeft() + self:GetRight())/2, 
 	(self:GetTop() + self:GetBottom()) / 2;
+=======
+local x, y = self:GetLeft(), self:GetTop();
+>>>>>>> origin/master
 
 
 self.beforeDragX = x;
 self.beforeDragY = y;
+<<<<<<< HEAD
 print("beforedragY is set to " .. self.beforeDragY);
+=======
+>>>>>>> origin/master
 
 self:StartMoving();
 self:SetFrameStrata("HIGH");
@@ -254,6 +283,7 @@ self.draggedX = x;
 self.draggedY = y;
 
 isValidPlacement = UnoCheckIfValidCardPlacement(self);
+<<<<<<< HEAD
 print(isValidPlacement);
 if (isValidPlacement == false) then
 print("beforedragY is now " .. self.beforeDragY);
@@ -262,6 +292,11 @@ self:SetPoint("CENTER",self.beforeDragX - (UnoClientFrame:GetLeft()
 	self.beforeDragY
 	- (UnoClientFrame:GetTop() + UnoClientFrame:GetBottom())/2);
 
+=======
+if (isValidPlacement == false) then
+self:setPoint("LEFT",self.beforeDragX);
+self:setPoint("TOP",self.beforeDragY);
+>>>>>>> origin/master
 end
 
 end);--end anonymous function
@@ -270,6 +305,10 @@ end--end for
 
 end--end function UnoUpdatePositions
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> origin/master
 --TODO: LEFT OFF HERE BTW
 function UnoCardIntersection(card1, card2) 
 
@@ -290,9 +329,13 @@ end--end function UnoCardIntersection
 function UnoCheckIfValidCardPlacement(draggingCard)
 
 --error: it is not your turn.
+<<<<<<< HEAD
 print("UnoGetMe()" .. UnoGetMe().name);
 print("currentTurnNameClient " .. currentTurnNameClient);
 if (UnoGetMe().name ~= currentTurnNameClient) then print("not your turn") return false end
+=======
+if (UnoGetMe().name ~= currentTurnNameClient) then return end
+>>>>>>> origin/master
 
 isOnTop = true;
 if (UnoCurrentUpdeckCard.frame.getLeft() > draggingCard.frame.getRight()
@@ -302,6 +345,21 @@ if (UnoCurrentUpdeckCard.frame.getLeft() > draggingCard.frame.getRight()
 	UnoCurrentUpdeckCard.frame.getTop() < draggingCard.frame.getBottom()
 	or
 	draggingCard.frame.getTop() < UnoCurrentScreen.frame.getBottom()
+<<<<<<< HEAD
+=======
+=======
+function UnoCheckIfValidCardPlacement(draggingCard)
+
+isOnTop = true;
+if (UnoCurrentUpdeckCard.getLeft() > draggingCard.getRight()
+	or
+	draggingCard.getLeft() > UnoCurrentUpdeckCard.getRight()
+	or
+	UnoCurrentUpdeckCard.getTop() < draggingCard.getBottom()
+	or
+	draggingCard.getTop() < UnoCurrentScreen.getBottom()
+>>>>>>> origin/master
+>>>>>>> origin/master
 	) then
 	isOnTop = false;
 	end

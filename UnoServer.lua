@@ -89,6 +89,10 @@ end--end for
 return nil;--didnt find anyone with that ID
 end--end function getServerUnoPlayerByOfficialIndex
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> origin/master
 
 
 function getUnoServerPlayer(name) 
@@ -101,12 +105,27 @@ end
 
 end--end function getUnoServerPlayer
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> origin/master
+>>>>>>> origin/master
 --note: you have to set the turn variable currentTurnNameServer before calling this
 function UnoBroadcastTurnUpdate() 
 --broadcast turn update
 for name, player in pairs(UnoServerPlayers) do
+<<<<<<< HEAD
 UnoMessage(getUnoServerPlayer(name),UNO_IDENTIFIER .. " " .. UNO_MESSAGE_TURNUPDATE
 			.. " " .. getUnoServerPlayer(currentTurnNameServer).officialIndex);
+=======
+<<<<<<< HEAD
+UnoMessage(getUnoServerPlayer(name),UNO_IDENTIFIER .. " " .. UNO_MESSAGE_TURNUPDATE
+			.. " " .. getUnoServerPlayer(name).officialIndex);
+=======
+UnoMessage(UnoServerPlayers[name],UNO_IDENTIFIER .. " " .. UNO_MESSAGE_TURNUPDATE
+			.. " " .. UnoServerPlayers[currentTurnNameServer].officialIndex);
+>>>>>>> origin/master
+>>>>>>> origin/master
 end--end for
 
 end--end function UnoBroadcastTurnUpdate
