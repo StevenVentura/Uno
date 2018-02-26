@@ -92,7 +92,7 @@ end--end UNO_STARTING
 if (sarray[2] == UNO_CLIENT_CARDPLACED and UnoCurrentScreen == UNO_SCREEN_PLAYINGGAME) then
 --ping pong client cardupdate from client to server to broadcast
 local updatedCardIndex = tonumber(sarray[3]);
-UnoServerCardsChanged[updatedCardIndex] = UnoServerCards[updatedCardIndex];
+UnoServerCardsChanged[updatedCardIndex] = "updeck";
 print("pls tho");
 UnoBroadcastUpdateDeck();
 --change the current turn

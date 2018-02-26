@@ -27,7 +27,7 @@ UnoClientFrameCloseButton:Show();
 UnoClientCards = {};
 UnoClientPlayers = {};
 
-UnoCurrentUpdeckCard = {};
+UnoCurrentUpdeckCardIndex = -1;
 
 function getClientUnoPlayerByOfficialIndex(index) 
 
@@ -155,6 +155,9 @@ local width,height = UnoClientFrame:GetSize();
 cardToPosition.frame.texture:SetTexture("Interface/AddOns/Uno/images/" .. cardToPosition.label .. ".tga");
 cardToPosition.frame:Show();
 if (IsUnoCardFaceDown(cardToPosition)) then
+if (cardToPosition.owner == "updeck") then
+print("heyo guys, a mordeus here");
+end
 cardToPosition.frame.texture:SetTexture("Interface/AddOns/Uno/images/uno_cardback.tga");
 end
 
@@ -167,21 +170,26 @@ cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",UnoGetUpdeckOffse
 
 --throw the previous updeck card away.
 
-if (UnoCurrentUpdeckCard ~= cardToPosition) then
-UnoCurrentUpdeckCard.owner = "trash";
+if (cardToPosition.owner == "updeck") then
+--TODO right here stopped off 2/25/2018
+--[[if (UnoCurrentUpdeckCardIndex ~= -1) then
+UnoClientCards[UnoCurrentUpdeckCardIndex].frame:Hide(); 
+end--]]
+UnoCurrentUpdeckCardIndex = cardToPosition.index;
 end
-if (UnoCurrentUpdeckCard ~= cardToPosition and UnoCurrentUpdeckCard.frame ~= nil) then
-UnoCurrentUpdeckCard.frame:Hide();
-end
+--[[if (UnoClientCards[UnoCurrentUpdeckCardIndex] ~= cardToPosition and UnoClientCards[UnoCurrentUpdeckCardIndex].frame ~= nil) then
+UnoClientCards[UnoCurrentUpdeckCardIndex].frame:Hide();
+end]]
 --set our handle to the new top value.
-UnoCurrentUpdeckCard = cardToPosition;
+
 
 
 end --end updeck
 
 --get the count of how many cards he owns
 
-local playerOwned = cardToPosition.owner ~= "updeck" and cardToPosition.owner ~= "maindeck";
+local playerOwned = cardToPosition.owner ~= "updeck" and cardToPosition.owner ~= "maindeck"
+						and cardToPosition.owner ~= "trash";
 
 if (playerOwned == true) then
 local playerHand = UnoGetHandClient(cardToPosition.owner);
@@ -309,13 +317,13 @@ function UnoCheckIfValidCardPlacement(draggingCard)
 if (UnoGetMe().name ~= currentTurnNameClient) then printUnoError("it is " .. currentTurnNameClient .. "'s turn.") return false end
 
 isOnTop = true;
-if (UnoCurrentUpdeckCard.frame:GetLeft() > draggingCard.frame:GetRight()
+if (UnoClientCards[UnoCurrentUpdeckCardIndex].frame:GetLeft() > draggingCard.frame:GetRight()
 	or
-	draggingCard.frame:GetLeft() > UnoCurrentUpdeckCard.frame:GetRight()
+	draggingCard.frame:GetLeft() > UnoClientCards[UnoCurrentUpdeckCardIndex].frame:GetRight()
 	or
-	UnoCurrentUpdeckCard.frame:GetTop() < draggingCard.frame:GetBottom()
+	UnoClientCards[UnoCurrentUpdeckCardIndex].frame:GetTop() < draggingCard.frame:GetBottom()
 	or
-	draggingCard.frame:GetTop() < UnoCurrentUpdeckCard.frame:GetBottom()
+	draggingCard.frame:GetTop() < UnoClientCards[UnoCurrentUpdeckCardIndex].frame:GetBottom()
 	) then
 	isOnTop = false;
 	end
@@ -332,8 +340,8 @@ if (isOnTop == true)
 		return true;
 	end--end if special card
 	--else check if the suit is right and stuff
-	if (UnoCurrentUpdeckCard.color == draggingCard.color 
-		or UnoCurrentUpdeckCard.label == draggingCard.label )
+	if (UnoClientCards[UnoCurrentUpdeckCardIndex].color == draggingCard.color 
+		or UnoClientCards[UnoCurrentUpdeckCardIndex].label == draggingCard.label )
 		then
 		return true;
 		end--end if
@@ -411,5 +419,6 @@ return card.owner == UnoGetMe().name;
 end--end function IsMyUnoCard
 
 function IsUnoCardFaceDown(card)
+if (card.owner == "updeck") then return false end
 return card.owner == "maindeck" or (not(card.owner == "updeck") and not(IsMyUnoCard(card)));
 end--end function
