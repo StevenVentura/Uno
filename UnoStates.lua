@@ -425,7 +425,10 @@ dummy:SetPoint("TOPLEFT",0,16);
 dummy:Hide();
  
 GuildRoster();--updates the info in the UI
-
+print("numonlnine is " .. numOnline);
+guildName, guildRankName, guildRankIndex = GetGuildInfo("player");
+--TODO: if he is actually in a guild then
+if (guildName ~= nil) then
 for index=1,numOnline do 
 
 local fullName, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile, canSoR, reputation = GetGuildRosterInfo(index) 
@@ -461,6 +464,7 @@ end);
 
 
 end--end for
+end--end if numOnline > 1
 
 for i, butt in ipairs(scrollbar2.buttons) do
   if (butt:GetBottom() < scrollframe2:GetBottom() or butt:GetTop() > scrollframe2:GetTop()) then
@@ -621,7 +625,9 @@ GuildRoster();--updates the info in the UI
 local numGuildMembers, numOnline, numOnlineAndMobile = GetNumGuildMembers()
 if (numOnline == 0) then numOnline = 1 end 
 GuildRoster();--updates the info in the UI
-
+guildName, guildRankName, guildRankIndex = GetGuildInfo("player");
+--TODO: if he is actually in a guild then
+if (guildName ~= nil) then
 for index=1,numOnline do 
 
 local fullName, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile, canSoR, reputation = GetGuildRosterInfo(index) 
@@ -672,6 +678,7 @@ button2:SetScript("OnEnter", function(self)
 end);
 
 end--end for
+end--end if in a guild
 
 for i, butt in ipairs(scrollbar2.buttons) do
 if (butt.stevenDisable == false) then

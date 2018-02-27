@@ -99,11 +99,14 @@ for i=1,amount do
 cardIndex = cardIndex + 1;--should go up to 108
 local tempName = cardname;
 if (cardname ~= "wild" and cardname ~= "wildplus4") then
-tempName = UNO_COLORS[colorIndex] .. cardname;
+fName = UNO_COLORS[colorIndex] .. cardname;
+else
+fName = cardname;
 end--end if
 UnoClientCards[cardIndex] = {
 color=UNO_COLORS[colorIndex],
 label=tempName,
+fileName=fName,
 owner="maindeck",
 index=cardIndex
 };
@@ -154,8 +157,14 @@ end--end function
 function UnoPositionCard(cardToPosition)
 local width,height = UnoClientFrame:GetSize();
 
-cardToPosition.frame.texture:SetTexture("Interface/AddOns/Uno/images/" .. cardToPosition.label .. ".tga");
+cardToPosition.frame.texture:SetTexture("Interface/AddOns/Uno/images/" .. cardToPosition.fileName .. ".tga");
+if (cardToPosition.owner == "discard") then
+cardToPosition.frame:Hide();
+return
+else
 cardToPosition.frame:Show();
+end
+
 if (IsUnoCardFaceDown(cardToPosition)) then
 
 cardToPosition.frame.texture:SetTexture("Interface/AddOns/Uno/images/uno_cardback.tga");
@@ -172,7 +181,7 @@ end --end updeck
 --get the count of how many cards he owns
 
 local playerOwned = cardToPosition.owner ~= "updeck" and cardToPosition.owner ~= "maindeck"
-						and cardToPosition.owner ~= "trash";
+						and cardToPosition.owner ~= "discard";
 
 if (playerOwned == true) then
 local playerHand = UnoGetHandClient(cardToPosition.owner);
@@ -323,6 +332,10 @@ if (isOnTop == true)
 		return true;
 	end--end if special card
 	--else check if the suit is right and stuff
+	print("|cffffff00updeckcolor=" .. UnoClientCards[UnoCurrentUpdeckCardIndex].color
+		.. " & drag=" .. draggingCard.color );
+		print("|cffffaa00updecklabel=" .. UnoClientCards[UnoCurrentUpdeckCardIndex].label
+		.. " & drag=" .. draggingCard.label );
 	if (UnoClientCards[UnoCurrentUpdeckCardIndex].color == draggingCard.color 
 		or UnoClientCards[UnoCurrentUpdeckCardIndex].label == draggingCard.label )
 		then

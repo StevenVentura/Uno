@@ -95,7 +95,12 @@ end--end UNO_STARTING
 if (sarray[2] == UNO_MESSAGE_NEWCARDDOWN and UnoCurrentScreen == UNO_SCREEN_PLAYINGGAME) then
 --hide the previous updeck card
 for x,y in pairs(UnoClientCards) do
+
 if (y.owner == "updeck") then
+print(y.index)
+print("heyo guys, amordeus is finally here")
+y.owner = "discard";
+y.frame:Hide();
 y.frame:Hide();
 end
 end
