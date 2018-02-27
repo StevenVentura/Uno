@@ -149,10 +149,27 @@ end--end if backwards
 end--end function getNextEntry
 
 function UnoServerDetermineNextTurn() 
+if (UnoCurrentUpdeckCard.label == "reverse") then 
+print("|cffff0000" .. "did it reverse before or after the card was placed?");
+if (UnoServerCurrentRotationDirection == UNO_ROTATION_FORWARDS) then
+UnoServerCurrentRotationDirection = UNO_ROTATION_BACKWARDS;
+else
+UnoServerCurrentRotationDirection = UNO_ROTATION_FORWARDS;
+end--end else
+end--end if reverse
+
 local currentTurnboy = getUnoServerPlayer(currentTurnNameServer); 
 local nextboy = -1;
 local arrayIndices = getUnoServerPlayerIDArray();
-nextboy = UnoServerGetNextEntry(arrayIndices,currentTurnboy.officialIndex,UnoServerCurrentRotationDirection);
+nextboy = UnoServerGetNextEntry(arrayIndices,currentTurnboy.officialIndex,
+		UnoServerCurrentRotationDirection);
+		
+if (UnoCurrentUpdeckCard.label == "skip") then
+print("|cffff0000" .. "did it skip before or after the card was placed?");
+nextboy = UnoServerGetNextEntry(arrayIndices,nextboy,
+		UnoServerCurrentRotationDirection);
+end
+
 
 print("|cff0000ffnextboy is " .. nextboy);
 currentTurnNameServer = getServerUnoPlayerByOfficialIndex(nextboy).name;

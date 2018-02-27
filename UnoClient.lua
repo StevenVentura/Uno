@@ -267,6 +267,8 @@ if (isValidPlacement == true) then
 print("messaging the host");
 UnoMessageTheHost(UNO_IDENTIFIER .. " " .. UNO_CLIENT_CARDPLACED .. " " .. 
 			self.cardindex);
+--unregister for drag lol
+self:EnableMouse(false);
 
 
 
