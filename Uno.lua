@@ -63,14 +63,17 @@ end--end function UNO_WHISPER_RECEIVED
 function UnoAbstractMessageReceived(message, author, pid)
 local sarray = UnoSplitString(message);
 local remainder = string.sub(message,strlen(UNO_IDENTIFIER)+2);
-print("remainder is " .. remainder)
-print("author is " .. author);
+
+
 --return and do nothing if its not an addon message.
 if (sarray[1] ~= UNO_IDENTIFIER) then return end;
 
 if (sarray[2] == UNO_MESSAGE_TURNUPDATE and UnoCurrentScreen ~= UNO_SCREEN_BLANK) then
 SetUnoTurnClient(tonumber(sarray[3]));
-end
+
+
+
+end--end if TURNUPDATEA
 
 if (sarray[2] == UNO_STARTING and UnoCurrentScreen ~= UNO_SCREEN_BLANK) then
 if (UnoClientLobbyScreen) then UnoClientLobbyScreen:Hide() end;
@@ -88,13 +91,35 @@ print("the hosts id is " .. UnoClientTheHostsIdentification)
 startTheUnoGame();
 end--end UNO_STARTING
 
+--client code
+if (sarray[2] == UNO_MESSAGE_NEWCARDDOWN and UnoCurrentScreen == UNO_SCREEN_PLAYINGGAME) then
+--hide the previous updeck card
+for x,y in pairs(UnoClientCards) do
+if (y.owner == "updeck") then
+y.frame:Hide();
+end
+end
+
+--put the new one in
+local newupdeckindex = tonumber(sarray[3]);
+UnoCurrentUpdeckCardIndex = newupdeckindex;
+UnoClientCards[UnoCurrentUpdeckCardIndex].owner = "updeck";
+--now put it in
+UnoUpdatePositions();
+
+end
 --server code
 if (sarray[2] == UNO_CLIENT_CARDPLACED and UnoCurrentScreen == UNO_SCREEN_PLAYINGGAME) then
 --ping pong client cardupdate from client to server to broadcast
 local updatedCardIndex = tonumber(sarray[3]);
-UnoServerCardsChanged[updatedCardIndex] = "updeck";
-print("pls tho");
-UnoBroadcastUpdateDeck();
+--[[UnoServerCardsChanged[updatedCardIndex] = "updeck";
+UnoBroadcastUpdateDeck();--]]
+UnoBroadcastMessage(UNO_IDENTIFIER .. " " .. 
+		UNO_MESSAGE_NEWCARDDOWN .. " " ..
+		updatedCardIndex);
+
+
+
 --change the current turn
 UnoServerDetermineNextTurn();
 print("broadcast pls");
@@ -110,6 +135,15 @@ local newOwner = sarray[((i-1)*2+4)];
 UnoClientCards[cardIndex].owner = newOwner;
 UnoUpdatePositions();
 --UnoPositionCard(UnoClientCards[cardIndex]);
+end--end for
+--also find the updeck and set it here lol
+for x,y in pairs(UnoClientCards) do
+if (y.owner ~= "maindeck") then print(y.owner)
+if (y.owner == "updeck") then 
+print("|cff0000ffree")
+UnoCurrentUpdeckCardIndex = y.index;
+end--end if
+end--end if
 end--end for
 end--end if UNO_MESSAGE_CARDUPDATE
 

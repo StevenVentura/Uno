@@ -131,7 +131,8 @@ if (UnoServerCurrentRotationDirection == UNO_ROTATION_BACKWARDS) then
 --TODO: method stub
 
 end--end else
-currentTurnNameServer = UnoServerPlayers[nextboy].name;
+print("|cff0000ffnextboy is " .. nextboy);
+currentTurnNameServer = getServerUnoPlayerByOfficialIndex(nextboy).name;
 end--end function UnoServerDetermineNextTurn
 --note: you have to set the turn variable currentTurnNameServer before calling this
 function UnoBroadcastTurnUpdate() 
@@ -193,6 +194,11 @@ end--end function UnoCreateAndDealCards
 
 UnoServerCardsChanged = {};
 
+function UnoBroadcastMessage(message) 
+for name, player in pairs(UnoServerPlayers) do
+UnoMessage(player, message);
+end
+end--end function UnoBroadcastMessage
 
 --[[
 documentation for UnoBroadcastUpdateDeck is in UnoCard.lua
@@ -210,6 +216,12 @@ UnoMessage(player, cardsMessage);
 end
 --and to myself too
 SendChatMessage(cardsMessage, "WHISPER",nil,UnitName("player"));
+
+--find which card was the updeck card
+
+--broadcast it as UPDECK_UPDATE
+
+
 
 
 --now clear the event stack

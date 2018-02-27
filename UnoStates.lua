@@ -24,6 +24,7 @@ UNO_TURN_UPDATE documentation:
 
 
 ]]
+UNO_MESSAGE_NEWCARDDOWN = "NEWCARDDOWN";
 
 --
 UnoScreenSlashUno = CreateFrame("Frame","UnoScreenSlashUno",UIParent);

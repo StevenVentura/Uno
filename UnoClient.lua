@@ -149,15 +149,15 @@ local width,height = UnoClientFrame:GetSize();
 return GetUnoCardHeight()*2;
 end--end function
 
+
+
 function UnoPositionCard(cardToPosition)
 local width,height = UnoClientFrame:GetSize();
 
 cardToPosition.frame.texture:SetTexture("Interface/AddOns/Uno/images/" .. cardToPosition.label .. ".tga");
 cardToPosition.frame:Show();
 if (IsUnoCardFaceDown(cardToPosition)) then
-if (cardToPosition.owner == "updeck") then
-print("heyo guys, a mordeus here");
-end
+
 cardToPosition.frame.texture:SetTexture("Interface/AddOns/Uno/images/uno_cardback.tga");
 end
 
@@ -167,23 +167,6 @@ end--end maindeck
 
 if (cardToPosition.owner == "updeck") then
 cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",UnoGetUpdeckOffset())
-
---throw the previous updeck card away.
-
-if (cardToPosition.owner == "updeck") then
---TODO right here stopped off 2/25/2018
---[[if (UnoCurrentUpdeckCardIndex ~= -1) then
-UnoClientCards[UnoCurrentUpdeckCardIndex].frame:Hide(); 
-end--]]
-UnoCurrentUpdeckCardIndex = cardToPosition.index;
-end
---[[if (UnoClientCards[UnoCurrentUpdeckCardIndex] ~= cardToPosition and UnoClientCards[UnoCurrentUpdeckCardIndex].frame ~= nil) then
-UnoClientCards[UnoCurrentUpdeckCardIndex].frame:Hide();
-end]]
---set our handle to the new top value.
-
-
-
 end --end updeck
 
 --get the count of how many cards he owns
