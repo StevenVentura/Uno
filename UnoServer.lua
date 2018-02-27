@@ -125,7 +125,6 @@ end--end function getHighestValueFromArray
 
 function UnoServerGetNextEntry(array,beforeValue,direction)
 if (direction == UNO_ROTATION_FORWARDS) then
-local nextentry = -1;
 local flaggy = false;
 for a,b in pairs(array) do
 print("a is " .. a);
@@ -135,7 +134,7 @@ print("returning " .. a);
 return a;
 end--end if flaggy==true
 --nextloopflaggy
-if (a == beforeValue) then print("set flaggy to true") flaggy = true end
+if (a == beforeValue) then flaggy = true end
 end
 --if it gets out with flaggy being true then it means its the first value
 for a,b in pairs(array) do
@@ -144,27 +143,44 @@ return a;
 end--end for
 end--end if direction is forwards
 if (direction == UNO_ROTATION_BACKWARDS) then
-
+local flaggy2 = false;
+--NOTE: this might not work if there's missing player indices
+for n = #array, 1, -1 do
+if (flaggy2 == true) then return n end
+if (array[n] == beforeValue) then flaggy2 = true end
+end--end for
+--if it gets out with flaggy being true then it means its the last value
+for n = #array, 1, -1 do
+--return the last value of the array
+return n
+end--end for
 end--end if backwards
 end--end function getNextEntry
 
 function UnoServerDetermineNextTurn() 
-if (UnoCurrentUpdeckCard.label == "reverse") then 
+if (UnoServerCards[UnoServerCurrentUpdeckCardIndex].label == "reverse") then 
 print("|cffff0000" .. "did it reverse before or after the card was placed?");
 if (UnoServerCurrentRotationDirection == UNO_ROTATION_FORWARDS) then
 UnoServerCurrentRotationDirection = UNO_ROTATION_BACKWARDS;
 else
 UnoServerCurrentRotationDirection = UNO_ROTATION_FORWARDS;
 end--end else
+
 end--end if reverse
 
 local currentTurnboy = getUnoServerPlayer(currentTurnNameServer); 
 local nextboy = -1;
 local arrayIndices = getUnoServerPlayerIDArray();
+
+if (UnoServerCards[UnoServerCurrentUpdeckCardIndex].label == "reverse") then
+--SPECIAL RULE: if there are 2 players, then reverse acts like a skip, and he keeps turn.
+if (#arrayIndices == 2) then return getUnoServerPlayer(currentTurnNameServer).officialIndex end
+end--end reverse special case part 2
+
 nextboy = UnoServerGetNextEntry(arrayIndices,currentTurnboy.officialIndex,
 		UnoServerCurrentRotationDirection);
 		
-if (UnoCurrentUpdeckCard.label == "skip") then
+if (UnoServerCards[UnoServerCurrentUpdeckCardIndex].label == "skip") then
 print("|cffff0000" .. "did it skip before or after the card was placed?");
 nextboy = UnoServerGetNextEntry(arrayIndices,nextboy,
 		UnoServerCurrentRotationDirection);

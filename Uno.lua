@@ -114,6 +114,7 @@ UnoUpdatePositions();
 
 end
 --server code
+--UNO_CLIENT_CARDPLACED is used for making a new updeck card. there is room for more too.
 if (sarray[2] == UNO_CLIENT_CARDPLACED and UnoCurrentScreen == UNO_SCREEN_PLAYINGGAME) then
 --ping pong client cardupdate from client to server to broadcast
 local updatedCardIndex = tonumber(sarray[3]);
@@ -123,7 +124,7 @@ UnoBroadcastMessage(UNO_IDENTIFIER .. " " ..
 		UNO_MESSAGE_NEWCARDDOWN .. " " ..
 		updatedCardIndex);
 
-
+UnoServerCurrentUpdeckCardIndex = updatedCardIndex;
 
 --change the current turn
 UnoServerDetermineNextTurn();
