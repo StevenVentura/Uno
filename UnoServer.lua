@@ -104,33 +104,56 @@ end
 
 end--end function getUnoServerPlayer
 
+function getUnoServerPlayerIDArray()
+local out = {};
+
+for name,player in pairs(UnoServerPlayers) do
+local index = player.officialIndex;
+out[index] = index;
+end
+
+return out;
+end--end function getUnoServerPlayerIDArray
+
+function getHighestIndexFromArray(array) 
+local highest = -1;
+for a,b in pairs(array) do
+if (a > highest) then highest = a end
+end
+return highest;
+end--end function getHighestValueFromArray
+
+function UnoServerGetNextEntry(array,beforeValue,direction)
+if (direction == UNO_ROTATION_FORWARDS) then
+local nextentry = -1;
+local flaggy = false;
+for a,b in pairs(array) do
+print("a is " .. a);
+print("beforevalue is " .. beforeValue)
+if (flaggy == true) then 
+print("returning " .. a);
+return a;
+end--end if flaggy==true
+--nextloopflaggy
+if (a == beforeValue) then print("set flaggy to true") flaggy = true end
+end
+--if it gets out with flaggy being true then it means its the first value
+for a,b in pairs(array) do
+--return the first value
+return a;
+end--end for
+end--end if direction is forwards
+if (direction == UNO_ROTATION_BACKWARDS) then
+
+end--end if backwards
+end--end function getNextEntry
+
 function UnoServerDetermineNextTurn() 
 local currentTurnboy = getUnoServerPlayer(currentTurnNameServer); 
 local nextboy = -1;
-if (UnoServerCurrentRotationDirection == UNO_ROTATION_FORWARDS) then
---whats the highest index btw?
-local nextIsCurrent = false;
-for name, player in pairs(UnoServerPlayers) do 
-if (UnoServerPlayers[name].officialIndex == currentTurnboy.officialIndex) then
-nextIsCurrent = true;
-end
-if (nextIsCurrent == true) then
-nextboy = UnoServerPlayers[name].officialIndex;
-end
-end--end for
-if (nextboy == -1) then
+local arrayIndices = getUnoServerPlayerIDArray();
+nextboy = UnoServerGetNextEntry(arrayIndices,currentTurnboy.officialIndex,UnoServerCurrentRotationDirection);
 
---this means it didnt choose a next boy, so just pick the first guy from array
-for name,player in pairs(UnoServerPlayers) do
-nextboy = UnoServerPlayers[name].officialIndex;
-break;
-end--end for
-end--end if nextboy == -11
-end--end if UNO_ROTATION_FORWARDS
-if (UnoServerCurrentRotationDirection == UNO_ROTATION_BACKWARDS) then
---TODO: method stub
-
-end--end else
 print("|cff0000ffnextboy is " .. nextboy);
 currentTurnNameServer = getServerUnoPlayerByOfficialIndex(nextboy).name;
 end--end function UnoServerDetermineNextTurn
