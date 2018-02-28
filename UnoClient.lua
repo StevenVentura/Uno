@@ -190,6 +190,7 @@ local handCount = tablelength(playerHand);
 local currentCount = 0;--lay the hand out across the table
 local thisCardsCount = 0;
 
+
 local px = UnoClientPlayers[cardToPosition.owner].centerX;
 
 local py = UnoClientPlayers[cardToPosition.owner].centerY;
@@ -269,8 +270,19 @@ if (self.cardlabel == "wild" or self.cardlabel == "wildplus4") then
 --is a wild
 
 --display the popup
+CreateFrame("Frame","UnoWildPickerFrame",UnoClientFrame);
+UnoWildPickerFrame:SetSize(400,140);
+UnoWildPickerFrame:SetPoint("CENTER");
+UnoWildPickerFrame.t = UnoWildPickerFrame:CreateTexture();
+UnoWildPickerFrame.t:SetAllPoints();
+UnoWildPickerFrame.t:SetColorTexture(43/255/2,15/255/2,1/255/2,0.80/4);
+UnoWildPickerFrame:Show();
 
-
+--red,blue,green,yellow
+CreateFrame("Button","UnoWildPickerRed",UnoWildPickerFrame,"UIPanelButtonTemplate"); 
+CreateFrame("Button","UnoWildPickerBlue",UnoWildPickerFrame,"UIPanelButtonTemplate"); 
+CreateFrame("Button","UnoWildPickerGreen",UnoWildPickerFrame,"UIPanelButtonTemplate"); 
+CreateFrame("Button","UnoWildPickerYellow",UnoWildPickerFrame,"UIPanelButtonTemplate"); 
 --popup buttons: when you press it, it ends the turn with the extra information
 
 --[[
@@ -283,15 +295,62 @@ UnoMessageTheHost(UNO_IDENTIFIER .. " " .. UNO_CLIENT_CARDPLACED .. " " ..
 			
 			);
 ]]
+UnoWildPickerRed:SetSize(100,105);
+UnoWildPickerRed:SetPoint("TOPLEFT",0,18);
+UnoWildPickerRed:SetText("Red");
+UnoWildPickerRed:SetScript("OnClick",function(selfhaha) 
+UnoWildPickerFrame:Hide();
+UnoMessageTheHost(UNO_IDENTIFIER .. " " .. UNO_CLIENT_CARDPLACED .. " " .. 
+			self.cardindex
+			.. " " .. 
+			"red");
+end);
+UnoWildPickerRed:Show();
+UnoWildPickerBlue:SetSize(100,105);
+UnoWildPickerBlue:SetPoint("TOPLEFT",100,18);
+UnoWildPickerBlue:SetText("Blue");
+UnoWildPickerBlue:SetScript("OnClick",function(selfhaha) 
+UnoWildPickerFrame:Hide();
+UnoMessageTheHost(UNO_IDENTIFIER .. " " .. UNO_CLIENT_CARDPLACED .. " " .. 
+			self.cardindex
+			.. " " .. 
+			"blue");
+end);
+UnoWildPickerBlue:Show();
+UnoWildPickerGreen:SetSize(100,105);
+UnoWildPickerGreen:SetPoint("TOPLEFT",200,18);
+UnoWildPickerGreen:SetText("Green");
+UnoWildPickerGreen:SetScript("OnClick",function(selfhaha) 
+UnoWildPickerFrame:Hide();
+UnoMessageTheHost(UNO_IDENTIFIER .. " " .. UNO_CLIENT_CARDPLACED .. " " .. 
+			self.cardindex
+			.. " " .. 
+			"green");
+end);
+UnoWildPickerGreen:Show();
+UnoWildPickerYellow:SetSize(100,105);
+UnoWildPickerYellow:SetPoint("TOPLEFT",300,18);
+UnoWildPickerYellow:SetText("Yellow");
+UnoWildPickerYellow:SetScript("OnClick",function(selfhaha) 
+UnoWildPickerFrame:Hide();
+UnoMessageTheHost(UNO_IDENTIFIER .. " " .. UNO_CLIENT_CARDPLACED .. " " .. 
+			self.cardindex
+			.. " " .. 
+			"yellow");
+end);
+UnoWildPickerYellow:Show();
+
+
+
 
 else
 --is not a wild
 UnoMessageTheHost(UNO_IDENTIFIER .. " " .. UNO_CLIENT_CARDPLACED .. " " .. 
 			self.cardindex);
---unregister for drag lol
-self:EnableMouse(false);
 end--end is not a wild
 
+--unregister for drag lol
+self:EnableMouse(false);
 
 
 end--end isValidPlacement == true

@@ -128,7 +128,7 @@ local colorpicked = sarray[4];
 UnoCurrentUpdeckCardIndex = newupdeckindex;
 UnoClientCards[UnoCurrentUpdeckCardIndex].owner = "updeck";
 if (colorpicked ~= nil) then
-UnoClientCards[UnoCurrentUpdeckCardIndex].owner = sarray[4];
+UnoClientCards[UnoCurrentUpdeckCardIndex].color = sarray[4];
 end
 --now put it in
 UnoUpdatePositions();
@@ -179,7 +179,6 @@ end--end for
 for x,y in pairs(UnoClientCards) do
 if (y.owner ~= "maindeck") then print(y.owner)
 if (y.owner == "updeck") then 
-print("|cff0000ffree")
 UnoCurrentUpdeckCardIndex = y.index;
 end--end if
 end--end if
