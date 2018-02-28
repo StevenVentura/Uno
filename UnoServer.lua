@@ -190,13 +190,55 @@ end
 print("|cff0000ffnextboy is " .. nextboy);
 currentTurnNameServer = getServerUnoPlayerByOfficialIndex(nextboy).name;
 end--end function UnoServerDetermineNextTurn
---note: you have to set the turn variable currentTurnNameServer before calling this
+
+
+--note: you have to set the turn variable currentTurnNameServer before calling this.
+--this is done by calling UnoServerDetermineNextTurn()
 function UnoBroadcastTurnUpdate() 
+local updeckboy = UnoServerCards[UnoServerCurrentUpdeckCardIndex];
+--tells whose turn it is now. Also adds the new cards to deck.
+
+local turnupdatedrawmessage = UNO_IDENTIFIER .. " " .. UNO_MESSAGE_TURNUPDATE
+			.. " " .. getUnoServerPlayer(currentTurnNameServer).officialIndex;
+local cardsDrawnString = "";
+----determine how many cards are drawn
+--cards can be drawn from draw2 and draw4 wild cards.
+--"plus2","skip","reverse",
+			--"wild","wildplus4"};
+local cardsToDrawFromEvent = 0;
+if (updeckboy.label == "plus2" ) then
+cardsToDrawFromEvent = 2;
+end
+if (updeckboy.label == "wildplus4") then
+cardsToDrawFromEvent = 4;
+end
+--draw the cardsToDrawFromEvent
+
+
+for i=1,cardsToDrawFromEvent do
+ServerDealUnoCardToPlayer(currentTurnNameServer);
+cardsDrawnString = cardsDrawnString .. tempstevenpleaseindex .. " ";
+end
+
+--TODO: method stub: also, cards must be drawn until the player has a valid card to play
+
+--append length to message
+numCardsDrawn = cardsToDrawFromEvent + 0;
+
+
+turnupdatedrawmessage = turnupdatedrawmessage .. " " .. numCardsDrawn;
+--iterate and append all new card values to message
+if (cardsDrawnString ~= nil and cardsDrawnString ~= "") then
+turnupdatedrawmessage = turnupdatedrawmessage .. " " .. cardsDrawnString;
+end
+
+
 --broadcast turn update
 for name, player in pairs(UnoServerPlayers) do
-UnoMessage(getUnoServerPlayer(name),UNO_IDENTIFIER .. " " .. UNO_MESSAGE_TURNUPDATE
-			.. " " .. getUnoServerPlayer(currentTurnNameServer).officialIndex);
+UnoMessage(getUnoServerPlayer(name),turnupdatedrawmessage);
 end--end for
+
+
 
 end--end function UnoBroadcastTurnUpdate
 currentTurnNameServer = nil;
@@ -204,7 +246,7 @@ function UnoCreateAndDealCards()
 --also set the current turn
 currentTurnNameServer = getServerUnoPlayerByOfficialIndex(1).name;
 
-UnoBroadcastTurnUpdate();
+
 
 
 --[[
@@ -242,6 +284,17 @@ end--end for
 
 --put random card face up
 ServerDealUnoCardToPlayer("updeck");
+
+forfucksakes = -1;
+for a,b in pairs(UnoServerCards) do 
+if (b.owner == "updeck") then 
+print("a " .. a); 
+forfucksakes = a end
+end
+print("fucksakes is " .. forfucksakes);
+UnoServerCurrentUpdeckCardIndex = forfucksakes;
+
+UnoBroadcastTurnUpdate();
 
 UnoBroadcastUpdateDeck();
 
@@ -306,8 +359,9 @@ end--end while
 
 UnoServerCards[index].owner = dealToMe;
 
---populate the event stack
 
+tempstevenpleaseindex = index;
+--populate the event stack
 UnoServerCardsChanged[index] = dealToMe;
 
 

@@ -70,8 +70,25 @@ if (sarray[1] ~= UNO_IDENTIFIER) then return end;
 
 if (sarray[2] == UNO_MESSAGE_TURNUPDATE and UnoCurrentScreen ~= UNO_SCREEN_BLANK) then
 SetUnoTurnClient(tonumber(sarray[3]));
+--local turnupdatedrawmessage = UNO_IDENTIFIER .. " " .. UNO_MESSAGE_TURNUPDATE
+--			.. " " .. getUnoServerPlayer(currentTurnNameServer).officialIndex;
+--turnupdatedrawmessage = turnupdatedrawmessage .. " " .. numCardsDrawn;
+----iterate and append all new card values to message
+--turnupdatedrawmessage = turnupdatedrawmessage .. " " .. cardsDrawnString;
+local numplsarray = {};
+for i = 1, tonumber(sarray[4]) do
+local x = tonumber(sarray[4+i]);
+numplsarray[x] = x;
+end--end for
 
-
+--change the owner on those cards
+for a,b in pairs(numplsarray) do
+--TODO: might have to use "host" instead of .name
+UnoClientCards[numplsarray[a]].owner = 
+			getClientUnoPlayerByOfficialIndex(tonumber(sarray[3])).name;
+end
+--update positions and draggable status
+UnoUpdatePositions();
 
 end--end if TURNUPDATEA
 
@@ -113,13 +130,11 @@ UnoClientCards[UnoCurrentUpdeckCardIndex].owner = "updeck";
 UnoUpdatePositions();
 
 end
---server code
+--server code: end of a client's turn
 --UNO_CLIENT_CARDPLACED is used for making a new updeck card. there is room for more too.
 if (sarray[2] == UNO_CLIENT_CARDPLACED and UnoCurrentScreen == UNO_SCREEN_PLAYINGGAME) then
 --ping pong client cardupdate from client to server to broadcast
 local updatedCardIndex = tonumber(sarray[3]);
---[[UnoServerCardsChanged[updatedCardIndex] = "updeck";
-UnoBroadcastUpdateDeck();--]]
 UnoBroadcastMessage(UNO_IDENTIFIER .. " " .. 
 		UNO_MESSAGE_NEWCARDDOWN .. " " ..
 		updatedCardIndex);
@@ -128,8 +143,7 @@ UnoServerCurrentUpdeckCardIndex = updatedCardIndex;
 
 --change the current turn
 UnoServerDetermineNextTurn();
-print("broadcast pls");
-UnoBroadcastTurnUpdate();
+UnoBroadcastTurnUpdate();--tells whose turn it is now. Also adds the new cards to deck.
 end
 
 --client code
