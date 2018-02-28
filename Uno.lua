@@ -124,8 +124,12 @@ end
 
 --put the new one in
 local newupdeckindex = tonumber(sarray[3]);
+local colorpicked = sarray[4];
 UnoCurrentUpdeckCardIndex = newupdeckindex;
 UnoClientCards[UnoCurrentUpdeckCardIndex].owner = "updeck";
+if (colorpicked ~= nil) then
+UnoClientCards[UnoCurrentUpdeckCardIndex].owner = sarray[4];
+end
 --now put it in
 UnoUpdatePositions();
 
@@ -135,9 +139,24 @@ end
 if (sarray[2] == UNO_CLIENT_CARDPLACED and UnoCurrentScreen == UNO_SCREEN_PLAYINGGAME) then
 --ping pong client cardupdate from client to server to broadcast
 local updatedCardIndex = tonumber(sarray[3]);
+
+if (sarray[4] == nil) then
+
 UnoBroadcastMessage(UNO_IDENTIFIER .. " " .. 
 		UNO_MESSAGE_NEWCARDDOWN .. " " ..
 		updatedCardIndex);
+
+end
+
+if (sarray[4] ~= nil) then
+UnoServerCards[updatedCardIndex].color = sarray[4];
+
+UnoBroadcastMessage(UNO_IDENTIFIER .. " " .. 
+		UNO_MESSAGE_NEWCARDDOWN .. " " ..
+		updatedCardIndex .. " " .. 
+		sarray[4]);
+
+end
 
 UnoServerCurrentUpdeckCardIndex = updatedCardIndex;
 

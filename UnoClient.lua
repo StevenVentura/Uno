@@ -252,6 +252,7 @@ self:StartMoving();
 self:SetFrameStrata("HIGH");
 end);
 card.frame.cardindex = card.index;
+card.frame.cardlabel = card.label;
 card.frame:SetScript("OnDragStop", function(self)
 self:SetFrameStrata("MEDIUM");
 self:StopMovingOrSizing();
@@ -264,11 +265,32 @@ isValidPlacement = UnoCheckIfValidCardPlacement(self.cardplease);
 
 if (isValidPlacement == true) then
 --change middle card?
-print("messaging the host");
+if (self.cardlabel == "wild" or self.cardlabel == "wildplus4") then
+--is a wild
+
+--display the popup
+
+
+--popup buttons: when you press it, it ends the turn with the extra information
+
+--[[
+format:
+UnoMessageTheHost(UNO_IDENTIFIER .. " " .. UNO_CLIENT_CARDPLACED .. " " .. 
+			self.cardindex
+			--
+			.. " " .. 
+			colorChosen
+			
+			);
+]]
+
+else
+--is not a wild
 UnoMessageTheHost(UNO_IDENTIFIER .. " " .. UNO_CLIENT_CARDPLACED .. " " .. 
 			self.cardindex);
 --unregister for drag lol
 self:EnableMouse(false);
+end--end is not a wild
 
 
 
