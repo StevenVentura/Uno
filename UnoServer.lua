@@ -191,6 +191,31 @@ print("|cff0000ffnextboy is " .. nextboy);
 currentTurnNameServer = getServerUnoPlayerByOfficialIndex(nextboy).name;
 end--end function UnoServerDetermineNextTurn
 
+handhahadebug = nil;
+function UnoServerPlayerHasAValidCardToPlay(playername)
+local hand = {};
+handhahadebug = hand;
+--populate hand
+for index,card in pairs(UnoServerCards) do
+if (card.owner == playername) then hand[index] = card end
+end
+
+
+local updeckboy = UnoServerCards[UnoServerCurrentUpdeckCardIndex];
+
+for a,b in pairs(hand) do
+if (b.label == "plus2"
+		or b.label == "skip"
+		or b.label == "reverse"
+		or b.label == "wild"
+		or b.label == "wildplus4") then return true end
+if (b.label == updeckboy.label) then return true end
+if (b.color == updeckboy.color) then return true end
+end--end for
+return false;
+
+end--end function UnoServerPlayerHasAValidCardToPlay
+
 
 --note: you have to set the turn variable currentTurnNameServer before calling this.
 --this is done by calling UnoServerDetermineNextTurn()
@@ -205,25 +230,34 @@ local cardsDrawnString = "";
 --cards can be drawn from draw2 and draw4 wild cards.
 --"plus2","skip","reverse",
 			--"wild","wildplus4"};
-local cardsToDrawFromEvent = 0;
+local cardsDrawnFromEvent = 0;
 if (updeckboy.label == "plus2" ) then
-cardsToDrawFromEvent = 2;
+cardsDrawnFromEvent = 2;
 end
 if (updeckboy.label == "wildplus4") then
-cardsToDrawFromEvent = 4;
+cardsDrawnFromEvent = 4;
 end
---draw the cardsToDrawFromEvent
+--draw the cardsDrawnFromEvent
 
 
-for i=1,cardsToDrawFromEvent do
+for i=1,cardsDrawnFromEvent do
+--note that this draws 1 card from the deck and places it into tempstevenpleaseindexUnoServer
 ServerDealUnoCardToPlayer(currentTurnNameServer);
-cardsDrawnString = cardsDrawnString .. tempstevenpleaseindex .. " ";
+cardsDrawnString = cardsDrawnString .. tempstevenpleaseindexUnoServer .. " ";
 end
 
 --TODO: method stub: also, cards must be drawn until the player has a valid card to play
+--check if the player has any valid cards to play on this
+local cardsDrawnFromNoneValidCards = 0;
+while (UnoServerPlayerHasAValidCardToPlay(currentTurnNameServer) == false) do
+--if he does not, then draw one, then check again.
+ServerDealUnoCardToPlayer(currentTurnNameServer);
+cardsDrawnString = cardsDrawnString .. tempstevenpleaseindexUnoServer .. " ";
+cardsDrawnFromNoneValidCards = cardsDrawnFromNoneValidCards + 1;
+end
 
 --append length to message
-numCardsDrawn = cardsToDrawFromEvent + 0;
+numCardsDrawn = cardsDrawnFromEvent + cardsDrawnFromNoneValidCards;
 
 
 turnupdatedrawmessage = turnupdatedrawmessage .. " " .. numCardsDrawn;
@@ -340,14 +374,24 @@ end--end for
 
 end--end function UnoBroadcastUpdateDeck
 
+function ServerGetCountOnMaindeck() 
 
+local count = 0;
+for i=1,128 do
+if (UnoServerCards[i].owner == "maindeck") then
+count = count + 1;
+end--end if
+end--end for
+return count;
+
+end--end function ServerGetCountOnMaindeck
 
 function ServerDealUnoCardToPlayer(dealToMe)
 
 
 index = random(1,128);
 outOfCards = false;atLeastOne = true;
-while(UnoServerCards[index].owner ~= "maindeck" and atLeastOne == true) do
+while(UnoServerCards[index].owner ~= "maindeck") do
 index = random(1,128);
 atLeastOne = false;
 for i=1,128 do 
@@ -355,14 +399,24 @@ if (UnoServerCards[i].owner == "maindeck") then
 atLeastOne = true;
 end--end if
 end--end for
+print("|cff000000adding discard back to deck");
+if (atLeastOne == false) then
+for i=1,128 do
+if (UnoServerCards[i].owner == "discard") then
+UnoServerCards[i].owner = "maindeck";
+end
+end--end for
+end--end if atleastone=false
 end--end while
+
 
 UnoServerCards[index].owner = dealToMe;
 
 
-tempstevenpleaseindex = index;
+tempstevenpleaseindexUnoServer = index;
 --populate the event stack
 UnoServerCardsChanged[index] = dealToMe;
+return tempstevenpleaseindexUnoServer;
 
 
 

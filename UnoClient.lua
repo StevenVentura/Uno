@@ -145,7 +145,7 @@ for index,card in pairs(UnoClientCards) do
 if (card.owner == name) then out[index] = card end
 end--end for
 return out;
-end--end function UnoGetHand
+end--end function UnoGetHandClient
 
 function UnoGetCardRadius()
 local width,height = UnoClientFrame:GetSize();
