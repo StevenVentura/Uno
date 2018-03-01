@@ -191,12 +191,14 @@ print("|cff0000ffnextboy is " .. nextboy);
 currentTurnNameServer = getServerUnoPlayerByOfficialIndex(nextboy).name;
 end--end function UnoServerDetermineNextTurn
 
+debugplsffs = nil;
 function UnoServerPlayerHasAValidCardToPlay(playername)
 local hand = {};
 --populate hand
 for index,card in pairs(UnoServerCards) do
 if (card.owner == playername) then hand[index] = card end
 end
+debugplsffs = hand;
 
 
 local updeckboy = UnoServerCards[UnoServerCurrentUpdeckCardIndex];

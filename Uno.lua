@@ -145,8 +145,8 @@ if (sarray[2] == UNO_CLIENT_CARDPLACED and UnoCurrentScreen == UNO_SCREEN_PLAYIN
 --ping pong client cardupdate from client to server to broadcast
 local updatedCardIndex = tonumber(sarray[3]);
 
+UnoServerCards[updatedCardIndex].owner = "updeck";
 if (sarray[4] == nil) then
-
 UnoBroadcastMessage(UNO_IDENTIFIER .. " " .. 
 		UNO_MESSAGE_NEWCARDDOWN .. " " ..
 		updatedCardIndex);
