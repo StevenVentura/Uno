@@ -22,6 +22,14 @@ UnoClientFrameCloseButton:SetPoint("TOPRIGHT");
 UnoClientFrameCloseButton:SetScript("OnClick",CloseOutOfUnoGame);
 UnoClientFrameCloseButton:SetText("x");
 UnoClientFrameCloseButton:Show();
+--Uno = UnoClientFrame:CreateFontString("UnoScrollFrameTitle",UnoScreenLobby,"GameFontNormal");
+CreateFrame("Frame","UnoClientUpdeckLabelFrame",UnoClientFrame);
+UnoClientUpdeckLabelFrame.label = 
+	UnoClientUpdeckLabelFrame:CreateFontString(nil,UnoClientUpdeckLabelFrame,"GameFontNormal");
+UnoClientUpdeckLabelFrame.label:SetTextColor(1,0.643,0.169,1);
+ UnoClientUpdeckLabelFrame.label:SetShadowColor(0,0,0,1);
+ UnoClientUpdeckLabelFrame.label:SetShadowOffset(2,-1);
+ UnoClientUpdeckLabelFrame.label:SetText("");
 
 
 UnoClientCards = {};
@@ -406,10 +414,7 @@ if (UnoClientCards[UnoCurrentUpdeckCardIndex].frame:GetLeft() > draggingCard.fra
 if (isOnTop == true)
 	then
 	print("ayyyyyy its on top");
-	if (draggingCard.label == "plus2"
-		or draggingCard.label == "skip"
-		or draggingCard.label == "reverse"
-		or draggingCard.label == "wild"
+	if (draggingCard.label == "wild"
 		or draggingCard.label == "wildplus4")
 	then
 		return true;

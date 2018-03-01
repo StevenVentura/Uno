@@ -129,7 +129,12 @@ UnoCurrentUpdeckCardIndex = newupdeckindex;
 UnoClientCards[UnoCurrentUpdeckCardIndex].owner = "updeck";
 if (colorpicked ~= nil) then
 UnoClientCards[UnoCurrentUpdeckCardIndex].color = sarray[4];
-end
+UnoClientUpdeckLabelFrame.label:SetText(sarray[4]);
+UnoClientUpdeckLabelFrame.label:SetPoint("TOP",UnoClientCards[UnoCurrentUpdeckCardIndex].frame,"BOTTOM");
+UnoClientUpdeckLabelFrame.label:Show();
+else
+UnoClientUpdeckLabelFrame.label:Hide();
+end--end else colorpicked
 --now put it in
 UnoUpdatePositions();
 
