@@ -499,21 +499,68 @@ UnoManualInviteEditBoxTitle = UnoScreenLobby:CreateFontString("UnoManualInviteEd
 UnoManualInviteEditBoxTitle:SetTextColor(1,1,0,1);
 UnoManualInviteEditBoxTitle:SetShadowColor(0,0,0,1);
 UnoManualInviteEditBoxTitle:SetShadowOffset(2,-1);
-UnoManualInviteEditBoxTitle:SetText("Manual (type name-realm and press enter)");
+UnoManualInviteEditBoxTitle:SetText("Manual invite: type name&realm; click send");
 UnoManualInviteEditBoxTitle:SetPoint("TOP",UnoProcessFrame,"BOTTOM",0,0);
 UnoManualInviteEditBoxTitle:SetPoint("LEFT",UnoProcessFrame);
 UnoManualInviteEditBoxTitle:Show();
 
-CreateFrame("EditBox","UnoManualInviteEditBox",UnoScreenLobby,"InputBoxTemplate");
-UnoManualInviteEditBox:SetSize(UnoProcessFrame:GetWidth(),50);
-UnoManualInviteEditBox:SetPoint("TOP",UnoManualInviteEditBoxTitle,"BOTTOM",0,10);
-UnoManualInviteEditBox:SetPoint("LEFT",UnoManualInviteEditBoxTitle)
-UnoManualInviteEditBox:SetAutoFocus(false);
-UnoManualInviteEditBox:SetScript("OnEnterPressed",function() 
-UnoManualInviteEditBox:SetText("");
+CreateFrame("EditBox","UnoManualInviteUsernameEditBox",UnoScreenLobby,"InputBoxTemplate");
+UnoManualInviteUsernameEditBox:SetSize(UnoProcessFrame:GetWidth()/2 - 20,50);
+UnoManualInviteUsernameEditBox:SetPoint("TOP",UnoManualInviteEditBoxTitle,"BOTTOM",0,10);
+UnoManualInviteUsernameEditBox:SetPoint("LEFT",UnoManualInviteEditBoxTitle)
+UnoManualInviteUsernameEditBox:SetAutoFocus(false);
+
+UnoManualInviteUsernameEditBox.title = UnoScreenLobby:CreateFontString(nil,UnoScreenLobby,"GameFontNormal");
+UnoManualInviteUsernameEditBox.title:SetTextColor(1,1,0,1);
+UnoManualInviteUsernameEditBox.title:SetShadowColor(0,0,0,1);
+UnoManualInviteUsernameEditBox.title:SetShadowOffset(2,-1);
+UnoManualInviteUsernameEditBox.title:SetText("Name");
+UnoManualInviteUsernameEditBox.title:SetPoint("TOP",UnoManualInviteUsernameEditBox,"BOTTOM",0,0);
+UnoManualInviteUsernameEditBox.title:SetPoint("LEFT",UnoManualInviteUsernameEditBox);
+UnoManualInviteUsernameEditBox.title:Show();
+
+
+
+UnoManualInviteUsernameEditBox:Show();
+
+CreateFrame("EditBox","UnoManualInviteRealmEditBox",UnoScreenLobby,"InputBoxTemplate");
+UnoManualInviteRealmEditBox:SetSize(UnoProcessFrame:GetWidth()/2 - 20,50);
+UnoManualInviteRealmEditBox:SetPoint("TOP",UnoManualInviteEditBoxTitle,"BOTTOM",0,10);
+UnoManualInviteRealmEditBox:SetPoint("LEFT",UnoManualInviteUsernameEditBox,"RIGHT", 20, 0);
+UnoManualInviteRealmEditBox:SetAutoFocus(false);
+UnoManualInviteRealmEditBox:Show();
+
+UnoManualInviteRealmEditBox.title = UnoScreenLobby:CreateFontString(nil,UnoScreenLobby,"GameFontNormal");
+UnoManualInviteRealmEditBox.title:SetTextColor(1,1,0,1);
+UnoManualInviteRealmEditBox.title:SetShadowColor(0,0,0,1);
+UnoManualInviteRealmEditBox.title:SetShadowOffset(2,-1);
+UnoManualInviteRealmEditBox.title:SetText("Realm");
+UnoManualInviteRealmEditBox.title:SetPoint("TOP",UnoManualInviteRealmEditBox,"BOTTOM",0,0);
+UnoManualInviteRealmEditBox.title:SetPoint("LEFT",UnoManualInviteRealmEditBox);
+UnoManualInviteRealmEditBox.title:Show();
+--now Send button
+CreateFrame("Button","UnoManualInviteSendButton",UnoScreenLobby,"UIPanelButtonTemplate");
+UnoManualInviteSendButton:SetSize(75,25);
+UnoManualInviteSendButton:SetPoint("TOP",UnoManualInviteEditBoxTitle,"BOTTOM",0,0);
+UnoManualInviteSendButton:SetPoint("LEFT",UnoManualInviteRealmEditBox,"RIGHT",20,0);
+UnoManualInviteSendButton:SetText("Send");
+UnoManualInviteSendButton:SetScript("OnClick",function()
+local namae = UnoCapitalizeFirst(UnoManualInviteUsernameEditBox:GetText());
+local realm = UnoCapitalizeFirst(UnoManualInviteRealmEditBox:GetText());
+local username = nil;
+if (realm ~= "" and realm ~= nil) then
+username = namae .. "-" .. realm;
+else
+UnoManualInviteRealmEditBox:SetText(GetRealmName());
+username = namae .. "-" .. GetRealmName();
+end
+if (AddUnoPlayerManualInvite(username)) then
+UnoMessage(UnoPlayers[username],UNO_IDENTIFIER .. " " .. UNO_MESSAGE_SEND_INVITATION);
 updateUnoInvitationStatusList();
+end
 end);
-UnoManualInviteEditBox:Show();
+
+
 
 -----------------------
 --make da invite and refresh buttons
@@ -705,16 +752,18 @@ UnoInviteListButton:SetScript("OnClick",function()
 for i, butt in ipairs(UnoScrollBar.buttons) do
   if (butt:GetChecked()) then
   --AddUnoPlayer("bnethashtag",butt.name,butt.presenceID,butt.glitchyAccountName);
-  AddUnoPlayer("bnethashtag",butt);
+  if (AddUnoPlayer("bnethashtag",butt)) then
   UnoMessage(UnoPlayers[butt.name],UNO_IDENTIFIER .. " " .. UNO_MESSAGE_SEND_INVITATION);
+  end--end if didnt exist already
   end--end if
 end--end for
 
 for i, butt in ipairs(UnoGuildiesScrollBar.buttons) do
   if (butt:GetChecked()) then
   --AddUnoPlayer("nameserver",butt.name);
-  AddUnoPlayer("nameserver",butt);
+  if (AddUnoPlayer("nameserver",butt)) then
   UnoMessage(UnoPlayers[butt.name],UNO_IDENTIFIER .. " " .. UNO_MESSAGE_SEND_INVITATION);
+  end--end if didnt exist already
   end--end if
 end--end for
 

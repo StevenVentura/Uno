@@ -112,8 +112,39 @@ UnoClientPlayers[playerName].title:SetText(playerName);
 UnoClientPlayers[playerName].title:Show(); 
 end--end function AddUnoPlayerClientPlaying
 
---used by the server in the invitation phase
+--[[
+return value is true if the record didn't already exist, and false if it already existed.
+]]
+function AddUnoPlayerManualInvite(username) 
+
+if (UnoPlayers[username] ~= nil) then return false end;
+
+UnoPlayers[username] = {
+statusIcon="none",
+whisperCategory="nameserver",
+userHasUnoOrNot=false,
+userHasUnoOrNotTimer=0,
+userJoinedTheLobby=false,
+userDeclinedTheInvite=false,
+contactType = UNO_CONTACT_WHISPER,
+presenceID = nil,
+isRealIDNotJustBNet = nil,
+realName = nil,
+toonName = justFirstName,
+name = username
+};
+
+
+return true;
+
+end--end function AddUnoPlayerManualInvite()
+--[[
+AddUnoPlayer(boolree, button) is used by the server in the invitation phase.
+return value is true if the record didn't already exist, and false if it already existed.
+]]
 function AddUnoPlayer(boolree, button)--nameX,pid,glitchyAccountName) 
+
+if (UnoPlayers[button.name] ~= nil) then return false end
 
 local taipu = "";
 if (boolree == "bnethashtag") then
@@ -147,7 +178,7 @@ toonName = justFirstName,
 name = button.name
 };
 
-
+return true;
 
 
 end--end function AddUnoPlayer

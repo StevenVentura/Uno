@@ -147,10 +147,13 @@ function UnoGetUpdeckOffset()
 return GetUnoCardWidth(), 0;
 end
 
-function UnoGetHandClient(name)
+function UnoGetNumberedHandClient(name)
 local out = {};
+count = 0;
 for index,card in pairs(UnoClientCards) do
-if (card.owner == name) then out[index] = card end
+if (card.owner == name) then out[count] = card 
+							 count = count + 1; 
+						end
 end--end for
 return out;
 end--end function UnoGetHandClient
@@ -192,43 +195,36 @@ local playerOwned = cardToPosition.owner ~= "updeck" and cardToPosition.owner ~=
 						and cardToPosition.owner ~= "discard";
 
 if (playerOwned == true) then
-local playerHand = UnoGetHandClient(cardToPosition.owner);
+local playerHand = UnoGetNumberedHandClient(cardToPosition.owner);
 local player = UnoClientPlayers[cardToPosition.owner];
 local handCount = tablelength(playerHand);
 local currentCount = 0;--lay the hand out across the table
-local thisCardsCount = 0;
-
-
 local px = UnoClientPlayers[cardToPosition.owner].centerX;
-
 local py = UnoClientPlayers[cardToPosition.owner].centerY;
 local theta = UnoClientPlayers[cardToPosition.owner].theta;
-local firstXOffset,firstYOffset;
-for index,card in pairs(UnoClientCards) do
-if (card.owner == cardToPosition.owner) then
-currentCount = currentCount + 1;
-if (index == cardToPosition.index) then thisCardsCount = currentCount; end
-end--end if his hand
-end--end for
+local thisCardsCount = UnoClientGetHandCountNumber(cardToPosition);
+
 if (handCount%2 == 0) then
-local distFromMiddle = thisCardsCount - handCount/2;
+local distFromMiddle = thisCardsCount - handCount/2 + 1;
 firstXOffset = -(GetUnoCardWidth()/2+GetUnoCardGap()) 
 			+ (GetUnoCardWidth()+GetUnoCardGap())*distFromMiddle;
 firstYOffset = 0;
 else--end even, else odd
 --distance from the middle value
-local distFromMiddle = thisCardsCount - ceil(handCount/2);
+local distFromMiddle = thisCardsCount - ceil(handCount/2) + 1;
 firstXOffset = distFromMiddle * (GetUnoCardWidth() + GetUnoCardGap());
 firstYOffset = 0;
 end--end odd
---calculated firstX and firstY , now need to rotate and give parent and stuff
+
 cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",
-		UnoGetCardRadius() * math.sin(theta-math.pi/2) 
-			+ firstXOffset*math.cos(theta-math.pi/2),
-		UnoGetCardRadius() * math.cos(theta-math.pi/2)
-			+ firstXOffset*math.sin(theta-math.pi/2) );
-cardToPosition.frame.texture:SetRotation(theta-math.pi/2+math.pi);
---TODO actually rotate the card i forgot how
+		UnoGetCardRadius() * math.sin(theta-0) 
+			+ firstXOffset*math.cos(theta-0),
+		UnoGetCardRadius() * math.cos(theta-0)
+			+ firstXOffset*math.sin(theta-0) );
+			
+cardToPosition.frame.texture:SetRotation(theta-0+math.pi);
+
+
 
 end--end if playerOwned
 
@@ -378,6 +374,17 @@ end--end for
 
 end--end function UnoUpdatePositions
 
+--returns the position (0,1,2,3,4,...) of the card in the players hand. for Positioning purposes.
+function UnoClientGetHandCountNumber(card)
+
+local handplease = UnoGetNumberedHandClient(card.owner);
+
+for a,b in pairs(handplease) do
+if (b.index == card.index) then return a; end
+end--end for
+
+end--end function UnoClientGetHandCountNumber
+
 --TODO: LEFT OFF HERE BTW
 function UnoCardIntersection(card1, card2) 
 
@@ -445,18 +452,18 @@ UnoClientFrame.texture:SetColorTexture(43/255,15/255,1/255,0.80);
 local numPlayers = tablelength(UnoClientPlayers);
 local theta = math.pi/2;
 local width,height = UnoClientFrame:GetSize();
+local centerXArray= {[1]=0,[2]=0,[3]=-width/5,[4]=width/5};
+local centerYArray= {[1]=-width/5,[2]=width/5,[3]=0,[4]=0};
+local thetaArray = {[1]=0,[2]=math.pi,[3]=math.pi/2,[4]=3*math.pi/2};
+
 for name,player in pairs(UnoClientPlayers) do
-player.theta = theta;
+player.theta = thetaArray[player.officialIndex];
 --relative to the middle of the board
 ------local px = UnoClientPlayers[cardToPosition.owner].centerX;
-player.centerX = width/5 * math.cos(player.theta);
-player.centerY = height/5 * math.sin(player.theta);
+player.centerX = centerXArray[player.officialIndex];
+player.centerY = centerYArray[player.officialIndex];
 --position the text label for the player
 player.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",player.centerX,player.centerY);
-
-
---increment for the next player
-theta = theta + 360*math.pi/180/numPlayers;
 end--end for
 
 

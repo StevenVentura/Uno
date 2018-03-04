@@ -23,6 +23,27 @@ function slashUno(msg,editbox)
 command, rest = msg:match("^(%S*)%s*(.-)$");
 
 end--end function
+
+function UnoCapitalizeFirst(inputstr)
+if (inputstr == nil or inputstr == "" or string.find(inputstr," ") ~= nil) then
+return nil;
+end
+local firstletter = string.sub(inputstr,1,1);
+local capsalphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+local loweralphabet = "abcdefghijklmnopqrstuvwxyz";
+
+local index = string.find(loweralphabet,firstletter);
+if (index ~= nil) then
+--replace the letter
+return string.sub(capsalphabet,index,index) .. string.sub(inputstr,2);
+
+else return inputstr;
+
+end
+
+
+
+end--end function UnoCapitalizeFirst
 --local function taken from http://stackoverflow.com/questions/1426954/split-string-in-lua by user973713 on 11/26/15
 function UnoSplitString(inputstr, sep)
         if sep == nil then
@@ -64,9 +85,12 @@ function UnoAbstractMessageReceived(message, author, pid)
 local sarray = UnoSplitString(message);
 local remainder = string.sub(message,strlen(UNO_IDENTIFIER)+2);
 
-
+print("author is " .. author);
+print("message is " .. message);
 --return and do nothing if its not an addon message.
 if (sarray[1] ~= UNO_IDENTIFIER) then return end;
+
+print("has uno id");
 
 if (sarray[2] == UNO_MESSAGE_TURNUPDATE and UnoCurrentScreen ~= UNO_SCREEN_BLANK) then
 SetUnoTurnClient(tonumber(sarray[3]));
@@ -193,6 +217,8 @@ end--end if UNO_MESSAGE_CARDUPDATE
 
 
 if (remainder == UNO_MESSAGE_HAS_ADDON and UnoCurrentScreen == UNO_SCREEN_LOBBY) then
+print("got into the UNOMESSAGEHASADDON block")
+print("does it need to set Author for if whisper client doesnt have realm name?");
 --TODO da name match the table?
 UnoPlayers[author].userHasUnoOrNot = true;
 updateUnoInvitationStatusList();
