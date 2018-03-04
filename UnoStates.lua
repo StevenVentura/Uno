@@ -499,7 +499,7 @@ UnoManualInviteEditBoxTitle = UnoScreenLobby:CreateFontString("UnoManualInviteEd
 UnoManualInviteEditBoxTitle:SetTextColor(1,1,0,1);
 UnoManualInviteEditBoxTitle:SetShadowColor(0,0,0,1);
 UnoManualInviteEditBoxTitle:SetShadowOffset(2,-1);
-UnoManualInviteEditBoxTitle:SetText("Manual invite: type name&realm; click send");
+UnoManualInviteEditBoxTitle:SetText("[MANUAL INVITE]: Enter the name and realm, then click send");
 UnoManualInviteEditBoxTitle:SetPoint("TOP",UnoProcessFrame,"BOTTOM",0,0);
 UnoManualInviteEditBoxTitle:SetPoint("LEFT",UnoProcessFrame);
 UnoManualInviteEditBoxTitle:Show();
@@ -515,7 +515,7 @@ UnoManualInviteUsernameEditBox.title:SetTextColor(1,1,0,1);
 UnoManualInviteUsernameEditBox.title:SetShadowColor(0,0,0,1);
 UnoManualInviteUsernameEditBox.title:SetShadowOffset(2,-1);
 UnoManualInviteUsernameEditBox.title:SetText("Name");
-UnoManualInviteUsernameEditBox.title:SetPoint("TOP",UnoManualInviteUsernameEditBox,"BOTTOM",0,0);
+UnoManualInviteUsernameEditBox.title:SetPoint("TOP",UnoManualInviteUsernameEditBox,"BOTTOM",0,10);
 UnoManualInviteUsernameEditBox.title:SetPoint("LEFT",UnoManualInviteUsernameEditBox);
 UnoManualInviteUsernameEditBox.title:Show();
 
@@ -535,7 +535,7 @@ UnoManualInviteRealmEditBox.title:SetTextColor(1,1,0,1);
 UnoManualInviteRealmEditBox.title:SetShadowColor(0,0,0,1);
 UnoManualInviteRealmEditBox.title:SetShadowOffset(2,-1);
 UnoManualInviteRealmEditBox.title:SetText("Realm");
-UnoManualInviteRealmEditBox.title:SetPoint("TOP",UnoManualInviteRealmEditBox,"BOTTOM",0,0);
+UnoManualInviteRealmEditBox.title:SetPoint("TOP",UnoManualInviteRealmEditBox,"BOTTOM",0,10);
 UnoManualInviteRealmEditBox.title:SetPoint("LEFT",UnoManualInviteRealmEditBox);
 UnoManualInviteRealmEditBox.title:Show();
 --now Send button

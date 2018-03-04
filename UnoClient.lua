@@ -230,9 +230,93 @@ end--end if playerOwned
 
 end--end function UnoPositionCard
 
-function printUnoError(text) 
---TODO: method stub
-print("|cffff0000<UnoError>:" .. text);
+
+UnoClientErrorDuration = 12.0;
+
+
+--dummy fontstring btw; starting point for reference
+UnoClientFrame:CreateFontString("UnoClientErrorFrame0","DIALOG","GameFontNormal");
+UnoClientErrorFrame0:SetPoint("CENTER",UnoClientFrame,"CENTER",0,120);
+
+for unoIndexvar=1,3 do
+UnoClientFrame:CreateFontString("UnoClientErrorFrame" .. unoIndexvar,"DIALOG","GameFontNormal");
+_G["UnoClientErrorFrame" .. unoIndexvar]:SetFont("Fonts\\FRIZQT__.TTF",
+		24, "OUTLINE, MONOCHROME");
+
+_G["UnoClientErrorFrame" .. unoIndexvar].timer = UnoClientErrorDuration + 1;
+_G["UnoClientErrorFrame" .. unoIndexvar].positive = true;
+_G["UnoClientErrorFrame" .. unoIndexvar]:SetTextColor(0,0,1,1);
+_G["UnoClientErrorFrame" .. unoIndexvar]:SetShadowColor(0,0,0,1);
+_G["UnoClientErrorFrame" .. unoIndexvar]:SetShadowOffset(2,-1);
+_G["UnoClientErrorFrame" .. unoIndexvar]:SetText("");
+_G["UnoClientErrorFrame" .. unoIndexvar]:SetPoint("CENTER",
+			_G["UnoClientErrorFrame" .. (unoIndexvar-1)],
+			0,-25);
+_G["UnoClientErrorFrame" .. unoIndexvar]:Hide();
+end--
+
+
+
+
+function updateUnoErrorText(elapsed)
+for i=1,3 do
+_G["UnoClientErrorFrame" .. i].timer = _G["UnoClientErrorFrame" .. i].timer + elapsed;
+if (_G["UnoClientErrorFrame" .. i].timer > UnoClientErrorDuration) then
+_G["UnoClientErrorFrame" .. i]:Hide();
+else
+--TODO: edit the opacity of the text here
+local timerffs = _G["UnoClientErrorFrame" .. i].timer;
+--fade only for the latter third
+if (timerffs > UnoClientErrorDuration*2/3) then
+--fade for latter third
+local percentboy = (timerffs - UnoClientErrorDuration*2/3)/(timerffs*1/3);
+if (_G["UnoClientErrorFrame" .. i].positive) then
+_G["UnoClientErrorFrame" .. i]:SetTextColor(1,1,0,1 - percentboy);
+else
+_G["UnoClientErrorFrame" .. i]:SetTextColor(0,0,1,1 - percentboy);
+end--else not positive
+else
+--draw opaque otherwise
+if (_G["UnoClientErrorFrame" .. i].positive) then
+_G["UnoClientErrorFrame" .. i]:SetTextColor(1,1,0,1);
+else
+_G["UnoClientErrorFrame" .. i]:SetTextColor(0,0,1,1);
+end
+end
+end
+end--end for
+
+end--end function updateUnoErrorText
+
+
+
+function printUnoError(newText,arg_PertainsToMe) 
+--replace the error message on frame 1.
+--shift it down to the other 2 frames.
+--2 contains 1, 3 contains 2, 1 contains the new info.
+
+--copy shift operations
+for i=2,1,-1 do
+_G["UnoClientErrorFrame" .. i+1]:SetText( 
+	_G["UnoClientErrorFrame" .. i]:GetText());
+_G["UnoClientErrorFrame" .. i+1].timer = 
+	_G["UnoClientErrorFrame" .. i].timer;
+_G["UnoClientErrorFrame" .. i+1].positive = 
+	_G["UnoClientErrorFrame" .. i].positive;
+
+end--end for
+--overwrite operation
+UnoClientErrorFrame1:SetText(newText);
+UnoClientErrorFrame1.positive = arg_PertainsToMe;
+UnoClientErrorFrame1.timer = 0;
+
+--update the text, show the message
+for i=1,3 do
+if (_G["UnoClientErrorFrame" .. i].timer < UnoClientErrorDuration) then
+_G["UnoClientErrorFrame" .. i]:Show();
+end
+end--end for
+
 
 end--end function printUnoError
 
@@ -404,7 +488,7 @@ end--end function UnoCardIntersection
 --TODO: allow the user to sort his cards.
 function UnoCheckIfValidCardPlacement(draggingCard)
 
-if (UnoGetMe().name ~= currentTurnNameClient) then printUnoError("it is " .. currentTurnNameClient .. "'s turn.") return false end
+if (UnoGetMe().name ~= currentTurnNameClient) then printUnoError("It is " .. currentTurnNameClient .. "'s turn.",false) return false end
 
 isOnTop = true;
 if (UnoClientCards[UnoCurrentUpdeckCardIndex].frame:GetLeft() > draggingCard.frame:GetRight()
@@ -416,6 +500,7 @@ if (UnoClientCards[UnoCurrentUpdeckCardIndex].frame:GetLeft() > draggingCard.fra
 	draggingCard.frame:GetTop() < UnoClientCards[UnoCurrentUpdeckCardIndex].frame:GetBottom()
 	) then
 	isOnTop = false;
+	printUnoError("You can't put that there!",true);
 	end
 --check for intersection with updeck card
 if (isOnTop == true)
@@ -427,14 +512,13 @@ if (isOnTop == true)
 		return true;
 	end--end if special card
 	--else check if the suit is right and stuff
-	print("|cffffff00updeckcolor=" .. UnoClientCards[UnoCurrentUpdeckCardIndex].color
-		.. " & drag=" .. draggingCard.color );
-		print("|cffffaa00updecklabel=" .. UnoClientCards[UnoCurrentUpdeckCardIndex].label
-		.. " & drag=" .. draggingCard.label );
+	
 	if (UnoClientCards[UnoCurrentUpdeckCardIndex].color == draggingCard.color 
 		or UnoClientCards[UnoCurrentUpdeckCardIndex].label == draggingCard.label )
 		then
 		return true;
+		else
+		printUnoError("Neither the number, nor the color matches.",true);
 		end--end if
 end--end if
 
@@ -453,7 +537,7 @@ local numPlayers = tablelength(UnoClientPlayers);
 local theta = math.pi/2;
 local width,height = UnoClientFrame:GetSize();
 local centerXArray= {[1]=0,[2]=0,[3]=-width/5,[4]=width/5};
-local centerYArray= {[1]=-width/5,[2]=width/5,[3]=0,[4]=0};
+local centerYArray= {[1]=width/5,[2]=-width/5,[3]=0,[4]=0};
 local thetaArray = {[1]=0,[2]=math.pi,[3]=math.pi/2,[4]=3*math.pi/2};
 
 for name,player in pairs(UnoClientPlayers) do
@@ -464,6 +548,8 @@ player.centerX = centerXArray[player.officialIndex];
 player.centerY = centerYArray[player.officialIndex];
 --position the text label for the player
 player.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",player.centerX,player.centerY);
+player.title:SetPoint("CENTER",
+	player.frame,"CENTER",0,0);
 end--end for
 
 

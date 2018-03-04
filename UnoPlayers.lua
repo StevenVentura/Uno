@@ -98,11 +98,11 @@ end--end function AddUnoPlayerClientLobby
 --used during playing the game.
 function AddUnoPlayerClientPlaying(playerName, index)
 UnoClientPlayers[playerName] = {
-		frame = CreateFrame("FRAME",nil,UIParent),
+		frame = CreateFrame("FRAME",nil,UnoClientFrame),
 		officialIndex = index, name=playerName,centerX=0,centerY=0};
 UnoClientPlayers[playerName].frame:SetSize(100,100);
 UnoClientPlayers[playerName].title = 
-	UnoClientPlayers[playerName].frame:CreateFontString(nil,nil,"GameFontNormal");
+	UnoClientPlayers[playerName].frame:CreateFontString(nil,UnoClientFrame,"GameFontNormal");
 UnoClientPlayers[playerName].title:SetTextColor(1,0.643,0.169,1);
  UnoClientPlayers[playerName].title:SetShadowColor(0,0,0,1);
  UnoClientPlayers[playerName].title:SetShadowOffset(2,-1);

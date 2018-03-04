@@ -77,7 +77,7 @@ end
 lagLess = 0;
 function UnoOnUpdate(self, elapsed)
 updateLobbyPlayers(elapsed);
-
+updateUnoErrorText(elapsed);
 
 
 end--end function UnoOnUpdate
@@ -105,6 +105,8 @@ print("has uno id");
 
 if (sarray[2] == UNO_MESSAGE_TURNUPDATE and UnoCurrentScreen ~= UNO_SCREEN_BLANK) then
 SetUnoTurnClient(tonumber(sarray[3]));
+printUnoError("It is " .. currentTurnNameClient .. "'s turn!",UnoGetMe().name == currentTurnNameClient);
+
 --local turnupdatedrawmessage = UNO_IDENTIFIER .. " " .. UNO_MESSAGE_TURNUPDATE
 --			.. " " .. getUnoServerPlayer(currentTurnNameServer).officialIndex;
 --turnupdatedrawmessage = turnupdatedrawmessage .. " " .. numCardsDrawn;
@@ -115,7 +117,9 @@ for i = 1, tonumber(sarray[4]) do
 local x = tonumber(sarray[4+i]);
 numplsarray[x] = x;
 end--end for
-
+if (tonumber(sarray[4]) > 0) then
+printUnoError(currentTurnNameClient .. " drew " .. sarray[4] .. " cards.",UnoGetMe().name == currentTurnNameClient);
+end--end if
 --change the owner on those cards
 for a,b in pairs(numplsarray) do
 --TODO: might have to use "host" instead of .name
