@@ -33,15 +33,26 @@ local capsalphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 local loweralphabet = "abcdefghijklmnopqrstuvwxyz";
 
 local index = string.find(loweralphabet,firstletter);
+local bigLetter = nil;
 if (index ~= nil) then
---replace the letter
-return string.sub(capsalphabet,index,index) .. string.sub(inputstr,2);
+--replace first letter with capital 
+bigLetter =  string.sub(capsalphabet,index,index);
+else bigLetter = firstletter;
+end--end if not nil else  if nil
 
-else return inputstr;
+local builtOutString = bigLetter;--build off this
 
-end
+for i=2,string.len(inputstr) do
+--replace each letter 1 by 1
+local otherLetterToLower = string.sub(inputstr,i,i);
+local maybeIndex = string.find(capsalphabet,otherLetterToLower);
+if (maybeIndex ~= nil) then 
+			otherLetterToLower = string.sub(loweralphabet,maybeIndex,maybeIndex);
+		end
+builtOutString = builtOutString .. otherLetterToLower;
+end--end for
 
-
+return builtOutString;
 
 end--end function UnoCapitalizeFirst
 --local function taken from http://stackoverflow.com/questions/1426954/split-string-in-lua by user973713 on 11/26/15
