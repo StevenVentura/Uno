@@ -553,48 +553,16 @@ end
 end);
 UnoClientFrameToggleChatButton:Show();
 
-CreateFrame("FRAME","UnoClientFrameChatboxFrame",UnoClientFrame);
+CreateFrame("EditBox","UnoClientFrameChatboxFrame",UnoClientFrame,"InputBoxTemplate");
 --dimensions of other frame
 UnoClientFrameChatboxFrame:SetPoint("TOPLEFT",UnoClientFrame,"TOPRIGHT");
+UnoClientFrameChatboxFrame:SetMultiLine(true);
+UnoClientFrameChatboxFrame:SetAutoFocus(false);
 UnoClientFrameChatboxFrame:SetSize(800*3/4*1/4,600*3/4*15/16);
+UnoClientFrameChatboxFrame:SetPoint("BOTTOM",UnoClientFrame,"BOTTOM",0,600*3/4*1/16)
 UnoClientFrameChatboxFrame.texture = UnoClientFrameChatboxFrame:CreateTexture();
 UnoClientFrameChatboxFrame.texture:SetAllPoints();
 UnoClientFrameChatboxFrame.texture:SetColorTexture(43/255/2,15/255/2,1/255/2,.80);
-UnoClientFrameChatboxFrame.scrollFrame = CreateFrame("ScrollFrame",
-										nil,UnoClientFrameChatboxFrame);
-UnoClientFrameChatboxFrame.scrollFrame:SetAllPoints();
-UnoClientFrameChatboxFrame.scrollbar = CreateFrame(
-			"Slider", nil, UnoClientFrameChatboxFrame.scrollFrame, "UIPanelScrollBarTemplate");
-UnoClientFrameChatboxFrame.scrollbar:SetPoint("TOPLEFT", 
-				UnoClientFrameChatboxFrame.scrollFrame, "TOPRIGHT", 4, -16) 
-UnoClientFrameChatboxFrame.scrollbar:SetPoint("BOTTOMLEFT",
-				UnoClientFrameChatboxFrame.scrollFrame, "BOTTOMRIGHT", 4, 16) 			
-UnoClientFrameChatboxFrame.scrollbar:SetMinMaxValues(1, 150); 
-UnoClientFrameChatboxFrame.scrollbar:SetValueStep(1);
-UnoClientFrameChatboxFrame.scrollbar.scrollStep = 1;
-UnoClientFrameChatboxFrame.scrollbar:SetValue(0);
-UnoClientFrameChatboxFrame.scrollbar:SetWidth(16);
-UnoClientFrameChatboxFrame.scrollbar:SetScript("OnValueChanged", 
-function (self, value) 
-self:GetParent():SetVerticalScroll(value) 
-end);
-UnoClientFrameChatboxFrame.scrollFrame:EnableMouseWheel(true);
-UnoClientFrameChatboxFrame.scrollFrame:SetScript("OnMouseWheel", function(self, delta)
-      UnoClientFrameChatboxFrame.scrollbar:SetValue(
-			UnoClientFrameChatboxFrame.scrollbar:GetValue()-delta*8);
-end);
-UnoClientFrameChatboxFrame.scrollbg = 
-			UnoClientFrameChatboxFrame.scrollbar:CreateTexture(nil, "BACKGROUND");
-UnoClientFrameChatboxFrame.scrollbg:SetAllPoints(UnoClientFrameChatboxFrame.scrollbar);
-UnoClientFrameChatboxFrame.scrollbg:SetColorTexture(0, 0, 0, 0.4);
---STOPPED RIGHT HERE TODO
-UnoClientFrameChatboxFrame.content = CreateFrame("Frame", nil, UnoClientFrameChatboxFrame.scrollFrame) 
-UnoClientFrameChatboxFrame.content:SetSize(128, 128) 
-UnoClientFrameChatboxFrame.content.texture = UnoClientFrameChatboxFrame.content:CreateTexture() 
-UnoClientFrameChatboxFrame.content.texture:SetAllPoints() 
---UnoClientFrameChatboxFrame.content.texture:SetTexture("Interface\\GLUES\\MainMenu\\Glues-BlizzardLogo") 
-UnoClientFrameChatboxFrame.content.texture:SetColorTexture(0,0,0,0);
-UnoClientFrameChatboxFrame.scrollFrame:SetScrollChild(UnoClientFrameChatboxFrame.content);
 
 ---------------------------
 --now make da edit box
