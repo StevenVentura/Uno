@@ -18,7 +18,7 @@ these messages can either happen in battle.net or they can happen in whisper.
 CreateFrame("Frame","UnoClientFrame",UIParent);
 CreateFrame("Button","UnoClientFrameCloseButton",UnoClientFrame,"UIPanelButtonTemplate");
 UnoClientFrameCloseButton:SetSize(24,24);
-UnoClientFrameCloseButton:SetPoint("TOPRIGHT");
+UnoClientFrameCloseButton:SetPoint("TOPLEFT");
 UnoClientFrameCloseButton:SetScript("OnClick",CloseOutOfUnoGame);
 UnoClientFrameCloseButton:SetText("x");
 UnoClientFrameCloseButton:Show();
@@ -484,6 +484,12 @@ return
 
 end--end function UnoCardIntersection
 
+function UnoSendChatMessageToUnoChat(message)
+
+
+
+end--end function UnoSendChatMessageToUnoChat
+
 
 --TODO: allow the user to sort his cards.
 function UnoCheckIfValidCardPlacement(draggingCard)
@@ -549,20 +555,21 @@ UnoClientFrameToggleChatButton:Show();
 
 CreateFrame("FRAME","UnoClientFrameChatboxFrame",UnoClientFrame);
 --dimensions of other frame
-UnoClientFrameChatboxFrame:SetPoint("LEFT",UnoClientFrame,"RIGHT");
-UnoClientFrameChatboxFrame:SetSize(800*3/4*1/4,600*3/4);
+UnoClientFrameChatboxFrame:SetPoint("TOPLEFT",UnoClientFrame,"TOPRIGHT");
+UnoClientFrameChatboxFrame:SetSize(800*3/4*1/4,600*3/4*15/16);
 UnoClientFrameChatboxFrame.texture = UnoClientFrameChatboxFrame:CreateTexture();
 UnoClientFrameChatboxFrame.texture:SetAllPoints();
 UnoClientFrameChatboxFrame.texture:SetColorTexture(43/255/2,15/255/2,1/255/2,.80);
 UnoClientFrameChatboxFrame.scrollFrame = CreateFrame("ScrollFrame",
 										nil,UnoClientFrameChatboxFrame);
+UnoClientFrameChatboxFrame.scrollFrame:SetAllPoints();
 UnoClientFrameChatboxFrame.scrollbar = CreateFrame(
 			"Slider", nil, UnoClientFrameChatboxFrame.scrollFrame, "UIPanelScrollBarTemplate");
 UnoClientFrameChatboxFrame.scrollbar:SetPoint("TOPLEFT", 
 				UnoClientFrameChatboxFrame.scrollFrame, "TOPRIGHT", 4, -16) 
 UnoClientFrameChatboxFrame.scrollbar:SetPoint("BOTTOMLEFT",
 				UnoClientFrameChatboxFrame.scrollFrame, "BOTTOMRIGHT", 4, 16) 			
-UnoClientFrameChatboxFrame.scrollbar:SetMinMaxValues(1, 300); 
+UnoClientFrameChatboxFrame.scrollbar:SetMinMaxValues(1, 150); 
 UnoClientFrameChatboxFrame.scrollbar:SetValueStep(1);
 UnoClientFrameChatboxFrame.scrollbar.scrollStep = 1;
 UnoClientFrameChatboxFrame.scrollbar:SetValue(0);
@@ -581,6 +588,28 @@ UnoClientFrameChatboxFrame.scrollbg =
 UnoClientFrameChatboxFrame.scrollbg:SetAllPoints(UnoClientFrameChatboxFrame.scrollbar);
 UnoClientFrameChatboxFrame.scrollbg:SetColorTexture(0, 0, 0, 0.4);
 --STOPPED RIGHT HERE TODO
+UnoClientFrameChatboxFrame.content = CreateFrame("Frame", nil, UnoClientFrameChatboxFrame.scrollFrame) 
+UnoClientFrameChatboxFrame.content:SetSize(128, 128) 
+UnoClientFrameChatboxFrame.content.texture = UnoClientFrameChatboxFrame.content:CreateTexture() 
+UnoClientFrameChatboxFrame.content.texture:SetAllPoints() 
+--UnoClientFrameChatboxFrame.content.texture:SetTexture("Interface\\GLUES\\MainMenu\\Glues-BlizzardLogo") 
+UnoClientFrameChatboxFrame.content.texture:SetColorTexture(0,0,0,0);
+UnoClientFrameChatboxFrame.scrollFrame:SetScrollChild(UnoClientFrameChatboxFrame.content);
+
+---------------------------
+--now make da edit box
+--CreateFrame("EditBox","UnoManualInviteUsernameEditBox",UnoScreenLobby,"InputBoxTemplate");
+UnoClientFrameChatboxFrame.editbox = 
+		CreateFrame("EditBox",nil,UnoClientFrame,"InputBoxTemplate");
+UnoClientFrameChatboxFrame.editbox:SetPoint("TOP",UnoClientFrameChatboxFrame,"BOTTOM",10,0);
+UnoClientFrameChatboxFrame.editbox:SetAutoFocus(false);
+UnoClientFrameChatboxFrame.editbox:SetSize(800*3/4*1/4,600*3/4*1/16)
+UnoClientFrameChatboxFrame.editbox:Show();
+
+UnoClientFrameChatboxFrame.editbox:SetScript("OnEnterPressed", function(self)
+UnoSendChatMessageToUnoChat(self:GetText());
+self:SetText("");
+end);
 
 --
 
