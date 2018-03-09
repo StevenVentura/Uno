@@ -127,10 +127,7 @@ function UnoServerGetNextEntry(array,beforeValue,direction)
 if (direction == UNO_ROTATION_FORWARDS) then
 local flaggy = false;
 for a,b in pairs(array) do
-print("a is " .. a);
-print("beforevalue is " .. beforeValue)
 if (flaggy == true) then 
-print("returning " .. a);
 return a;
 end--end if flaggy==true
 --nextloopflaggy

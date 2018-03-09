@@ -484,10 +484,46 @@ return
 
 end--end function UnoCardIntersection
 
+function UnoReceivedChatboxMessage(author,message)
+--replace all underscores with spaces
+local spaces = "";
+for i=1,string.len(message) do
+local character = string.sub(message,i,i);
+if (character == "_") then
+spaces = spaces .. " ";
+else
+spaces = spaces .. character;
+end--end if
+end--end for
+
+--nickname
+local nickname = nil;
+if (string.len(author) >= 4) then
+nickname = string.sub(author,1,4);
+else
+nickname = author;
+end
+--put it in the chat box
+UnoClientFrameChatboxFrame:Insert("[" .. nickname .. "]:" .. spaces .. "\n");
+
+end--end function UnoReceivedChatboxMessage
+
 function UnoSendChatMessageToUnoChat(message)
-
-
-
+--replace all spaces with underscores
+local underscores = "";
+for i=1,string.len(message) do
+local character = string.sub(message,i,i);
+if (character == " ") then
+underscores = underscores .. "_";
+else
+underscores = underscores .. character;
+end--end if
+end--end for
+--send signal to server host
+UnoMessageTheHost(UNO_IDENTIFIER .. " " .. 
+				  UNO_MESSAGE_CHATMESSAGECLIENT .. " " ..
+				  UnoGetMe().name .. " " .. 
+				  underscores);
 end--end function UnoSendChatMessageToUnoChat
 
 
@@ -564,6 +600,7 @@ UnoClientFrameChatboxFrame.texture = UnoClientFrameChatboxFrame:CreateTexture();
 UnoClientFrameChatboxFrame.texture:SetAllPoints();
 UnoClientFrameChatboxFrame.texture:SetColorTexture(43/255/2,15/255/2,1/255/2,.80);
 
+
 ---------------------------
 --now make da edit box
 --CreateFrame("EditBox","UnoManualInviteUsernameEditBox",UnoScreenLobby,"InputBoxTemplate");
@@ -578,6 +615,12 @@ UnoClientFrameChatboxFrame.editbox:SetScript("OnEnterPressed", function(self)
 UnoSendChatMessageToUnoChat(self:GetText());
 self:SetText("");
 end);
+
+UnoClientFrameChatboxFrame:SetScript("OnEditFocusGained", function(self) 
+UnoClientFrameChatboxFrame.editbox:SetFocus();
+end
+
+);
 
 --
 

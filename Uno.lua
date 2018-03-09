@@ -130,7 +130,18 @@ end
 UnoUpdatePositions();
 
 end--end if TURNUPDATEA
+if (sarray[2] == UNO_MESSAGE_CHATMESSAGESERVER) then
+UnoReceivedChatboxMessage(sarray[3],sarray[4]);
+end
+if (sarray[2] == UNO_MESSAGE_CHATMESSAGECLIENT) then
+--broadcast the message
+UnoBroadcastMessage(UNO_IDENTIFIER .. " " .. 
+		UNO_MESSAGE_CHATMESSAGESERVER .. " " ..
+		sarray[3] .. " " .. 
+		sarray[4]);
 
+
+end--end if UNO_MESSAGE_CHATMESSAGE
 if (sarray[2] == UNO_STARTING and UnoCurrentScreen ~= UNO_SCREEN_BLANK) then
 if (UnoClientLobbyScreen) then UnoClientLobbyScreen:Hide() end;
 --populate the client players array
