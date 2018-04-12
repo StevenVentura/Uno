@@ -30,7 +30,7 @@ UNO_MESSAGE_NEWCARDDOWN = "NEWCARDDOWN";
 
 --
 UnoScreenSlashUno = CreateFrame("Frame","UnoScreenSlashUno",UIParent);
-UnoScreenSlashUno:SetSize(400,300);
+UnoScreenSlashUno:SetSize(250,250);
 UnoScreenSlashUno:SetPoint("CENTER");
 UnoScreenSlashUno.t = UnoScreenSlashUno:CreateTexture();
 UnoScreenSlashUno.t:SetAllPoints();

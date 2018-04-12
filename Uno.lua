@@ -21,6 +21,12 @@ SlashCmdList["Uno"] = slashUno;
 
 function slashUno(msg,editbox)
 command, rest = msg:match("^(%S*)%s*(.-)$");
+if (UnoCurrentScreen == UNO_SCREEN_BLANK) then
+UnoCurrentScreen = UNO_SCREEN_SLASHUNO;
+UnoScreenSlashUno:Show();
+
+end
+
 
 end--end function
 

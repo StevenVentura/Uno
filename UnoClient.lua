@@ -15,7 +15,9 @@ these messages can either happen in battle.net or they can happen in whisper.
 
 ]]
 
-CreateFrame("Frame","UnoClientFrame",UIParent);
+
+CreateFrame("Frame","UnoClientFrameDragFrame",UIParent);
+CreateFrame("Frame","UnoClientFrame",UnoClientFrameDragFrame);
 CreateFrame("Button","UnoClientFrameCloseButton",UnoClientFrame,"UIPanelButtonTemplate");
 UnoClientFrameCloseButton:SetSize(24,24);
 UnoClientFrameCloseButton:SetPoint("TOPLEFT");
@@ -569,8 +571,56 @@ end--end function UnoCheckIfValidCardPlacement
 
 function UnoDrawClient() 
 
-UnoClientFrame:SetPoint("CENTER");
+UnoClientFrameDragFrame:SetPoint("CENTER",UIParent,"CENTER",0,200);
+UnoClientFrame:SetPoint("TOP",UnoClientFrameDragFrame,"BOTTOM");
 UnoClientFrame:SetSize(800*3/4,600*3/4);
+UnoClientFrameDragFrame:SetSize(800*3/4,600*3/4*1/32);
+UnoClientFrameDragFrame:SetClampedToScreen(true);
+UnoClientFrame:SetClampedToScreen(true);
+UnoClientFrameDragFrame.label = UnoClientFrameDragFrame:CreateFontString(nil,UnoClientFrameDragFrame,"GameFontNormal");
+	UnoClientFrameDragFrame.label:SetTextColor(1,0.643,0.169,1);
+UnoClientFrameDragFrame.label:SetShadowColor(0,0,0,1);
+ UnoClientFrameDragFrame.label:SetShadowOffset(2,-1);
+ UnoClientFrameDragFrame.label:SetText("Click To Drag");
+ UnoClientFrameDragFrame.label:SetAllPoints();
+ UnoClientFrameDragFrame.label:Hide();
+UnoClientFrameDragFrame.texture = UnoClientFrameDragFrame:CreateTexture();
+UnoClientFrameDragFrame.texture:SetAllPoints();
+UnoClientFrameDragFrame.texture:SetColorTexture(0,0,0,0);
+UnoClientFrameDragFrame:SetMovable(true);
+UnoClientFrameDragFrame:EnableMouse();
+UnoClientFrameDragFrame:SetScript("OnEnter", function() 
+if (UnoClientFrame:IsShown()) then
+UnoClientFrameDragFrame.texture:SetColorTexture(0,0,0,1);
+UnoClientFrameDragFrame.label:Show();
+end
+end);
+UnoClientFrameDragFrame:SetScript("OnLeave", function() 
+UnoClientFrameDragFrame.texture:SetColorTexture(0,0,0,0);
+UnoClientFrameDragFrame.label:Hide();
+
+end);
+
+
+UnoClientFrameDragFrame:RegisterForDrag("LeftButton");
+UnoClientFrameDragFrame:SetScript("OnDragStart",function(self)
+self:StartMoving();
+end);
+UnoClientFrameDragFrame:SetScript("OnDragStop", function(self)
+
+self:StopMovingOrSizing();
+--[[if (self:GetBottom() < UnoClientFrame:GetTop()) then
+self:SetPoint("CENTER",UIParent,"CENTER",(self:GetLeft()+self:GetRight())/2,UnoClientFrame:GetTop());
+end--]]
+if (self:GetBottom() < UnoClientFrame:GetTop()) then
+self:ClearAllPoints();
+self:SetPoint("BOTTOMLEFT",self:GetLeft(),UnoClientFrame:GetTop());
+end
+
+
+
+end);
+
 UnoClientFrame.texture = UnoClientFrame:CreateTexture();
 UnoClientFrame.texture:SetAllPoints();
 UnoClientFrame.texture:SetColorTexture(43/255,15/255,1/255,0.80);
@@ -583,8 +633,10 @@ UnoClientFrameToggleChatButton:SetText("CHAT");
 UnoClientFrameToggleChatButton:SetScript("OnClick",function(self)
 if (UnoClientFrameChatboxFrame:IsShown()) then
 UnoClientFrameChatboxFrame:Hide();
+UnoClientFrameChatboxFrame.editbox:Hide();
 else
 UnoClientFrameChatboxFrame:Show();
+UnoClientFrameChatboxFrame.editbox:Show();
 end
 end);
 UnoClientFrameToggleChatButton:Show();
@@ -659,7 +711,7 @@ end
 
 
 
-
+UnoClientFrameDragFrame:Show();
 UnoClientFrame:Show();
 end--end function UnoDrawClient
 function UnoIAmTheHost()
