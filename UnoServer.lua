@@ -344,9 +344,30 @@ documentation for UnoBroadcastUpdateDeck is in UnoCard.lua
 function UnoBroadcastUpdateDeck()
 --using the UnoServerCardsChanged event stack, create cardsMessage
 local cardsMessage = UNO_IDENTIFIER .. " " .. UNO_MESSAGE_CARDUPDATE;
+
 for masterIndex, newOwner in pairs(UnoServerCardsChanged) do
-cardsMessage = cardsMessage .. " " .. masterIndex .. " " .. newOwner;
+--
+local ownerid = -1;
+if (newOwner == "updeck") then
+ownerid = 9;--special value btw
+else
+if (getUnoServerPlayer(newOwner) == nil) then
+print("@@@@$#@$" .. name); 
+else
+ownerid = getUnoServerPlayer(newOwner).officialIndex;
+
+end
+end
+--
+
+--cardsMessage = cardsMessage .. " " .. masterIndex .. " " .. newOwner;
+cardsMessage = cardsMessage .. " " .. masterIndex .. " " .. ownerid;
 end--end for
+
+
+
+
+
 
 --now broadcast message to all players
 for name, player in pairs(UnoServerPlayers) do

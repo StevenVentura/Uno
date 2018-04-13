@@ -231,7 +231,13 @@ if (sarray[2] == UNO_MESSAGE_CARDUPDATE and UnoCurrentScreen == UNO_SCREEN_PLAYI
 local numCardUpdates = (tablelength(sarray) - 2)/2;
 for i=1,numCardUpdates,1 do
 local cardIndex = tonumber(sarray[((i-1)*2+3)]); 
-local newOwner = sarray[((i-1)*2+4)];
+local newOwnerID = tonumber(sarray[((i-1)*2+4)]);
+local newOwner = nil;
+if (newOwnerID == 9) then
+newOwner = "updeck";
+else
+newOwner = getClientUnoPlayerByOfficialIndex(newOwnerID).name;
+end
 UnoClientCards[cardIndex].owner = newOwner;
 UnoUpdatePositions();
 --UnoPositionCard(UnoClientCards[cardIndex]);
