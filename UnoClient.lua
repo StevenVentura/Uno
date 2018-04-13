@@ -15,7 +15,6 @@ these messages can either happen in battle.net or they can happen in whisper.
 
 ]]
 
-
 CreateFrame("Frame","UnoClientFrameDragFrame",UIParent);
 CreateFrame("Frame","UnoClientFrame",UnoClientFrameDragFrame);
 CreateFrame("Button","UnoClientFrameCloseButton",UnoClientFrame,"UIPanelButtonTemplate");
@@ -54,6 +53,46 @@ currentTurnNameClient = getClientUnoPlayerByOfficialIndex(index).name;
 print("|cff0000ffit's " .. currentTurnNameClient .. "'s turn.");
 --TODO: animation here and stuff
 end--end function SetUnoTurnClient
+
+function RotateUnoClient() 
+
+--increment the rotation value
+UnoRotateUnoClientButton.rotationValue = UnoRotateUnoClientButton.rotationValue + 1;
+
+--refresh the stuff
+local numPlayers = tablelength(UnoClientPlayers);
+local theta = math.pi/2;
+local width,height = UnoClientFrame:GetSize();
+local centerXArray= {[1]=0,[2]=0,[3]=width/5,[4]=-width/5};
+local centerYArray= {[1]=width/5,[2]=-width/5,[3]=0,[4]=0};
+local thetaArray = {[1]=0,[2]=math.pi,[3]=math.pi/2,[4]=3*math.pi/2};
+
+for name,player in pairs(UnoClientPlayers) do
+local offiIndex = (player.officialIndex + UnoRotateUnoClientButton.rotationValue) % 5;
+if (offiIndex == 0) then
+UnoRotateUnoClientButton.rotationValue = UnoRotateUnoClientButton.rotationValue + 1;
+offiIndex = (player.officialIndex + UnoRotateUnoClientButton.rotationValue) % 5;
+end
+if (offiIndex == 3 or offiIndex == 4) then
+player.vertical = true;
+else
+player.vertical = false;
+end
+player.theta = thetaArray[offiIndex];
+--relative to the middle of the board
+------local px = UnoClientPlayers[cardToPosition.owner].centerX;
+player.centerX = centerXArray[offiIndex];
+player.centerY = centerYArray[offiIndex];
+--position the text label for the player
+player.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",player.centerX,player.centerY);
+player.title:SetPoint("CENTER",
+	player.frame,"CENTER",0,0);
+end--end for
+
+
+
+end--end function RotateUnoClient
+
 
 function UnoMessageTheHost(message)
 if (UnoHostContact == nil) then --then this means i am the host
@@ -211,6 +250,7 @@ local py = UnoClientPlayers[cardToPosition.owner].centerY;
 local theta = UnoClientPlayers[cardToPosition.owner].theta;
 local thisCardsCount = UnoClientGetHandCountNumber(cardToPosition);
 
+if (UnoCardDisplayModeButton.displayMode == "Expand") then
 local cardSizeScaleFactor = 1;
 if (handCount <= 5) then
 cardSizeScaleFactor = 1;
@@ -245,6 +285,14 @@ cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",
 			+ firstXOffset*math.sin(theta-0) );
 			
 cardToPosition.frame.texture:SetRotation(theta-0+math.pi);
+end--end if displaymode == "Expand"
+if (UnoCardDisplayModeButton.displayMode == "Compact") then
+
+
+
+
+
+end
 
 
 
@@ -649,7 +697,7 @@ UnoClientFrame.texture:SetColorTexture(43/255,15/255,1/255,0.80);
 CreateFrame("BUTTON","UnoClientFrameToggleChatButton",UnoClientFrame,"UIPanelButtonTemplate");
 UnoClientFrameToggleChatButton:SetPoint("TOPRIGHT");
 UnoClientFrameToggleChatButton:SetSize(60,24);
-UnoClientFrameToggleChatButton:SetText("CHAT");
+UnoClientFrameToggleChatButton:SetText("Chat");
 UnoClientFrameToggleChatButton:SetScript("OnClick",function(self)
 if (UnoClientFrameChatboxFrame:IsShown()) then
 UnoClientFrameChatboxFrame:Hide();
@@ -661,6 +709,47 @@ end
 end);
 
 UnoClientFrameToggleChatButton:Show();
+
+
+
+--add the DisplayMode Button
+CreateFrame("BUTTON","UnoCardDisplayModeButton",UnoClientFrame,"UIPanelButtonTemplate");
+UnoCardDisplayModeButton:SetPoint("TOPRIGHT",UnoClientFrameToggleChatButton,"TOPLEFT");
+UnoCardDisplayModeButton:SetSize(80,24);
+UnoCardDisplayModeButton:SetText("Expand");
+UnoCardDisplayModeButton.displayMode = "Compact";
+UnoCardDisplayModeButton:Show();
+UnoCardDisplayModeButton:SetScript("OnClick",function(self)
+
+--TODO: when you click the button :3c
+if (UnoCardDisplayModeButton.displayMode == "Compact") then
+UnoCardDisplayModeButton.displayMode = "Expand";
+UnoCardDisplayModeButton:SetText("Compact");
+else
+UnoCardDisplayModeButton.displayMode = "Compact";
+UnoCardDisplayModeButton:SetText("Expand");
+end
+
+UnoUpdatePositions();
+
+
+
+end);
+
+--add the rotate button
+CreateFrame("BUTTON","UnoRotateUnoClientButton",UnoClientFrame,"UIPanelButtonTemplate");
+UnoRotateUnoClientButton:SetPoint("TOPRIGHT",UnoCardDisplayModeButton,"TOPLEFT");
+UnoRotateUnoClientButton:SetSize(80,24);
+UnoRotateUnoClientButton:SetText("Rotate");
+UnoRotateUnoClientButton.rotationValue = 0;
+UnoRotateUnoClientButton:Show();
+UnoRotateUnoClientButton:SetScript("OnClick",function(self)
+
+RotateUnoClient();
+UnoUpdatePositions();
+
+end);
+
 
 CreateFrame("EditBox","UnoClientFrameChatboxFrame",UnoClientFrame,"InputBoxTemplate");
 --dimensions of other frame
