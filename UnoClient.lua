@@ -139,7 +139,7 @@ return width/8;
 end--end
 function GetUnoCardGap()
 local width,height = UnoClientFrame:GetSize();
-return GetUnoCardHeight()/3;
+return GetUnoCardHeight()/16;
 end--end
 
 function UnoGetMaindeckOffset()
@@ -189,6 +189,8 @@ end--end maindeck
 
 if (cardToPosition.owner == "updeck") then
 cardToPosition.frame:SetPoint("CENTER",UnoClientFrame,"CENTER",UnoGetUpdeckOffset())
+cardToPosition.frame:SetSize(width/8*0.7142857142857143,width/8);
+cardToPosition.frame.texture:SetRotation(0);
 end --end updeck
 
 --get the count of how many cards he owns
@@ -197,6 +199,9 @@ local playerOwned = cardToPosition.owner ~= "updeck" and cardToPosition.owner ~=
 						and cardToPosition.owner ~= "discard";
 
 if (playerOwned == true) then
+
+
+
 local playerHand = UnoGetNumberedHandClient(cardToPosition.owner);
 local player = UnoClientPlayers[cardToPosition.owner];
 local handCount = tablelength(playerHand);
@@ -206,15 +211,30 @@ local py = UnoClientPlayers[cardToPosition.owner].centerY;
 local theta = UnoClientPlayers[cardToPosition.owner].theta;
 local thisCardsCount = UnoClientGetHandCountNumber(cardToPosition);
 
+local cardSizeScaleFactor = 1;
+if (handCount <= 5) then
+cardSizeScaleFactor = 1;
+else
+cardSizeScaleFactor = 5 / handCount;
+end
+if (UnoClientPlayers[cardToPosition.owner].vertical == false) then
+cardToPosition.frame:SetSize(cardSizeScaleFactor*width/8*0.7142857142857143,cardSizeScaleFactor*width/8);
+else
+cardToPosition.frame:SetSize(cardSizeScaleFactor*width/8,cardSizeScaleFactor*width/8*0.7142857142857143);
+end
+
+
+
+
 if (handCount%2 == 0) then
 local distFromMiddle = thisCardsCount - handCount/2 + 1;
-firstXOffset = -(GetUnoCardWidth()/2+GetUnoCardGap()) 
-			+ (GetUnoCardWidth()+GetUnoCardGap())*distFromMiddle;
+firstXOffset = -(GetUnoCardWidth()/2+GetUnoCardGap())*cardSizeScaleFactor 
+			+ (GetUnoCardWidth()+GetUnoCardGap())*distFromMiddle*cardSizeScaleFactor;
 firstYOffset = 0;
 else--end even, else odd
 --distance from the middle value
 local distFromMiddle = thisCardsCount - ceil(handCount/2) + 1;
-firstXOffset = distFromMiddle * (GetUnoCardWidth() + GetUnoCardGap());
+firstXOffset = distFromMiddle * (GetUnoCardWidth() + GetUnoCardGap()) * cardSizeScaleFactor;
 firstYOffset = 0;
 end--end odd
 
@@ -639,6 +659,7 @@ UnoClientFrameChatboxFrame:Show();
 UnoClientFrameChatboxFrame.editbox:Show();
 end
 end);
+
 UnoClientFrameToggleChatButton:Show();
 
 CreateFrame("EditBox","UnoClientFrameChatboxFrame",UnoClientFrame,"InputBoxTemplate");
@@ -653,6 +674,7 @@ UnoClientFrameChatboxFrame.texture:SetAllPoints();
 UnoClientFrameChatboxFrame.texture:SetColorTexture(43/255/2,15/255/2,1/255/2,.80);
 
 
+
 ---------------------------
 --now make da edit box
 --CreateFrame("EditBox","UnoManualInviteUsernameEditBox",UnoScreenLobby,"InputBoxTemplate");
@@ -662,6 +684,9 @@ UnoClientFrameChatboxFrame.editbox:SetPoint("TOP",UnoClientFrameChatboxFrame,"BO
 UnoClientFrameChatboxFrame.editbox:SetAutoFocus(false);
 UnoClientFrameChatboxFrame.editbox:SetSize(800*3/4*1/4,600*3/4*1/16)
 UnoClientFrameChatboxFrame.editbox:Show();
+
+UnoClientFrameChatboxFrame:Hide();
+UnoClientFrameChatboxFrame.editbox:Hide();
 
 UnoClientFrameChatboxFrame.editbox:SetScript("OnEnterPressed", function(self)
 UnoSendChatMessageToUnoChat(self:GetText());
@@ -679,11 +704,16 @@ end
 local numPlayers = tablelength(UnoClientPlayers);
 local theta = math.pi/2;
 local width,height = UnoClientFrame:GetSize();
-local centerXArray= {[1]=0,[2]=0,[3]=-width/5,[4]=width/5};
+local centerXArray= {[1]=0,[2]=0,[3]=width/5,[4]=-width/5};
 local centerYArray= {[1]=width/5,[2]=-width/5,[3]=0,[4]=0};
 local thetaArray = {[1]=0,[2]=math.pi,[3]=math.pi/2,[4]=3*math.pi/2};
 
 for name,player in pairs(UnoClientPlayers) do
+if (player.officialIndex == 3 or player.officialIndex == 4) then
+player.vertical = true;
+else
+player.vertical = false;
+end
 player.theta = thetaArray[player.officialIndex];
 --relative to the middle of the board
 ------local px = UnoClientPlayers[cardToPosition.owner].centerX;
@@ -701,7 +731,9 @@ end--end for
 
 for index,card in pairs(UnoClientCards) do
 card.frame = CreateFrame("FRAME",nil,UnoClientFrame);
+
 card.frame:SetSize(width/8*0.7142857142857143,width/8);
+
 --UnoPositionCard(card);
 card.frame.texture = card.frame:CreateTexture();
 card.frame.texture:SetAllPoints();
