@@ -317,10 +317,8 @@ ServerDealUnoCardToPlayer("updeck");
 forfucksakes = -1;
 for a,b in pairs(UnoServerCards) do 
 if (b.owner == "updeck") then 
-print("a " .. a); 
 forfucksakes = a end
 end
-print("fucksakes is " .. forfucksakes);
 UnoServerCurrentUpdeckCardIndex = forfucksakes;
 
 UnoBroadcastTurnUpdate();

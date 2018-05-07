@@ -66,6 +66,12 @@ local width,height = UnoClientFrame:GetSize();
 local centerXArray= {[1]=0,[2]=0,[3]=width/5,[4]=-width/5};
 local centerYArray= {[1]=width/5,[2]=-width/5,[3]=0,[4]=0};
 local thetaArray = {[1]=0,[2]=math.pi,[3]=math.pi/2,[4]=3*math.pi/2};
+local mapping = {
+[1]={},
+[2]={[1]=3,[2]=2,[3]=4,[4]=1},
+[3]={},
+[4]={}
+};
 
 for name,player in pairs(UnoClientPlayers) do
 local offiIndex = (player.officialIndex + UnoRotateUnoClientButton.rotationValue) % 5;
@@ -73,6 +79,9 @@ if (offiIndex == 0) then
 UnoRotateUnoClientButton.rotationValue = UnoRotateUnoClientButton.rotationValue + 1;
 offiIndex = (player.officialIndex + UnoRotateUnoClientButton.rotationValue) % 5;
 end
+print("offindex is " .. offiIndex .. " mapping is " .. mapping[offiIndex]);
+offiIndex = mapping[player.officialIndex][offiIndex];
+
 if (offiIndex == 3 or offiIndex == 4) then
 player.vertical = true;
 else
@@ -89,7 +98,7 @@ player.title:SetPoint("CENTER",
 	player.frame,"CENTER",0,0);
 end--end for
 
-
+UnoUpdatePositions();
 
 end--end function RotateUnoClient
 
@@ -204,6 +213,11 @@ local width,height = UnoClientFrame:GetSize();
 return GetUnoCardHeight()*2;
 end--end function
 
+function UnoRotateToBottom() 
+
+
+
+end--end function 
 
 
 function UnoPositionCard(cardToPosition)
@@ -288,7 +302,8 @@ cardToPosition.frame.texture:SetRotation(theta-0+math.pi);
 end--end if displaymode == "Expand"
 if (UnoCardDisplayModeButton.displayMode == "Compact") then
 
-
+--first put this player on the bottom
+UnoRotateToBottom();
 
 
 
@@ -746,7 +761,6 @@ UnoRotateUnoClientButton:Show();
 UnoRotateUnoClientButton:SetScript("OnClick",function(self)
 
 RotateUnoClient();
-UnoUpdatePositions();
 
 end);
 

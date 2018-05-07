@@ -780,7 +780,7 @@ UnoReadyUpButton:SetPoint("TOP",UnoAcceptedPlayersFrame,"BOTTOM");
 UnoReadyUpButton:SetPoint("LEFT",UnoAcceptedPlayersFrame);
 UnoReadyUpButton:SetText("Ready?");
 UnoReadyUpButton:SetScript("OnClick",function()
-print("clicked da ready button");
+print("clicked da ready button (does nothing btw)");
 end);
 UnoReadyUpButton:Show();
 
@@ -790,7 +790,6 @@ UnoStartGameButton:SetPoint("TOP",UnoReadyUpButton,"BOTTOM");
 UnoStartGameButton:SetPoint("LEFT",UnoAcceptedPlayersFrame);
 UnoStartGameButton:SetText("Start Game");
 UnoStartGameButton:SetScript("OnClick",function()
-print("clicked da start button")
 StartTheUnoGameWithThesePlayers();--server command
 end);
 UnoStartGameButton:Show();

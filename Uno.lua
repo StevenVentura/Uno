@@ -95,6 +95,9 @@ function UNO_WHISPER_RECEIVED(ChatFrameSelf, event, message, author, ...)
 
 
 UnoAbstractMessageReceived(message,author);
+if (UnoSplitString(message," ")[1] == UNO_IDENTIFIER) then
+return true;
+end
 
 end--end function UNO_WHISPER_RECEIVED
 
@@ -102,12 +105,12 @@ function UnoAbstractMessageReceived(message, author, pid)
 local sarray = UnoSplitString(message);
 local remainder = string.sub(message,strlen(UNO_IDENTIFIER)+2);
 
-print("author is " .. author);
-print("message is " .. message);
+
+
 --return and do nothing if its not an addon message.
 if (sarray[1] ~= UNO_IDENTIFIER) then return end;
 
-print("has uno id");
+
 
 if (sarray[2] == UNO_MESSAGE_TURNUPDATE and UnoCurrentScreen ~= UNO_SCREEN_BLANK) then
 SetUnoTurnClient(tonumber(sarray[3]));
@@ -156,11 +159,10 @@ UnoClientMyOfficialIndex = tonumber(sarray[3]);
 for i=1,numOtherPlayers do
 local playerName = string.sub(sarray[i+3],1,string.find(sarray[i+3],"=")-1);
 AddUnoPlayerClientPlaying(playerName,tonumber(string.sub(sarray[i+3],-1,-1)));
-print("welcome " .. playerName .. " to your game xd")
+
 end--end for
 
 UnoClientTheHostsIdentification = author;
-print("the hosts id is " .. UnoClientTheHostsIdentification)
 startTheUnoGame();
 end--end UNO_STARTING
 
@@ -170,8 +172,6 @@ if (sarray[2] == UNO_MESSAGE_NEWCARDDOWN and UnoCurrentScreen == UNO_SCREEN_PLAY
 for x,y in pairs(UnoClientCards) do
 
 if (y.owner == "updeck") then
-print(y.index)
-print("heyo guys, amordeus is finally here")
 y.owner = "discard";
 y.frame:Hide();
 y.frame:Hide();
@@ -244,7 +244,7 @@ UnoUpdatePositions();
 end--end for
 --also find the updeck and set it here lol
 for x,y in pairs(UnoClientCards) do
-if (y.owner ~= "maindeck") then print(y.owner)
+if (y.owner ~= "maindeck") then 
 if (y.owner == "updeck") then 
 UnoCurrentUpdeckCardIndex = y.index;
 end--end if
@@ -319,7 +319,6 @@ acceptFrame:SetScript("OnClick", function()
 --now we are in the lobby waiting
 UnoCurrentScreen = UNO_SCREEN_LOBBYGUEST;
 UnoClientDisplayLobbyGuestScreen();
-print("why?")
 UnoMessage(UnoPlayersClientLobby[author], UNO_IDENTIFIER .. " " .. UNO_MESSAGE_ACCEPT);
 UnoInvitedToTheGame:Hide();
 end);
@@ -387,9 +386,22 @@ if (realID == glitchyAccountName) then return bnetNameWithNumber end--end if
 end--end for
 end--end function UnoFindBtagFromRealID
 
+function UNO_WHISPER_OUTGOING(ChatFrameSelf, event, message, author, ... )
+if (UnoSplitString(message," ")[1] == UNO_IDENTIFIER) then
+return true;
+end
+end--end function UNO_WHISPER_OUTGOING
+
+function UNO_BNET_MESSAGE_OUTGOING(tableThing,uselessCHAT_MSG_BN_WHISPER
+						,message,sender,u3,u4,u5,u6,u7,u8,u9,u10,presenceLie,u11,presenceID,u13 )
+if (UnoSplitString(message," ")[1] == UNO_IDENTIFIER) then
+return true;
+end
+						
+end--end function UNO_BNET_MESSAGE_OUTGOING
+
 function UNO_CHAT_MSG_BN_WHISPER(tableThing,uselessCHAT_MSG_BN_WHISPER
 						,message,sender,u3,u4,u5,u6,u7,u8,u9,u10,presenceLie,u11,presenceID,u13)
-
 
 --use nickname lookup instead of full RealID for privacy reasons
 if (UnoPlayers[sender] == nil) then
@@ -407,10 +419,18 @@ if (UnoPlayers[sender] == nil) then
 sender = UnoFindBtagFromRealID(sender);
 end--end if
 UnoAbstractMessageReceived(message,sender,presenceID);
+
+if (UnoSplitString(message," ")[1] == UNO_IDENTIFIER) then
+return true;
+end
+
 end --end function unochatbnet
 
 --this is called after the variables are loaded
 function UnoInit()
 ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER",UNO_WHISPER_RECEIVED);
 ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER",UNO_CHAT_MSG_BN_WHISPER);
+ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER_INFORM", UNO_WHISPER_OUTGOING);
+ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER_INFORM",UNO_BNET_MESSAGE_OUTGOING);
+
 end--end function UnoInit
